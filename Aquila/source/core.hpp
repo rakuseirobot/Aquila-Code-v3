@@ -132,7 +132,7 @@ public:
     int r_dir(){ return dir; }
     void w_wall(node* t,int direction,int num){ t->wall[(dir+direction+3)%4]=num; }
 	void w_wall(int direction,int num){ now->wall[(dir+direction+3)%4]=num; }
-    
+ 
     int r_wall(node* t,int direction){ return t->wall[(dir+direction+3)%4]; }
     int r_wall(int direction){ return now->wall[(dir+direction+3)%4]; }
 

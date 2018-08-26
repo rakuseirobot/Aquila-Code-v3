@@ -27,12 +27,31 @@ int main(){
 	lcd_putstr(LCD1_TWI,"Ready!");
 	//lcd_clear();
 	serial.string("wake_up\n");
-	////////////////////////////////////////////////
-	/*while(1){
-		hidarite(); //左手法
-		nachylenie();  //坂
-		float_killer();//再帰
-		float_killer2();//前と同じ原理の奴。
+/*	while(1){
+	for(int i=1;i<=6;i++){
+	serial.puthex(ping(i));
+	serial.string(",");
+	}
+	serial.string("\n\r");
 	}*/
+	while(1){
+		if(SW1){
+			motor::notify_long_ex();
+		}
+	}
+	////////////////////////////////////////////////
+	while(1){
+		write_walls();
+		//hidarite(); //左手法
+		//buzzer();
+		//serial.string("saka\n");
+		//nachylenie();  //坂
+		//serial.string("k_start\n");
+	float_killer();//再帰
+	//	serial.string("k_end\n");
+		//float_killer2();//前と同じ原理の奴。
+		//serial.string("k2_end\n");
+	}
+	//motor::notify_long_ex();
 	return 0;
 }

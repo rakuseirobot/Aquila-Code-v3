@@ -13,7 +13,7 @@ PORTCとPORTD-プルアップ忘れてる
 //#define SERMO_addr 0xB4
 #define SERMO_addr 0xB4
 //#define temp_thre 15680
-#define temp_thre 15400
+#define temp_thre 15200
 uint32_t dat[6];
 //uint8_t data[3]={0};
 //twiReadMultiple(LCD1_TWI,&data,3);

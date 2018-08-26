@@ -13,7 +13,7 @@ PB2,PB3 --SS
 #define LeftM PIN3_bm  //2
 
 
-spi motor_spi(&SPIC,&PORTC,SPI_PRESCALER_DIV16_gc);
+spi motor_spi(&SPIC,&PORTC,SPI_PRESCALER_DIV64_gc);
 const int rose=700;
 const int16_t longway = 4500;
 
@@ -111,7 +111,9 @@ namespace motor{
 	}
 
 	void move(uint8_t x=6){// x = 0:1 block Advance 1:2 blocks Advance 2:Left Turn with Copass 3:Right Turn with Compass 4:1 block Back 5:2 block Back 6:Half block Advance 7:Half block Back 8:Left Turn without Compass 9:Right Turn without Compass 
-		_delay_ms(5);
+		_delay_ms(10);
+		motor::wait();
+		//_delay_ms(1);
 		int16_t first = 0;
 		int16_t now = 0;
 		switch(x){
@@ -188,13 +190,13 @@ namespace motor{
 				motor::wait();
 				//_delay_ms(300);
 			break;
-			case 8: //?E????V?n????
+			case 9: //?E????V?n????
 				m_send(1,2,m_turnspeed,3);
 				m_send(2,1,m_turnspeed,3);
 				motor::wait();
 				//_delay_ms(300);
 			break;
-			case 9: //??????V?n????
+			case 8: //??????V?n????
 				m_send(1,1,m_turnspeed,3);
 				m_send(2,2,m_turnspeed,3);
 				motor::wait();
@@ -207,7 +209,7 @@ namespace motor{
 				//_delay_ms(300);
 			//break;
 		}
-		_delay_ms(20);
+		_delay_ms(300);
 	}
 	void forever(void){
 		m_send(1,1,5,0);
@@ -333,7 +335,7 @@ namespace motor{
 		else{}
 		return;
 	}
-	const int32_t turnvalue = 2;
+	const int32_t turnvalue = 6;
 	void turn_fix(uint8_t force = 0){
 		int val=0;
 		uint8_t chk[2]={0};
@@ -474,7 +476,7 @@ namespace motor{
 	uint8_t notify_long_ex(void){
 		int16_t dis[3];
 		uint8_t dev;
-		dis[0] = ping(1);
+		dis[0] = ping(3);
 		if(dis[0]>=longway){
 			led(Blueled,1);
 			lcd_clear();
@@ -504,13 +506,13 @@ namespace motor{
 			motor::turn_fix();
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"NotifyL");
-			dis[0] = ping(1);
+			dis[0] = ping(3);
 			if(gbbest<=dis[0]){
 				led(Redled,1);
 				do{
 					m_send(1,2,7,1);
 					m_send(2,2,7,1);
-					dis[0] = ping(1);
+					dis[0] = ping(3);
 					dis[1] = smaller_s(ping(2),ping(3));
 					dis[2] = smaller_s(ping(5),ping(6));/*
 					usart_putdec(dis[1]);
@@ -595,8 +597,8 @@ namespace motor{
 	void fix_position(void){
 		//notify_half();
 		turn_fix();
-		gb_fix();
-		turn_fix();
+		//gb_fix();
+		//turn_fix();
 		return;
 	}
 }

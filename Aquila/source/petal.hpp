@@ -20,7 +20,7 @@
 core ta;
 
 int for_write_walls1(int num){
-	if(check_ping2(num)==1){
+	if(for_cp(num)==1){
 		return v::wall;
 	}else{
 		return v::nowall;
@@ -52,8 +52,6 @@ void for_write_walls2(int direc){
 	}
 }
 
-
-
 void write_walls(){
 	ta.w_wall(v::left,for_write_walls1(v::left));
 	ta.w_wall(ta.ac_next(v::left,1),v::right,for_write_walls1(v::left));
@@ -66,7 +64,9 @@ void write_walls(){
 }
 
 void ondo(){
-	if(check_sermo()==0 || check_sermo()==1 || check_sermo()==2){
+	if(ta.r_now()->type==v::hisai||ta.r_now()->type==v::r_kit){
+		
+	}else if(check_sermo()==0 || check_sermo()==1 || check_sermo()==2){
 		ta.r_now()->type=v::hisai;
 		throw_kit();
 		ta.r_now()->type=v::r_kit;
@@ -127,7 +127,7 @@ void move(int num){//num::0:turn_l(90deg),1:go_st,2:turn_r(90deg),3:back(turn),4
 		default:
 			break;
 	}
-	ta.r_now()->type = v::normal;
+	if(ta.r_now()->type==v::unknown){ta.r_now()->type = v::normal;}
 	write_walls();
 	motor::fix_position();
 	blacktile();
@@ -135,10 +135,10 @@ void move(int num){//num::0:turn_l(90deg),1:go_st,2:turn_r(90deg),3:back(turn),4
 }
 
 void nachylenie(){//多分モーター回した後に入れるべきやつ。//色々改善の余地がある。
-	if(saka_check()){ //F():坂判定機,今坂の上にいるかどうかがわかる。
+	if(motor::notify_long_ex()==1){ //F():坂判定機,今坂の上にいるかどうかがわかる。
 		ta.r_now()->type=v::slope;
 		node*t=ta.r_now()->back[0];
-		saka();
+		//saka();
 		ta.move_to(t->x,t->y,t->z+1);//???
 		//ta.r_now()->type=v::slope;
 	}else if(ta.r_now()->type==v::slope){
@@ -242,14 +242,15 @@ void float_killer2(){
 
 void hidarite(){
 	if(ta.r_wall(v::left)==v::wall || ta.ac_next(v::left,1)->type==v::black){
-		if(ta.r_wall(v::front)==v::wall || ta.ac_next(v::left,1)->type==v::front){
-			if(ta.r_wall(v::right)==v::wall || ta.ac_next(v::right,1)->type==v::wall){
-				//後ろへ
-				move(3);
-				move(3);
+		if(ta.r_wall(v::front)==v::wall || ta.ac_next(v::left,1)->type==v::black){
+			if(ta.r_wall(v::right)==v::wall || ta.ac_next(v::right,1)->type==v::black){
+				//後ろへ->右へ
+				move(2);
+				//move(0);
 				move(1);
 			}else{
-				move(3);
+				move(0);
+				move(0);
 				move(1);
 				//右へ
 			}
