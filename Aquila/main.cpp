@@ -16,7 +16,49 @@ void print_num(int num,int num2,int num3){
 	serial.putdec(num3);
 	serial.string("\n");
 }
-
+void lcd_num(int x,int y,int z){
+	lcd_putdec(LCD1_TWI,x);
+	_delay_ms(1000);
+	lcd_clear();
+	lcd_putdec(LCD1_TWI,y);
+	_delay_ms(1000);
+	lcd_clear();
+	lcd_putdec(LCD1_TWI,z);
+	_delay_ms(1000);
+	lcd_clear();
+}
+void debugping(int direction){
+	int x,x2;
+	switch(direction){
+		case v::left:
+			x=1;
+			x2=2;
+			break;
+		case v::front:
+			x=3;
+			x2=3;
+			break;
+		case v::right:
+			x=4;
+			x2=5;
+			break;
+		case v::back:
+			x=6;
+			x2=6;
+			break;
+		default:
+			break;
+	}
+	lcd_num(direction,x,x2);
+	lcd_num(ping(x),ping(x2),for_cp(direction));
+	write_walls();
+	lcd_num(for_cp(direction),for_write_walls1(direction),ta.r_wall(direction));
+	serial.string("\n");
+	lcd_putstr(LCD1_TWI,"end");
+	_delay_ms(200);
+	lcd_clear();
+	//ping->for_cp(ping_control)->for_write_walls1->write_walls(petal)
+}
 
 int main(){	
 	init_all();
@@ -27,13 +69,21 @@ int main(){
 	lcd_putstr(LCD1_TWI,"Ready!");
 	//lcd_clear();
 	serial.string("wake_up\n");
-/*	while(1){
+// 	while(1){
+// 		serial.putdec(1);
+// 	}
+	while(1){
 	for(int i=1;i<=6;i++){
 	serial.puthex(ping(i));
 	serial.string(",");
 	}
 	serial.string("\n\r");
-	}*/
+	}
+/*
+    while(1){
+	  motor::move(0);
+	  motor::move(1);
+    }
 	while(1){
 		if(SW1){
 			motor::notify_long_ex();
@@ -42,16 +92,24 @@ int main(){
 	////////////////////////////////////////////////
 	while(1){
 		write_walls();
-		//hidarite(); //左手法
+		hidarite(); //左手法
 		//buzzer();
 		//serial.string("saka\n");
 		//nachylenie();  //坂
 		//serial.string("k_start\n");
-	float_killer();//再帰
+		float_killer();//再帰
 	//	serial.string("k_end\n");
 		//float_killer2();//前と同じ原理の奴。
 		//serial.string("k2_end\n");
 	}
 	//motor::notify_long_ex();
-	return 0;
+	*/
+	while(1){
+		debugping(v::left);
+		debugping(v::front);
+		debugping(v::right);
+		debugping(v::back);
+		_delay_ms(500);
+	}
+return 0;
 }

@@ -43,4 +43,5 @@ void init_avr(void){
 	PORTQ.DIRSET = PIN0_bm|PIN1_bm|PIN2_bm;//フルカラーLED
 	PORTQ.OUTSET = PIN0_bm|PIN1_bm|PIN2_bm;
 	PORTK.DIRSET = PIN0_bm|PIN1_bm|PIN2_bm|PIN3_bm;//ステッピングinit
+	PORTB.DIRSET = PIN0_bm|PIN1_bm;//モーター用SIG
 }
