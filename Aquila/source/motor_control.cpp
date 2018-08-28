@@ -13,7 +13,7 @@ PB2,PB3 --SS
 #define LeftM PIN3_bm  //2
 
 
-spi motor_spi(&SPIC,&PORTC,SPI_PRESCALER_DIV64_gc);
+spi motor_spi(&SPIC,&PORTC,SPI_PRESCALER_DIV16_gc);
 const int rose=700;
 const int16_t longway = 4500;
 
@@ -111,9 +111,7 @@ namespace motor{
 	}
 
 	void move(uint8_t x=6){// x = 0:1 block Advance 1:2 blocks Advance 2:Left Turn with Copass 3:Right Turn with Compass 4:1 block Back 5:2 block Back 6:Half block Advance 7:Half block Back 8:Left Turn without Compass 9:Right Turn without Compass 
-		_delay_ms(10);
-		motor::wait();
-		//_delay_ms(1);
+		_delay_ms(5);
 		int16_t first = 0;
 		int16_t now = 0;
 		switch(x){
@@ -190,13 +188,13 @@ namespace motor{
 				motor::wait();
 				//_delay_ms(300);
 			break;
-			case 9: //?E????V?n????
+			case 8: //?E????V?n????
 				m_send(1,2,m_turnspeed,3);
 				m_send(2,1,m_turnspeed,3);
 				motor::wait();
 				//_delay_ms(300);
 			break;
-			case 8: //??????V?n????
+			case 9: //??????V?n????
 				m_send(1,1,m_turnspeed,3);
 				m_send(2,2,m_turnspeed,3);
 				motor::wait();
@@ -209,12 +207,12 @@ namespace motor{
 				//_delay_ms(300);
 			//break;
 		}
-		_delay_ms(300);
+		_delay_ms(20);
 	}
 	void forever(void){
 		m_send(1,1,5,0);
 		m_send(2,1,5,0);
-		while(ping(1)>=3);
+		while(ping(3)>=3);
 		motor::move();
 		return;
 	}/*
@@ -278,8 +276,8 @@ namespace motor{
 	uint32_t tbest = 600;
 	void gb_fix(void){
 		int16_t dis[3];
-		dis[0]=ping(1);//Forward
-		dis[1]=ping(4);//Back
+		dis[0]=ping(3);//Forward
+		dis[1]=ping(6);//Back
 		if(Sikiti>=dis[0]){
 			if((gbbest-dis[0])<fixno*-1){
 				m_send(1,2,1,2);
@@ -288,7 +286,7 @@ namespace motor{
 					if(dis[0]>=longway){
 						break;
 					}
-					dis[0]=ping(1);
+					dis[0]=ping(3);
 				}
 				motor::brake(1);
 				motor::brake(2);
@@ -300,7 +298,7 @@ namespace motor{
 					if(dis[0]>=longway){
 						break;
 					}
-					dis[0]=ping(1);
+					dis[0]=ping(3);
 				}
 				motor::brake(1);
 				motor::brake(2);
@@ -314,7 +312,7 @@ namespace motor{
 					if(dis[1]>=longway){
 						break;
 					}
-					dis[1]=ping(4);
+					dis[1]=ping(6);
 				}
 				motor::brake(1);
 				motor::brake(2);
@@ -326,7 +324,7 @@ namespace motor{
 					if(dis[1]>=longway){
 						break;
 					}
-					dis[1]=ping(4);
+					dis[1]=ping(6);
 				}
 				motor::brake(1);
 				motor::brake(2);
@@ -335,37 +333,37 @@ namespace motor{
 		else{}
 		return;
 	}
-	const int32_t turnvalue = 6;
-	void turn_fix(uint8_t force = 0){
+	const int32_t turnvalue = 2;
+	void turn_fix(uint8_t force){
 		int val=0;
 		uint8_t chk[2]={0};
-		if (!force&&smaller_s(ping(2),ping(3))>=Sikiti&&smaller_s(ping(5),ping(6))>=Sikiti){
+		if (!force&&smaller_s(ping(1),ping(2))>=Sikiti&&smaller_s(ping(4),ping(5))>=Sikiti){
 			return;
 		}
 		else{
-			if (smaller_s(ping(2),ping(3))<=Sikiti){
-				if(!(ping(2)<=Sikiti&&ping(3)<=Sikiti)){
+			if (smaller_s(ping(1),ping(2))<=Sikiti){
+				if(!(ping(2)<=Sikiti&&ping(1)<=Sikiti)){
 					return;
 				}
 			}
-			if (smaller_s(ping(5),ping(6))<=Sikiti){
-				if(!(ping(5)<=Sikiti&&ping(6)<=Sikiti)){
+			if (smaller_s(ping(5),ping(4))<=Sikiti){
+				if(!(ping(5)<=Sikiti&&ping(4)<=Sikiti)){
 					return;
 				}
 			}
-			int ldiff = (ping(2)+ping(3))/2;
-			int rdiff = (ping(5)+ping(6))/2;
+			int ldiff = (ping(2)+ping(1))/2;
+			int rdiff = (ping(5)+ping(4))/2;
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"FixingTurn");
 			
 			if(rdiff>ldiff){
-				chk[0]=2;
-				chk[1]=3;
+				chk[0]=1;
+				chk[1]=2;
 				//usart_string("use Left!\n\r");
 			}
 			else if(rdiff<ldiff){
-				chk[0]=5;
-				chk[1]=6;
+				chk[0]=4;
+				chk[1]=5;
 				//usart_string("use Right!\n\r");
 			}
 			//usart_putdec(ping(chk[0]));
@@ -420,7 +418,7 @@ namespace motor{
 		for (uint8_t i=0;i<=7;i++){
 			dis[i]=ping(i);
 		}
-		if(smaller_s(dis[2],dis[3])>=Sikiti&&rose>=smaller_s(dis[2],dis[3])){
+		if(smaller_s(dis[2],dis[1])>=Sikiti&&rose>=smaller_s(dis[1],dis[2])){
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"NotifyP");
 			motor::move(2);
@@ -430,7 +428,7 @@ namespace motor{
 			lcd_clear();
 			return 1;
 		}
-		else if(smaller_s(dis[5],dis[6])>=Sikiti&&rose>=smaller_s(dis[5],dis[6])){
+		else if(smaller_s(dis[5],dis[4])>=Sikiti&&rose>=smaller_s(dis[5],dis[4])){
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"NotifyP");
 			motor::move(3);
@@ -449,10 +447,10 @@ namespace motor{
 	uint8_t notify_half(void){
 		uint8_t dis[10];
 		uint8_t i = 0;
-		dis[0] = check_ping(2);
-		dis[1] = check_ping(3);
-		dis[2] = check_ping(6);
-		dis[3] = check_ping(5);
+		dis[0] = check_ping(1);
+		dis[1] = check_ping(2);
+		dis[2] = check_ping(5);
+		dis[3] = check_ping(4);
 		if(dis[0]==1&&dis[1]==0){
 			i=1;
 		}else if(dis[0]==0&&dis[1]==1){
@@ -513,8 +511,8 @@ namespace motor{
 					m_send(1,2,7,1);
 					m_send(2,2,7,1);
 					dis[0] = ping(3);
-					dis[1] = smaller_s(ping(2),ping(3));
-					dis[2] = smaller_s(ping(5),ping(6));/*
+					dis[1] = smaller_s(ping(2),ping(1));
+					dis[2] = smaller_s(ping(5),ping(4));/*
 					usart_putdec(dis[1]);
 					usart_putdec(dis[2]);
 					usart_string("\n\r");*/
@@ -538,7 +536,7 @@ namespace motor{
 	}
 	uint8_t notify_long(void){
 		int16_t dis;
-		dis = ping(1);
+		dis = ping(3);
 		if(dis >= longway){
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"NotifyL");
@@ -559,13 +557,13 @@ namespace motor{
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"NotifyL");
 
-			dis = ping(1);
+			dis = ping(3);
 			if(dis >= gbbest){
 				led(Redled,1);
 				do{
 					m_send(1,2,m_speed,1);
 					m_send(2,2,m_speed,1);
-					dis = ping(1);
+					dis = ping(3);
 				}while(dis >= gbbest);
 				motor::brake(1);
 				motor::brake(2);
@@ -597,9 +595,9 @@ namespace motor{
 	void fix_position(void){
 		//notify_half();
 		turn_fix();
-		//gb_fix();
-		//turn_fix();
-		return;
+		gb_fix();
+		turn_fix();
+		//return;
 	}
 }
 

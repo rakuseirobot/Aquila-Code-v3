@@ -34,7 +34,8 @@ namespace motor{
 	void fix(uint8_t x,uint8_t ping1,uint8_t ping2,int no);
 	//uint8_t fix_position(void);
 	void fix_position();
-	void turn_fix(uint8_t x);
+	void gb_fix(void);
+	void turn_fix(uint8_t x=0);
 	uint8_t notify_long_ex();
 	#define m_speed 7
 	#define m_turnspeed 5
