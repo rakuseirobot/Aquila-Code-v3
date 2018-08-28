@@ -211,6 +211,12 @@
     <Compile Include="source\core.hpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="source\gyro_control.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="source\gyro_control.hpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="source\initializing.cpp">
       <SubType>compile</SubType>
     </Compile>

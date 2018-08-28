@@ -8,6 +8,8 @@ source\action.cpp
 
 source\color_control.cpp
 
+source\gyro_control.cpp
+
 source\initializing.cpp
 
 source\lcd_control.cpp

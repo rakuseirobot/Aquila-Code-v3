@@ -161,7 +161,7 @@ void BMX055_Mag(void)
 		// Read 6 bytes of data
 		// xMag lsb, xMag msb, yMag lsb, yMag msb, zMag lsb, zMag msb
 		data[i] = bmx.ReadSingle(0);
-		bmx.Stop();‚š
+		bmx.Stop();
 	}
 	// Convert the data
 	xMag = ((data[1] <<8) | (data[0]>>3));

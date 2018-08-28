@@ -41,6 +41,7 @@ C_SRCS +=  \
 ../main.cpp \
 ../source/action.cpp \
 ../source/color_control.cpp \
+../source/gyro_control.cpp \
 ../source/initializing.cpp \
 ../source/lcd_control.cpp \
 ../source/motor_control.cpp \
@@ -62,6 +63,7 @@ OBJS +=  \
 main.o \
 source/action.o \
 source/color_control.o \
+source/gyro_control.o \
 source/initializing.o \
 source/lcd_control.o \
 source/motor_control.o \
@@ -76,6 +78,7 @@ OBJS_AS_ARGS +=  \
 main.o \
 source/action.o \
 source/color_control.o \
+source/gyro_control.o \
 source/initializing.o \
 source/lcd_control.o \
 source/motor_control.o \
@@ -90,6 +93,7 @@ C_DEPS +=  \
 main.d \
 source/action.d \
 source/color_control.d \
+source/gyro_control.d \
 source/initializing.d \
 source/lcd_control.d \
 source/motor_control.d \
@@ -104,6 +108,7 @@ C_DEPS_AS_ARGS +=  \
 main.d \
 source/action.d \
 source/color_control.d \
+source/gyro_control.d \
 source/initializing.d \
 source/lcd_control.d \
 source/motor_control.d \
@@ -128,6 +133,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 
