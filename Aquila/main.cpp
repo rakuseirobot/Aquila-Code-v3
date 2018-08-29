@@ -76,6 +76,9 @@ int main(){
 	serial.putdec(3.14*100);
 	init_bmx055();
 	while(1){
+		motor::move(0);
+	}
+	while(1){
 		BMX055_Accl();
 		serial.string("Accl= ");
 		serial.putdec(xAccl);

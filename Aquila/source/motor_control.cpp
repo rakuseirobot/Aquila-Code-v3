@@ -333,7 +333,7 @@ namespace motor{
 		else{}
 		return;
 	}
-	const int32_t turnvalue = 2;
+	const int32_t turnvalue = 1;
 	void turn_fix(uint8_t force){
 		int val=0;
 		uint8_t chk[2]={0};
