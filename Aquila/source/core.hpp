@@ -9,8 +9,8 @@ namespace v{
     //for all ,such as wall,move,and so on...
     ci left =0;
     ci front=1;
-    ci back=2;
-    ci right=3;
+    ci back=3;
+    ci right=2;
     //direction
     ci start = -1;
     ci unknown = 0;

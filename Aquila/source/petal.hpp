@@ -97,7 +97,7 @@ bool saka_check(){//未定。
 void move(int num){//num::0:turn_l(90deg),1:go_st,2:turn_r(90deg),3:back(turn),4:back(usiro)
 	switch(num){
 		case 0:
-			motor::move(8);
+			motor::move(9);
 			ta.turn_l();
 			break;
 		case 1:
@@ -113,7 +113,7 @@ void move(int num){//num::0:turn_l(90deg),1:go_st,2:turn_r(90deg),3:back(turn),4
 			ta.turn_l();
 			break;
 		case 2:
-			motor::move(9);
+			motor::move(8);
 			ta.turn_r();
 			break;
 		case 3:
@@ -129,7 +129,7 @@ void move(int num){//num::0:turn_l(90deg),1:go_st,2:turn_r(90deg),3:back(turn),4
 	}
 	if(ta.r_now()->type==v::unknown){ta.r_now()->type = v::normal;}
 	write_walls();
-	motor::fix_position();
+	//motor::fix_position();
 	blacktile();
 	ondo();
 }
