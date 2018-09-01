@@ -212,6 +212,7 @@ public:
 			//no action
 		}
 	}
+
 	void append_node(int dire,int dis){
 		append_node(now,dire,dir,dis);
 	}

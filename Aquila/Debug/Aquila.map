@@ -1237,21 +1237,21 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000    0x1d858
+.debug_info     0x00000000    0x1d879
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000     0x3e5a C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a1u/avrxmega7/crtatxmega128a1u.o
- .debug_info    0x00003e5a    0x11d40 main.o
- .debug_info    0x00015b9a      0x5c8 source/action.o
- .debug_info    0x00016162      0x530 source/color_control.o
- .debug_info    0x00016692      0x5a2 source/initializing.o
- .debug_info    0x00016c34      0xf43 source/lcd_control.o
- .debug_info    0x00017b77     0x1fa9 source/motor_control.o
- .debug_info    0x00019b20      0xf96 source/ping_control.o
- .debug_info    0x0001aab6      0xcf3 source/sermo_control.o
- .debug_info    0x0001b7a9      0xe42 source/ui_control.o
- .debug_info    0x0001c5eb      0x411 source/xmega_spi.o
- .debug_info    0x0001c9fc      0x6cc source/xmega_twi.o
- .debug_info    0x0001d0c8      0x790 source/xmega_usart.o
+ .debug_info    0x00003e5a    0x11d61 main.o
+ .debug_info    0x00015bbb      0x5c8 source/action.o
+ .debug_info    0x00016183      0x530 source/color_control.o
+ .debug_info    0x000166b3      0x5a2 source/initializing.o
+ .debug_info    0x00016c55      0xf43 source/lcd_control.o
+ .debug_info    0x00017b98     0x1fa9 source/motor_control.o
+ .debug_info    0x00019b41      0xf96 source/ping_control.o
+ .debug_info    0x0001aad7      0xcf3 source/sermo_control.o
+ .debug_info    0x0001b7ca      0xe42 source/ui_control.o
+ .debug_info    0x0001c60c      0x411 source/xmega_spi.o
+ .debug_info    0x0001ca1d      0x6cc source/xmega_twi.o
+ .debug_info    0x0001d0e9      0x790 source/xmega_usart.o
 
 .debug_abbrev   0x00000000     0x5aab
  *(.debug_abbrev)
@@ -1300,32 +1300,32 @@ END GROUP
  .debug_frame   0x00000ac8      0x124 source/xmega_twi.o
  .debug_frame   0x00000bec      0x128 source/xmega_usart.o
 
-.debug_str      0x00000000     0x45a9
+.debug_str      0x00000000     0x45b9
  *(.debug_str)
  .debug_str     0x00000000     0x2969 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a1u/avrxmega7/crtatxmega128a1u.o
- .debug_str     0x00002969      0xab2 main.o
-                                0xb4c (size before relaxing)
- .debug_str     0x0000341b       0xbe source/action.o
+ .debug_str     0x00002969      0xac2 main.o
+                                0xb61 (size before relaxing)
+ .debug_str     0x0000342b       0xbe source/action.o
                                 0x3ba (size before relaxing)
- .debug_str     0x000034d9       0xd6 source/color_control.o
+ .debug_str     0x000034e9       0xd6 source/color_control.o
                                 0x389 (size before relaxing)
- .debug_str     0x000035af      0x22a source/initializing.o
+ .debug_str     0x000035bf      0x22a source/initializing.o
                                 0x515 (size before relaxing)
- .debug_str     0x000037d9      0x1b4 source/lcd_control.o
+ .debug_str     0x000037e9      0x1b4 source/lcd_control.o
                                 0x4c7 (size before relaxing)
- .debug_str     0x0000398d      0x32f source/motor_control.o
+ .debug_str     0x0000399d      0x32f source/motor_control.o
                                 0x899 (size before relaxing)
- .debug_str     0x00003cbc      0x445 source/ping_control.o
+ .debug_str     0x00003ccc      0x445 source/ping_control.o
                                 0x8df (size before relaxing)
- .debug_str     0x00004101       0xe6 source/sermo_control.o
+ .debug_str     0x00004111       0xe6 source/sermo_control.o
                                 0x6c9 (size before relaxing)
- .debug_str     0x000041e7      0x1b7 source/ui_control.o
+ .debug_str     0x000041f7      0x1b7 source/ui_control.o
                                 0x89d (size before relaxing)
- .debug_str     0x0000439e       0x64 source/xmega_spi.o
+ .debug_str     0x000043ae       0x64 source/xmega_spi.o
                                 0x3ed (size before relaxing)
- .debug_str     0x00004402      0x15e source/xmega_twi.o
+ .debug_str     0x00004412      0x15e source/xmega_twi.o
                                 0x4f6 (size before relaxing)
- .debug_str     0x00004560       0x49 source/xmega_usart.o
+ .debug_str     0x00004570       0x49 source/xmega_usart.o
                                 0x415 (size before relaxing)
 
 .debug_loc      0x00000000     0xd092
