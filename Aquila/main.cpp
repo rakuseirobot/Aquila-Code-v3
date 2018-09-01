@@ -65,7 +65,7 @@ int main(){
 	init_all();
 	_delay_ms(200);
 	lcd_putstr(LCD1_TWI,"Hello");
-	motor::wait();
+	//motor::wait();
 	lcd_clear();
 	lcd_putstr(LCD1_TWI,"Ready!");
 	//lcd_clear();
@@ -75,37 +75,38 @@ int main(){
 // 	}serial.string("wake_up\n");
 	serial.putdec(3.14*100);
 	init_bmx055();
-	while(1){
-		motor::move(0);
-	}
-	while(1){
-		BMX055_Accl();
-		serial.string("Accl= ");
-		serial.putdec(xAccl);
-		serial.string(",");
-		serial.putdec(yAccl);
-		serial.string(",");
-		serial.putdec(zAccl);
-		serial.string(",");
-		BMX055_Gyro();
-		serial.string("Gyro= ");
-		serial.putdec(xGyro);
-		serial.string(",");
-		serial.putdec(yGyro);
-		serial.string(",");
-		serial.putdec(zGyro);
-		serial.string(",");
-		BMX055_Mag();
-		serial.string("Mag= ");
-		serial.putdec(xMag);
-		serial.string(",");
-		serial.putdec(yMag);
-		serial.string(",");
-		serial.putdec(zMag);
-		serial.string("\n\r");
-		_delay_ms(500);
-	}
-	
+	//while(1){
+		//motor::move(0);
+	//}
+	bmx_test();
+	//while(1){
+		//BMX055_Accl();
+		//serial.string("Accl= ");
+		//serial.putdec(xAccl);
+		//serial.string(",");
+		//serial.putdec(yAccl);
+		//serial.string(",");
+		//serial.putdec(zAccl);
+		//serial.string(",");
+		//BMX055_Gyro();
+		//serial.string("Gyro= ");
+		//serial.putdec(xGyro);
+		//serial.string(",");
+		//serial.putdec(yGyro);
+		//serial.string(",");
+		//serial.putdec(zGyro);
+		//serial.string(",");
+		//BMX055_Mag();
+		//serial.string("Mag= ");
+		//serial.putdec(xMag);
+		//serial.string(",");
+		//serial.putdec(yMag);
+		//serial.string(",");
+		//serial.putdec(zMag);
+		//serial.string("\n\r");
+		//_delay_ms(500);
+	//}
+	//
 	////////////////////////////////////////////////
 	while(1){
 		if(SW1){
