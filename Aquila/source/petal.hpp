@@ -14,8 +14,7 @@
  #include "action.hpp"
  #include "color_control.hpp"
  #include "sermo_control.hpp"
- #include "serial.hpp" //荳逡ｪ譛蠕後↓・・ｼ・
- #include <avr/eeprom.h>
+ #include "serial.hpp" //荳逡ｪ譛蠕後↓・・ｼ・#include <avr/eeprom.h>
  #include <util/delay.h>
 
 core ta;
@@ -119,9 +118,7 @@ void move(int num){//num::0:turn_l(90deg),1:go_st,2:turn_r(90deg),3:back(turn),4
 			break;
 		case 3:
 			motor::move(9);
-			motor::fix_position();
 			motor::move(9);
-			motor::fix_position();
 			motor::move(0);
 			ta.turn_r();
 			ta.turn_r();
@@ -189,7 +186,6 @@ int change_relatively(int now_dir,int di){//diは絶対的な方向,now_dirは�
 	}else if(num ==3||num == -1){
 		return v::right;
 	}else{/*error*/}
-	return 0;
 }
 					 
 int _change_relatively(int now_dir,int dir){/*now_dir::今のdir,dir::direction from now_dir,ans::絶対的なdir,,,,(now_dir,dir)->ans*/}
@@ -248,28 +244,26 @@ void hidarite(){
 	if(ta.r_wall(v::left)==v::wall || ta.ac_next(v::left,1)->type==v::black){
 		if(ta.r_wall(v::front)==v::wall || ta.ac_next(v::left,1)->type==v::black){
 			if(ta.r_wall(v::right)==v::wall || ta.ac_next(v::right,1)->type==v::black){
-				//後ろへ->右へ
-				move(v::right);
-				//move(0);
-				move(v::front);
+				move(0);
+				move(0);
+				move(1);
 			}else{
-				move(v::left);
-				move(v::left);
-				move(v::front);
+				move(2);
+				//move(0);
+				move(1);
 				//右へ
 			}
 		}else{
-			move(v::front);
+			move(1);
 			//前へ
 		}
 	}else{
-		move(v::left);
-		move(v::front);
+		move(0);
+		move(1);
 		//左へ
 	}
  //壁書き込み。
- write_walls();
-}	
+}
 
 void go_home(){
 	node* t = ta.r_now();
@@ -309,5 +303,6 @@ void go_home(){
 		}
 	}
 }
+
 
 

@@ -27,7 +27,7 @@ main.d main.o: .././main.cpp .././source/petal.hpp \
  .././source/action.hpp \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\eeprom.h \
  .././source/color_control.hpp .././source/sermo_control.hpp \
- .././source/serial.hpp .././source/gyro_control.hpp
+ .././source/serial.hpp
 
 .././source/petal.hpp:
 
@@ -96,5 +96,3 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 .././source/sermo_control.hpp:
 
 .././source/serial.hpp:
-
-.././source/gyro_control.hpp:

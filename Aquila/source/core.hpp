@@ -9,8 +9,8 @@ namespace v{
     //for all ,such as wall,move,and so on...
     ci left =0;
     ci front=1;
-    ci back=3;
-    ci right=2;
+    ci back=2;
+    ci right=3;
     //direction
     ci start = -1;
     ci unknown = 0;
@@ -60,6 +60,7 @@ class core{
     //for status
     long long unsigned int counter;//dfs's counter.
     node* ans;//dfs's answer.
+	node* begin;//歩数mapのbegin
     //for dfs
 public:
     core(){
@@ -70,6 +71,7 @@ public:
 		dir = 0;
         counter=0;
         ans = np;
+		begin = np;
     };
     void turn_r(){
         dir++;
