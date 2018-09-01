@@ -87,7 +87,7 @@ void init_bmx055(void){
 	//------------------------------------------------------------//
 	bmx.Address(Addr_Mag,0);
 	bmx.WriteSingle(0x52);  // Select Mag register
-	bmx.WriteSingle(0x16);  // No. of Repetitions for Z-Axis = 15
+	bmx.WriteSingle(0x16);  // No. of Repetitions for Z-Axis = 15    //0x0F??
 	bmx.Stop();
 }
 
@@ -113,9 +113,9 @@ void BMX055_Accl(void)
 	if (yAccl > 2047)  yAccl -= 4096;
 	zAccl = ((data[5] * 256) + (data[4] & 0xF0)) / 16;
 	if (zAccl > 2047)  zAccl -= 4096;
-	/*xAccl = xAccl * 0.0098; // renge +-2g
+	xAccl = xAccl * 0.0098; // renge +-2g
 	yAccl = yAccl * 0.0098; // renge +-2g
-	zAccl = zAccl * 0.0098; // renge +-2g*/
+	zAccl = zAccl * 0.0098; // renge +-2g
 	return;
 }
 //=====================================================================================//
@@ -142,9 +142,9 @@ void BMX055_Gyro(void)
 	zGyro = (data[5] * 256) + data[4];
 	if (zGyro > 32767)  zGyro -= 65536;
 
-	/*xGyro = xGyro * 0.0038; //  Full scale = +/- 125 degree/s
+	xGyro = xGyro * 0.0038; //  Full scale = +/- 125 degree/s
 	yGyro = yGyro * 0.0038; //  Full scale = +/- 125 degree/s
-	zGyro = zGyro * 0.0038; //  Full scale = +/- 125 degree/s*/
+	zGyro = zGyro * 0.0038; //  Full scale = +/- 125 degree/s
 	return;
 }
 //=====================================================================================//
@@ -165,10 +165,43 @@ void BMX055_Mag(void)
 	}
 	// Convert the data
 	xMag = ((data[1] <<8) | (data[0]>>3));
-	//if (xMag > 4095)  xMag -= 8192;
+	if (xMag > 4095)  xMag -= 8192;
 	yMag = ((data[3] <<8) | (data[2]>>3));
-	//if (yMag > 4095)  yMag -= 8192;
+	if (yMag > 4095)  yMag -= 8192;
 	zMag = ((data[5] <<8) | (data[4]>>3));
-	//if (zMag > 16383)  zMag -= 32768;
+	if (zMag > 16383)  zMag -= 32768;
 	return;
 }
+
+void bmx_test(void){
+	
+	usart serial(&USARTC0,&PORTC);
+	while(1){
+		BMX055_Accl();
+		serial.string("Accl= ");
+		serial.putdec(xAccl);
+		serial.string(",");
+		serial.putdec(yAccl);
+		serial.string(",");
+		serial.putdec(zAccl);
+		serial.string(",");
+		BMX055_Gyro();
+		serial.string("Gyro= ");
+		serial.putdec(xGyro);
+		serial.string(",");
+		serial.putdec(yGyro);
+		serial.string(",");
+		serial.putdec(zGyro);
+		serial.string(",");
+		BMX055_Mag();
+		serial.string("Mag= ");
+		serial.putdec(xMag);
+		serial.string(",");
+		serial.putdec(yMag);
+		serial.string(",");
+		serial.putdec(zMag);
+		serial.string("\n\r");
+		_delay_ms(500);
+	}	
+}
+	
