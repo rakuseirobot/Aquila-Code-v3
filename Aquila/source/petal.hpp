@@ -27,30 +27,56 @@ int for_write_walls1(int num){
 	}
 }
 
-void for_write_walls2(int direc){
-	if(check_ping2(direc)==2){
-		ta.w_wall(direc,v::nowall);
-		ta.append_node(direc,1);
-		ta.w_wall(ta.ac_next(direc,1),3-direc,v::nowall);
-		ta.w_wall(ta.ac_next(direc,1),direc,v::wall);
-		ta.append_node(ta.ac_next(direc,1),direc,ta.r_dir(),1);
-		ta.w_wall(ta.ac_next(direc,2),3-direc,v::wall);
-	}else if(check_ping2(direc)==3){
-		ta.w_wall(direc,v::nowall);
-		ta.append_node(direc,1);
-		ta.w_wall(ta.ac_next(direc,1),3-direc,v::nowall);
-		ta.w_wall(ta.ac_next(direc,1),direc,v::nowall);
-		ta.append_node(ta.ac_next(direc,1),direc,ta.r_dir(),1);
-		ta.w_wall(ta.ac_next(direc,2),3-direc,v::nowall);
-		ta.w_wall(ta.ac_next(direc,2),direc,v::wall);
-		ta.append_node(ta.ac_next(direc,2),direc,ta.r_dir(),1);
-		ta.w_wall(ta.ac_next(direc,3),3-direc,v::wall);
-	}else if(check_ping2(direc)==4){
-		 
+/*
+int c_p(int x){
+	if(check_ping(x)<){
+		return 1;
+	}else if(check_ping(x)<){
+		return 2;
+	}else if(check_ping(x)<){
+		return 3;
+	}else if(check_ping(x)<){
+		return 4;
+	}else if(check_ping(x)<){
+		return 5;
 	}else{
-		 
+		//error
 	}
 }
+
+void for_w_w(int direc){
+	switch(c_p(direc)){
+		case 1: //横に壁
+			ta.w_wall(direc,v::wall);
+			break;
+		case 2: //隣のマスに壁がある
+			ta.append_node(direc,1);
+			ta.w_wall(direc,v::nowall);
+			ta.w_wall(ta.ac_next(direc,1),direc,v::wall);//隣のマスに壁をwrite
+			break;
+		case 3: //2つ隣のマスに壁がある
+			ta.append_node(direc,1);
+			ta.append_node(ta.ac_next(direc,1),direc,ta.r_dir(),1);//隣の隣のマス作成
+			ta.w_wall(direc,v::nowall);
+			ta.w_wall(ta.ac_next(direc,1),direc,v::nowall);
+			ta.w_wall(ta.ac_next(direc,2),direc,v::wall);
+			break;
+		case 4: //3つ隣のマスに壁がある
+			ta.append_node(direc,1);
+			ta.append_node(ta.ac_next(direc,1),direc,ta.r_dir(),1);//隣の隣のマス作成
+			ta.append_node(ta.ac_next(direc,2),direc,ta.r_dir(),1);//隣の隣の隣のマス作成
+			ta.w_wall(direc,v::nowall);
+			ta.w_wall(ta.ac_next(direc,1),direc,v::nowall);
+			ta.w_wall(ta.ac_next(direc,2),direc,v::nowall);
+			ta.w_wall(ta.ac_next(direc,3),direc,v::wall);
+			break;
+		case 5: //4つ隣のマスに壁がある
+			break;
+		default:
+			break;
+	}
+}
+*/
 
 void write_walls(){
 	ta.w_wall(v::left,for_write_walls1(v::left));

@@ -18,8 +18,15 @@ int main(){
     //lcd_clear();
     serial.string("wake_up\n");
 	while(1){
-		write_walls();
-		hidarite();
+		lcd_putdec(LCD1_TWI,check_ping(v::right));
+		_delay_ms(100);
+	//	lcd_clear();
+		//write_walls();
+	
+		move(1);
+		lcd_clear();
+		move(3);
+		//hidarite();
 	}
     return 0;
 }

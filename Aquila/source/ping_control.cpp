@@ -105,10 +105,10 @@ int for_cp(int num){
 }
 
 uint8_t check_ping2(int x){
- if(x==0)x=1;
- if(x==1)x=3;
- if(x==2)x=5;
- if(x==3)x=6;
+//  if(x==0)x=1;
+//  if(x==1)x=3;
+//  if(x==2)x=5;
+//  if(x==3)x=6;
  if(ping(x)<Sikiti){
 	return 1;
  }else if(ping(x)<Sikiti*2){//50=>60ÅEΩ…èCÅEΩÅEΩ9.05

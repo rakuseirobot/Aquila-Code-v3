@@ -1,4 +1,9 @@
-//#include<iostream>
+/*
+ *  core.hpp 
+ *  this is functions for mapping,algorithms,and so on. It's core of this robot.
+ *  Author: TOMOKI
+ */ 
+
 #define np nullptr
 using namespace std;
 using ll = long long int;
@@ -33,6 +38,7 @@ struct node{
     node* back[1] ={nullptr};
     int wall[4]={0};// 0|<=|2 wall[0].,if dir=1 then wall[v::left]=left.??????????????
     int flag=0;
+    int hosu=1000; 
 };
 
 class nodes{
@@ -51,27 +57,51 @@ public:
     bl full(){ if(now>=max-1){ return true; }else{ return false; } }
 };
 
+struct queue{////test
+    node* box[300]={np};
+    int siz;
+
+    queue(){siz = 0;}
+    void push(node* x){ box[siz]=x; siz++; }
+    node* front(){return box[0];}
+    int size(){return siz;}
+    void pop(){
+        for(int i=0;i<siz;i++){
+            box[i]=box[i+1];
+        }
+        siz--;
+    }
+    void clear(){for(int i=0;i<siz;i++)box[i]=np; siz=0;}
+    bool search(node* x){
+        bool tt = false;
+        for(int i=0;i<siz;i++){if(box[i]==x)tt=true;}
+        return tt;
+    }
+};
+
 nodes mall;
 
 class core{
     node* now;
-    node* start;//it may be unnecessary.But now, it is used in dfs. 
+    node* start;//it may be unnecessary.But now, it is used in dfs.
     int dir;//0::<,1::^,2::>,3::v
     //for status
     long long unsigned int counter;//dfs's counter.
+    long long unsigned int countter;
     node* ans;//dfs's answer.
-	node* begin;//歩数mapのbegin
+    node* begin;//歩数mapのbegin
     //for dfs
 public:
     core(){
         now = mall.make();
-        start = now; 
+        start = now;
         start->x=100;start->y=100;start->z=1;start->back[0]=np;start->type=v::start;start->depth=0;
         //dir = v::left;
-		dir = 0;
+        dir = 0;
         counter=0;
         ans = np;
-		begin = np;
+        begin = np;
+        countter=0;
     };
     void turn_r(){
         dir++;
@@ -86,12 +116,12 @@ public:
         if(t!=np){
             if(t->depth>depth+1)t->depth=depth+1;
             if((long long int)(t->flag)<=counter){
-              if(t->x==x && t->y==y && t->z==z){ ans=t; }
-              t->flag=counter+1;
-              dfs(t->next[0],x,y,z,t->depth);
-              dfs(t->next[1],x,y,z,t->depth);
-              dfs(t->next[2],x,y,z,t->depth);
-              dfs(t->next[3],x,y,z,t->depth);
+                if(t->x==x && t->y==y && t->z==z){ ans=t; }
+                t->flag=counter+1;
+                dfs(t->next[0],x,y,z,t->depth);
+                dfs(t->next[1],x,y,z,t->depth);
+                dfs(t->next[2],x,y,z,t->depth);
+                dfs(t->next[3],x,y,z,t->depth);
             }
         }
     };
@@ -104,6 +134,7 @@ public:
 
     void move_to(node* t,int x,int y,int z){//connect (t,node(x,y,z)).
         node* k = find(x,y,z);
+            //cout<<"t,x,y,z,k :"<<t<<" , "<<x<<" , "<<y<<" , "<<z<<" , "<<k<<endl;
         if(k==np){
             node* n = mall.make();
             n->x=x;n->y=y;n->z=z;
@@ -113,8 +144,15 @@ public:
             n->next[0]=t;
         }else{
             if(t->next[0]!=k && t->next[1]!=k && t->next[2]!= k && t->next[3]!= k){
-                for(int i=0;i<4;i++){ if(t->next[i]==np){t->next[i]=k; break;}}//conection of nodes.
-                if(k->next[0]!=t && k->next[1]!=t && k->next[2]!= t &&k->next[3]!=t){ for(int i=0;i<4;i++){ if(k->next[i]==np){k->next[i]=t; break; } } }//conection of nodes.
+                for(int i=0;i<4;i++){ 
+                    if(t->next[i]==np){t->next[i]=k; break;}
+                }//conection of nodes.
+                //////////////////////////////////////////////////////////////////////
+                if(k->next[0]!=t && k->next[1]!=t && k->next[2]!= t && k->next[3]!=t){ 
+                    for(int i=0;i<4;i++){ 
+                        if(k->next[i]==np){k->next[i]=t; break; } 
+                    }//conection of nodes.
+                }
                 find(x,y,z);//depth�ｿｽﾌ更�ｿｽV
             }
             k->back[0]=t;
@@ -125,7 +163,7 @@ public:
         now = find(x,y,z);
     }
 
-	node* r_start(){ return start; }
+    node* r_start(){ return start; }
 
     node* r_now(){ return now; }
     void w_now(int x,int y,int z){ now = find(x,y,z); }
@@ -133,8 +171,8 @@ public:
 
     int r_dir(){ return dir; }
     void w_wall(node* t,int direction,int num){ t->wall[(dir+direction+3)%4]=num; }
-	void w_wall(int direction,int num){ now->wall[(dir+direction+3)%4]=num; }
- 
+    void w_wall(int direction,int num){ now->wall[(dir+direction+3)%4]=num; }
+
     int r_wall(node* t,int direction){ return t->wall[(dir+direction+3)%4]; }
     int r_wall(int direction){ return now->wall[(dir+direction+3)%4]; }
 
@@ -188,35 +226,128 @@ public:
         }
     }
 
-	void append_node(node* t,int dire,int now_dir,int dist){
-		if(ac_next(t,dire,now_dir,dist)==np){
-			int direction = (dire+now_dir+3)%4; 
-			switch(direction){
-				case v::left:
-				    move_to(t,t->x - dist,t->y,t->z);
-				    break;
-				case v::front:
-				    move_to(t,t->x,t->y + dist,t->z);
-				    break;
-				case v::right:
-				    move_to(t,t->x + dist,t->y,t->z);
-				    break;
-				case v::back:
-				    move_to(t,t->x,t->y - dist,t->z);
-			    	break;
-				default:
-				    //np;
-				    break;
-			}
-		}else{
-			//no action
-		}
-	}
-
-	void append_node(int dire,int dis){
-		append_node(now,dire,dir,dis);
-	}
+  /*  void append_node(node* t,int dire,int now_dir,int dist){
+        if(ac_next(t,dire,now_dir,dist)==np){
+            int direction = (dire+now_dir+3)%4;
+            switch(direction){
+                case v::left :
+                    move_to(t,t->x - dist,t->y,t->z);
+                    break;
+                case v::front :
+                    move_to(t,t->x,t->y + dist,t->z);
+                    break;
+                case v::right :
+                    move_to(t,t->x + dist,t->y,t->z);
+                    break;
+                case v::back :
+                    move_to(t,t->x,t->y - dist,t->z);
+                    break;
+                default:
+                    //np;
+                    break;
+            }
+        }else{
+            //no action
+        }
+    } */
+    
+    void append_node(node* t,int dire,int now_dir,int dist){
+        if(t==np){
+            //no action
+        }else{
+            int direction = (dire+now_dir+3)%4;
+            switch(direction){
+                case v::left :
+                    move_to(t,t->x - dist,t->y,t->z);
+                    break;
+                case v::front :
+                    move_to(t,t->x,t->y + dist,t->z);
+                    break;
+                case v::right :
+                    move_to(t,t->x + dist,t->y,t->z);
+                    break;
+                case v::back :
+                    move_to(t,t->x,t->y - dist,t->z);
+                    break;
+                default:
+                    //np;
+                    break;
+            }
+        }
+    }
+    
+    void append_node(int dire,int dis){
+        append_node(now,dire,dir,dis);
+    }
 
     node* ac_next(int dire,int dist){ return ac_next(now,dire,dir,dist); }
-};
+    /*
+    * test -> Approval
+    *  func : void hosumap(int x,int y,int z) 
+    *   use : core-> (node*) begin , node-> (int) hosu
+    * ////////////////////////////////////////////// 
+    *  func : void clear_hosu();
+    *   use : node* find(int x,int y,int z)??
+    */
+   void dfs_to_hosu(node* t,int hosuu){
+       //if(t!=np)cout<<"start"<<t<<" , "<<t->x<<" , "<<t->y<<" , "<<t->z<<" , "<<hosuu<<endl;
+        if(t!=np){
+            if(t->hosu>hosuu+1)t->hosu=hosuu+1;
+            if((long long int)(t->flag)<=counter){
+                //if(t->x==x && t->y==y && t->z==z){ ans=t; }
+                t->flag=counter+1;
+                dfs_to_hosu(t->next[0],t->hosu);
+                dfs_to_hosu(t->next[1],t->hosu);
+                dfs_to_hosu(t->next[2],t->hosu);
+                dfs_to_hosu(t->next[3],t->hosu);
+            }
+            //cout<<"x,y,z,hosu,hosuu : "<<t->x<<" , "<<t->y<<" , "<<t->z<<" , "<<t->hosu<<" , "<<hosuu<<endl;
+        }
+    };
 
+
+   queue q;
+
+   void recursion_hosu(node* t){
+       if(t!=np){
+           if(!q.search(t)){
+                q.push(t);
+                dfs_to_hosu(t,t->hosu);
+                counter++;
+                recursion_hosu(t->next[0]);
+                counter++;
+                recursion_hosu(t->next[1]);
+                counter++;
+                recursion_hosu(t->next[2]);
+                counter++;
+                recursion_hosu(t->next[3]);
+                counter++;
+           }
+       }
+   }
+
+   void hosumap(int x,int y,int z){
+       begin = find(x,y,z);
+       begin->hosu = 0;
+       recursion_hosu(begin);
+       q.clear();
+       counter++;
+   }
+
+   void cl_hs(node* t){
+       if(t!=np && (long long)(t->flag)<=counter){
+           t->flag=counter+1;
+           t->hosu=0;
+           cl_hs(t->next[0]);
+           cl_hs(t->next[1]);
+           cl_hs(t->next[2]);
+           cl_hs(t->next[3]);
+       }
+   }
+   
+   void clear_hosu(){
+       cl_hs(start);
+   }
+   ///////
+/////////end of hosu_map// := test -> Approval   ////////////////////////
+};
