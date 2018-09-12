@@ -57,6 +57,13 @@ public:
     bl full(){ if(now>=max-1){ return true; }else{ return false; } }
 };
 
+struct stack{
+	node* box[300]={np};
+	int siz;
+	queue(){siz=0;};
+	node* front(){}
+};
+
 struct queue{////test
     node* box[300]={np};
     int siz;

@@ -17,16 +17,19 @@ int main(){
     lcd_putstr(LCD1_TWI,"Ready!");
     //lcd_clear();
     serial.string("wake_up\n");
-	while(1){
-		lcd_putdec(LCD1_TWI,check_ping(v::right));
-		_delay_ms(100);
-	//	lcd_clear();
-		//write_walls();
-	
-		move(1);
-		lcd_clear();
-		move(3);
-		//hidarite();
-	}
+ 	write_walls();
+	lcd_putdec(LCD1_TWI,check_ping(v::left));
+	_delay_ms(1000);
+	lcd_clear();
+// 	while(1){
+// 		write_walls();
+// 		_delay_ms(1000);
+// 	}
+ 	real_dfs(np,ta.r_now());
+// 	while(1){
+// 		lcd_putdec(LCD1_TWI,check_ping(v::left));
+// 		_delay_ms(200);
+// 		lcd_clear();
+// 	}
     return 0;
 }
