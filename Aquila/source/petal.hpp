@@ -410,5 +410,4 @@ void real_dfs(node* t,node* s){
 	if(t!=np)movetoa(t);
 }
 
-void real_dfs2(node*)
 

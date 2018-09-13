@@ -25,7 +25,14 @@ int main(){
 // 		write_walls();
 // 		_delay_ms(1000);
 // 	}
- 	real_dfs(np,ta.r_now());
+ 	//real_dfs(np,ta.r_now());
+	while(1){
+		lcd_putdec(LCD1_TWI,ping(1));
+		lcd_putstr(LCD1_TWI,"\n");
+		lcd_putdec(LCD1_TWI,ping(5));
+		_delay_ms(300);
+		lcd_clear();
+	}
 // 	while(1){
 // 		lcd_putdec(LCD1_TWI,check_ping(v::left));
 // 		_delay_ms(200);

@@ -36,8 +36,8 @@ struct node{
     int x=0,y=0,z=0,depth=1000,type=0;
     node* next[4] ={nullptr,nullptr,nullptr,nullptr};
     node* back[1] ={nullptr};
-    int wall[4]={0};// 0|<=|2 wall[0].,if dir=1 then wall[v::left]=left.??????????????
-    int flag=0;
+    uint8_t wall[4]={0};// 0|<=|2 wall[0].,if dir=1 then wall[v::left]=left.??????????????
+    long int flag=0;
     int hosu=1000; 
 };
 
@@ -60,8 +60,9 @@ public:
 struct stack{
 	node* box[300]={np};
 	int siz;
-	queue(){siz=0;};
-	node* front(){}
+	stack(){siz=0;};
+	node* front(){return box[siz-1];}
+
 };
 
 struct queue{////test
@@ -86,6 +87,7 @@ struct queue{////test
     }
 };
 
+queue q;
 nodes mall;
 
 class core{
@@ -132,6 +134,38 @@ public:
             }
         }
     };
+
+	void into_queue(node* t){
+		for(int i=0;i<4;i++){
+			if(t->next[i]!=np && (int)t->next[i]->flag <= counter){
+				q.push(t->next[i]);
+                t->next[i]->flag = counter+1;
+                t->next[i]->hosu=t->hosu+1;
+			}
+		}
+	}
+
+	node* bfs_type(node* t,int typ){
+		t->flag = counter+1;
+		t->hosu=0;
+		q.push(t);
+		node* x;
+		while(q.size()>0){
+			x = q.front();
+			if(x->type==typ){break;}
+			into_queue(x);
+			q.pop();
+		}
+		counter++;
+		if(q.size()>0){
+			q.clear();
+            return x;
+		}else{
+            q.clear();
+			return np;
+		}
+	}
+
     node* find(int x,int y,int z){
         ans=np;
         dfs(start,x,y,z,start->depth);
@@ -258,7 +292,7 @@ public:
         }
     } */
     
-    void append_node(node* t,int dire,int now_dir,int dist){
+    void append_node(node* t,int dire,int now_dir,int dist){//t->dir->now_dor->distance
         if(t==np){
             //no action
         }else{
@@ -296,50 +330,52 @@ public:
     *  func : void clear_hosu();
     *   use : node* find(int x,int y,int z)??
     */
-   void dfs_to_hosu(node* t,int hosuu){
-       //if(t!=np)cout<<"start"<<t<<" , "<<t->x<<" , "<<t->y<<" , "<<t->z<<" , "<<hosuu<<endl;
-        if(t!=np){
-            if(t->hosu>hosuu+1)t->hosu=hosuu+1;
-            if((long long int)(t->flag)<=counter){
-                //if(t->x==x && t->y==y && t->z==z){ ans=t; }
-                t->flag=counter+1;
-                dfs_to_hosu(t->next[0],t->hosu);
-                dfs_to_hosu(t->next[1],t->hosu);
-                dfs_to_hosu(t->next[2],t->hosu);
-                dfs_to_hosu(t->next[3],t->hosu);
-            }
-            //cout<<"x,y,z,hosu,hosuu : "<<t->x<<" , "<<t->y<<" , "<<t->z<<" , "<<t->hosu<<" , "<<hosuu<<endl;
-        }
-    };
-
-
-   queue q;
-
-   void recursion_hosu(node* t){
-       if(t!=np){
-           if(!q.search(t)){
-                q.push(t);
-                dfs_to_hosu(t,t->hosu);
-                counter++;
-                recursion_hosu(t->next[0]);
-                counter++;
-                recursion_hosu(t->next[1]);
-                counter++;
-                recursion_hosu(t->next[2]);
-                counter++;
-                recursion_hosu(t->next[3]);
-                counter++;
-           }
-       }
-   }
-
-   void hosumap(int x,int y,int z){
-       begin = find(x,y,z);
-       begin->hosu = 0;
-       recursion_hosu(begin);
-       q.clear();
-       counter++;
-   }
+//   void dfs_to_hosu(node* t,int hosuu){
+//       //if(t!=np)cout<<"start"<<t<<" , "<<t->x<<" , "<<t->y<<" , "<<t->z<<" , "<<hosuu<<endl;
+//        if(t!=np){
+//            if(t->hosu>hosuu+1)t->hosu=hosuu+1;
+//            if((long long int)(t->flag)<=counter){
+//                //if(t->x==x && t->y==y && t->z==z){ ans=t; }
+//                t->flag=counter+1;
+//                dfs_to_hosu(t->next[0],t->hosu);
+//                dfs_to_hosu(t->next[1],t->hosu);
+//                dfs_to_hosu(t->next[2],t->hosu);
+//                dfs_to_hosu(t->next[3],t->hosu);
+//            }
+//            //cout<<"x,y,z,hosu,hosuu : "<<t->x<<" , "<<t->y<<" , "<<t->z<<" , "<<t->hosu<<" , "<<hosuu<<endl;
+//        }
+//    };
+//
+//
+//   queue q;
+//
+//   void recursion_hosu(node* t){
+//       if(t!=np){
+//           if(!q.search(t)){
+//                q.push(t);
+//                dfs_to_hosu(t,t->hosu);
+//                counter++;
+//                recursion_hosu(t->next[0]);
+//                counter++;
+//                recursion_hosu(t->next[1]);
+//                counter++;
+//                recursion_hosu(t->next[2]);
+//                counter++;
+//                recursion_hosu(t->next[3]);
+//                counter++;
+//           }
+//       }
+//   }
+//
+//   void hosumap(int x,int y,int z){
+//       begin = find(x,y,z);
+//       begin->hosu = 0;
+//       recursion_hosu(begin);
+//       q.clear();
+//       counter++;
+//   }
+// *bfsの実装により不必要になった。
+// *replaced by  bfs
 
    void cl_hs(node* t){
        if(t!=np && (long long)(t->flag)<=counter){
@@ -354,6 +390,7 @@ public:
    
    void clear_hosu(){
        cl_hs(start);
+       counter++;
    }
    ///////
 /////////end of hosu_map// := test -> Approval   ////////////////////////
