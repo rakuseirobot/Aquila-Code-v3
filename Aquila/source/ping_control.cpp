@@ -58,8 +58,8 @@ uint16_t ping_check (PORT_t *p_port,uint8_t p_pin){
 	_delay_ms(5);
 	return (uint16_t)(TCC0.CNT);
 }
-const int Front=1,Back=4; 
-const double LEFT=73.18, RIGHT=3.11; //L::2,3//R::5,6
+// const int Front=1,Back=4; 
+// const double LEFT=73.18, RIGHT=3.11; //L::2,3//R::5,6
 
 /*
 bool check_ping(int x){
@@ -76,39 +76,35 @@ bool check_ping(int x){
 }
 */
 
-int for_cp(int num){
-	if(num==0){
-		if(smaller(ping(1),ping(2))<Sikiti){
-			return 1;
-		}else{
-			return	0;
-		}
-	}else if(num==1){
-		if(ping(3)<Sikiti){
-			return 1;
-		}else{
-			return 0;
-		}
-	}else if(num==2){
-		if(smaller(ping(4),ping(5))<Sikiti){
-			return 1;
-		}else{
-			return 0;
-		}
-	}else if(num==3){
-		if(ping(6)<Sikiti){
-			return 1;
-		}else{
-			return 0;
-		}
-	}
-}
+// int for_cp(int num){
+// 	if(num==0){
+// 		if(smaller(ping(1),ping(2))<Sikiti){
+// 			return 1;
+// 		}else{
+// 			return	0;
+// 		}
+// 	}else if(num==1){
+// 		if(ping(3)<Sikiti){
+// 			return 1;
+// 		}else{
+// 			return 0;
+// 		}
+// 	}else if(num==2){
+// 		if(smaller(ping(4),ping(5))<Sikiti){
+// 			return 1;
+// 		}else{
+// 			return 0;
+// 		}
+// 	}else if(num==3){
+// 		if(ping(6)<Sikiti){
+// 			return 1;
+// 		}else{
+// 			return 0;
+// 		}
+// 	}
+// }
 
 uint8_t check_ping2(int x){
-//  if(x==0)x=1;
-//  if(x==1)x=3;
-//  if(x==2)x=5;
-//  if(x==3)x=6;
  if(ping(x)<Sikiti){
 	return 1;
  }else if(ping(x)<Sikiti*2){//50=>60・ｽﾉ修・ｽ・ｽ9.05
@@ -131,7 +127,7 @@ uint16_t smaller(uint16_t x,uint16_t y){//・ｽ蛯ｫ・ｽ・ｽ・ｽ・ｽ
  }
 }
 
-uint8_t check_ping(int x){
+uint8_t check_ping(int x){//x::direction,return 1,2,3,4,0(0=error)
 	switch(x){
 		case 0:
 			return smaller(check_ping2(1),check_ping2(2));

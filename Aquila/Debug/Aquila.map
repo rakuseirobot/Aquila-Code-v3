@@ -78,8 +78,6 @@ Discarded input sections
  .bss           0x00000000        0x0 main.o
  .text._ZN4core5go_stEv
                 0x00000000     0x4dd4 main.o
- .text._Z16for_write_walls1i
-                0x00000000       0x10 main.o
  .text._Z4ondov
                 0x00000000       0x5e main.o
  .text._Z9blacktilev
@@ -214,8 +212,6 @@ Discarded input sections
  .text          0x00000000        0x0 source/ping_control.o
  .data          0x00000000        0x0 source/ping_control.o
  .bss           0x00000000        0x0 source/ping_control.o
- .text._Z6for_cpi
-                0x00000000       0xae source/ping_control.o
  .text._Z7smallerjj
                 0x00000000        0xa source/ping_control.o
  .rodata.str1.1
@@ -1193,131 +1189,131 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x3c8
+.debug_aranges  0x00000000      0x3b8
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0xd0 main.o
+                0x00000000       0xc8 main.o
  .debug_aranges
-                0x000000d0       0x38 source/action.o
+                0x000000c8       0x38 source/action.o
  .debug_aranges
-                0x00000108       0x38 source/color_control.o
+                0x00000100       0x38 source/color_control.o
  .debug_aranges
-                0x00000140       0x38 source/initializing.o
+                0x00000138       0x38 source/initializing.o
  .debug_aranges
-                0x00000178       0x40 source/lcd_control.o
+                0x00000170       0x40 source/lcd_control.o
  .debug_aranges
-                0x000001b8       0xa0 source/motor_control.o
+                0x000001b0       0xa0 source/motor_control.o
  .debug_aranges
-                0x00000258       0x50 source/ping_control.o
+                0x00000250       0x48 source/ping_control.o
  .debug_aranges
-                0x000002a8       0x48 source/ui_control.o
+                0x00000298       0x48 source/ui_control.o
  .debug_aranges
-                0x000002f0       0x30 source/xmega_spi.o
+                0x000002e0       0x30 source/xmega_spi.o
  .debug_aranges
-                0x00000320       0x60 source/xmega_twi.o
+                0x00000310       0x60 source/xmega_twi.o
  .debug_aranges
-                0x00000380       0x48 source/xmega_usart.o
+                0x00000370       0x48 source/xmega_usart.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000    0x1d8d1
+.debug_info     0x00000000    0x1d77a
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000     0x3e5a C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a1u/avrxmega7/crtatxmega128a1u.o
- .debug_info    0x00003e5a    0x12aac main.o
- .debug_info    0x00016906      0x5c8 source/action.o
- .debug_info    0x00016ece      0x530 source/color_control.o
- .debug_info    0x000173fe      0x5a2 source/initializing.o
- .debug_info    0x000179a0      0xf43 source/lcd_control.o
- .debug_info    0x000188e3     0x1fa9 source/motor_control.o
- .debug_info    0x0001a88c      0xf96 source/ping_control.o
- .debug_info    0x0001b822      0xe42 source/ui_control.o
- .debug_info    0x0001c664      0x411 source/xmega_spi.o
- .debug_info    0x0001ca75      0x6cc source/xmega_twi.o
- .debug_info    0x0001d141      0x790 source/xmega_usart.o
+ .debug_info    0x00003e5a    0x12a54 main.o
+ .debug_info    0x000168ae      0x5c8 source/action.o
+ .debug_info    0x00016e76      0x530 source/color_control.o
+ .debug_info    0x000173a6      0x5a2 source/initializing.o
+ .debug_info    0x00017948      0xf43 source/lcd_control.o
+ .debug_info    0x0001888b     0x1fa9 source/motor_control.o
+ .debug_info    0x0001a834      0xe97 source/ping_control.o
+ .debug_info    0x0001b6cb      0xe42 source/ui_control.o
+ .debug_info    0x0001c50d      0x411 source/xmega_spi.o
+ .debug_info    0x0001c91e      0x6cc source/xmega_twi.o
+ .debug_info    0x0001cfea      0x790 source/xmega_usart.o
 
-.debug_abbrev   0x00000000     0x581e
+.debug_abbrev   0x00000000     0x57e3
  *(.debug_abbrev)
  .debug_abbrev  0x00000000     0x3b0e C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a1u/avrxmega7/crtatxmega128a1u.o
- .debug_abbrev  0x00003b0e      0x631 main.o
- .debug_abbrev  0x0000413f      0x1d0 source/action.o
- .debug_abbrev  0x0000430f      0x1c2 source/color_control.o
- .debug_abbrev  0x000044d1      0x14c source/initializing.o
- .debug_abbrev  0x0000461d      0x24c source/lcd_control.o
- .debug_abbrev  0x00004869      0x49e source/motor_control.o
- .debug_abbrev  0x00004d07      0x324 source/ping_control.o
- .debug_abbrev  0x0000502b      0x263 source/ui_control.o
- .debug_abbrev  0x0000528e      0x1b0 source/xmega_spi.o
- .debug_abbrev  0x0000543e      0x217 source/xmega_twi.o
- .debug_abbrev  0x00005655      0x1c9 source/xmega_usart.o
+ .debug_abbrev  0x00003b0e      0x614 main.o
+ .debug_abbrev  0x00004122      0x1d0 source/action.o
+ .debug_abbrev  0x000042f2      0x1c2 source/color_control.o
+ .debug_abbrev  0x000044b4      0x14c source/initializing.o
+ .debug_abbrev  0x00004600      0x24c source/lcd_control.o
+ .debug_abbrev  0x0000484c      0x49e source/motor_control.o
+ .debug_abbrev  0x00004cea      0x306 source/ping_control.o
+ .debug_abbrev  0x00004ff0      0x263 source/ui_control.o
+ .debug_abbrev  0x00005253      0x1b0 source/xmega_spi.o
+ .debug_abbrev  0x00005403      0x217 source/xmega_twi.o
+ .debug_abbrev  0x0000561a      0x1c9 source/xmega_usart.o
 
-.debug_line     0x00000000     0x63c7
+.debug_line     0x00000000     0x6345
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x3b5 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a1u/avrxmega7/crtatxmega128a1u.o
- .debug_line    0x000003b5     0x3aa3 main.o
- .debug_line    0x00003e58      0x3f5 source/action.o
- .debug_line    0x0000424d      0x28c source/color_control.o
- .debug_line    0x000044d9      0x1f6 source/initializing.o
- .debug_line    0x000046cf      0x481 source/lcd_control.o
- .debug_line    0x00004b50      0x9f1 source/motor_control.o
- .debug_line    0x00005541      0x37d source/ping_control.o
- .debug_line    0x000058be      0x391 source/ui_control.o
- .debug_line    0x00005c4f      0x181 source/xmega_spi.o
- .debug_line    0x00005dd0      0x35d source/xmega_twi.o
- .debug_line    0x0000612d      0x29a source/xmega_usart.o
+ .debug_line    0x000003b5     0x3a80 main.o
+ .debug_line    0x00003e35      0x3f5 source/action.o
+ .debug_line    0x0000422a      0x28c source/color_control.o
+ .debug_line    0x000044b6      0x1f6 source/initializing.o
+ .debug_line    0x000046ac      0x481 source/lcd_control.o
+ .debug_line    0x00004b2d      0x9f1 source/motor_control.o
+ .debug_line    0x0000551e      0x31e source/ping_control.o
+ .debug_line    0x0000583c      0x391 source/ui_control.o
+ .debug_line    0x00005bcd      0x181 source/xmega_spi.o
+ .debug_line    0x00005d4e      0x35d source/xmega_twi.o
+ .debug_line    0x000060ab      0x29a source/xmega_usart.o
 
-.debug_frame    0x00000000      0xc38
+.debug_frame    0x00000000      0xc0c
  *(.debug_frame)
- .debug_frame   0x00000000      0x450 main.o
- .debug_frame   0x00000450       0x74 source/action.o
- .debug_frame   0x000004c4       0x64 source/color_control.o
- .debug_frame   0x00000528       0x54 source/initializing.o
- .debug_frame   0x0000057c      0x10c source/lcd_control.o
- .debug_frame   0x00000688      0x1e0 source/motor_control.o
- .debug_frame   0x00000868       0xb0 source/ping_control.o
- .debug_frame   0x00000918       0x90 source/ui_control.o
- .debug_frame   0x000009a8       0x44 source/xmega_spi.o
- .debug_frame   0x000009ec      0x124 source/xmega_twi.o
- .debug_frame   0x00000b10      0x128 source/xmega_usart.o
+ .debug_frame   0x00000000      0x440 main.o
+ .debug_frame   0x00000440       0x74 source/action.o
+ .debug_frame   0x000004b4       0x64 source/color_control.o
+ .debug_frame   0x00000518       0x54 source/initializing.o
+ .debug_frame   0x0000056c      0x10c source/lcd_control.o
+ .debug_frame   0x00000678      0x1e0 source/motor_control.o
+ .debug_frame   0x00000858       0x94 source/ping_control.o
+ .debug_frame   0x000008ec       0x90 source/ui_control.o
+ .debug_frame   0x0000097c       0x44 source/xmega_spi.o
+ .debug_frame   0x000009c0      0x124 source/xmega_twi.o
+ .debug_frame   0x00000ae4      0x128 source/xmega_usart.o
 
-.debug_str      0x00000000     0x4562
+.debug_str      0x00000000     0x4513
  *(.debug_str)
  .debug_str     0x00000000     0x2969 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a1u/avrxmega7/crtatxmega128a1u.o
- .debug_str     0x00002969      0xbfc main.o
-                                0xca7 (size before relaxing)
- .debug_str     0x00003565       0x7e source/action.o
+ .debug_str     0x00002969      0xbc3 main.o
+                                0xc6e (size before relaxing)
+ .debug_str     0x0000352c       0x7e source/action.o
                                 0x3c2 (size before relaxing)
- .debug_str     0x000035e3       0x95 source/color_control.o
+ .debug_str     0x000035aa       0x95 source/color_control.o
                                 0x390 (size before relaxing)
- .debug_str     0x00003678      0x22a source/initializing.o
+ .debug_str     0x0000363f      0x22a source/initializing.o
                                 0x51d (size before relaxing)
- .debug_str     0x000038a2      0x18c source/lcd_control.o
+ .debug_str     0x00003869      0x18c source/lcd_control.o
                                 0x4ce (size before relaxing)
- .debug_str     0x00003a2e      0x30b source/motor_control.o
+ .debug_str     0x000039f5      0x30b source/motor_control.o
                                 0x899 (size before relaxing)
- .debug_str     0x00003d39      0x462 source/ping_control.o
-                                0x8e6 (size before relaxing)
- .debug_str     0x0000419b      0x1b7 source/ui_control.o
+ .debug_str     0x00003d00      0x44c source/ping_control.o
+                                0x8be (size before relaxing)
+ .debug_str     0x0000414c      0x1b7 source/ui_control.o
                                 0x8a4 (size before relaxing)
- .debug_str     0x00004352       0x64 source/xmega_spi.o
+ .debug_str     0x00004303       0x64 source/xmega_spi.o
                                 0x3f4 (size before relaxing)
- .debug_str     0x000043b6      0x163 source/xmega_twi.o
+ .debug_str     0x00004367      0x163 source/xmega_twi.o
                                 0x4fe (size before relaxing)
- .debug_str     0x00004519       0x49 source/xmega_usart.o
+ .debug_str     0x000044ca       0x49 source/xmega_usart.o
                                 0x41c (size before relaxing)
 
-.debug_loc      0x00000000     0xd384
+.debug_loc      0x00000000     0xd291
  *(.debug_loc)
- .debug_loc     0x00000000     0xa38f main.o
- .debug_loc     0x0000a38f      0x372 source/action.o
- .debug_loc     0x0000a701      0x239 source/color_control.o
- .debug_loc     0x0000a93a      0x76d source/lcd_control.o
- .debug_loc     0x0000b0a7      0xc3e source/motor_control.o
- .debug_loc     0x0000bce5      0x4e7 source/ping_control.o
- .debug_loc     0x0000c1cc      0x52a source/ui_control.o
- .debug_loc     0x0000c6f6       0xa7 source/xmega_spi.o
- .debug_loc     0x0000c79d      0x58b source/xmega_twi.o
- .debug_loc     0x0000cd28      0x65c source/xmega_usart.o
+ .debug_loc     0x00000000     0xa369 main.o
+ .debug_loc     0x0000a369      0x372 source/action.o
+ .debug_loc     0x0000a6db      0x239 source/color_control.o
+ .debug_loc     0x0000a914      0x76d source/lcd_control.o
+ .debug_loc     0x0000b081      0xc3e source/motor_control.o
+ .debug_loc     0x0000bcbf      0x41a source/ping_control.o
+ .debug_loc     0x0000c0d9      0x52a source/ui_control.o
+ .debug_loc     0x0000c603       0xa7 source/xmega_spi.o
+ .debug_loc     0x0000c6aa      0x58b source/xmega_twi.o
+ .debug_loc     0x0000cc35      0x65c source/xmega_usart.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -1337,19 +1333,19 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x480
+.debug_ranges   0x00000000      0x470
  *(.debug_ranges)
- .debug_ranges  0x00000000      0x198 main.o
- .debug_ranges  0x00000198       0x28 source/action.o
- .debug_ranges  0x000001c0       0x28 source/color_control.o
- .debug_ranges  0x000001e8       0x28 source/initializing.o
- .debug_ranges  0x00000210       0x30 source/lcd_control.o
- .debug_ranges  0x00000240       0xa8 source/motor_control.o
- .debug_ranges  0x000002e8       0x40 source/ping_control.o
- .debug_ranges  0x00000328       0xb0 source/ui_control.o
- .debug_ranges  0x000003d8       0x20 source/xmega_spi.o
- .debug_ranges  0x000003f8       0x50 source/xmega_twi.o
- .debug_ranges  0x00000448       0x38 source/xmega_usart.o
+ .debug_ranges  0x00000000      0x190 main.o
+ .debug_ranges  0x00000190       0x28 source/action.o
+ .debug_ranges  0x000001b8       0x28 source/color_control.o
+ .debug_ranges  0x000001e0       0x28 source/initializing.o
+ .debug_ranges  0x00000208       0x30 source/lcd_control.o
+ .debug_ranges  0x00000238       0xa8 source/motor_control.o
+ .debug_ranges  0x000002e0       0x38 source/ping_control.o
+ .debug_ranges  0x00000318       0xb0 source/ui_control.o
+ .debug_ranges  0x000003c8       0x20 source/xmega_spi.o
+ .debug_ranges  0x000003e8       0x50 source/xmega_twi.o
+ .debug_ranges  0x00000438       0x38 source/xmega_usart.o
 
 .debug_macro
  *(.debug_macro)

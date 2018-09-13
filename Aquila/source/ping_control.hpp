@@ -17,7 +17,7 @@
 
 uint16_t ping(int no);
 uint16_t ping_check (PORT_t *p_port,uint8_t p_pin);
-int for_cp(int num);
+//int for_cp(int num);
 //bool check_ping(int x);
 uint8_t check_ping2(int x);
 uint16_t smaller(uint16_t x,uint16_t y);

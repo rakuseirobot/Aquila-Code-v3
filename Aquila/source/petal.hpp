@@ -21,15 +21,6 @@
 
 core ta;
 
-int for_write_walls1(int num){
-	if(for_cp(num)==1){
-		return v::wall;
-	}else{
-		return v::nowall;
-	}
-}
-
-
 void for_w_w(int direc){
 	switch(check_ping(direc)){
 		case 1: //横に壁

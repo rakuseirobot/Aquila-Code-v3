@@ -112,8 +112,8 @@ namespace motor{
 
 	void move(uint8_t x=6){// x = 0:1 block Advance 1:2 blocks Advance 2:Left Turn with Copass 3:Right Turn with Compass 4:1 block Back 5:2 block Back 6:Half block Advance 7:Half block Back 8:right Turn without Compass 9:left Turn without Compass 
 		_delay_ms(5);
-		int16_t first = 0;
-		int16_t now = 0;
+		uint16_t first = 0;
+		uint16_t now = 0;
 		switch(x){
 			case 0: //???u???b?N????
 			m_send(2,2,m_speed,1);
