@@ -113,14 +113,6 @@ void for_w_w(int direc){
 
 
 void write_walls(){
-// 	ta.w_wall(v::left,for_write_walls1(v::left));
-// 	ta.w_wall(ta.ac_next(v::left,1),v::right,for_write_walls1(v::left));
-// 	ta.w_wall(v::front,for_write_walls1(v::front));
-// 	ta.w_wall(ta.ac_next(v::front,1),v::back,for_write_walls1(v::front));
-// 	ta.w_wall(v::right,for_write_walls1(v::right));
-// 	ta.w_wall(ta.ac_next(v::right,1),v::left,for_write_walls1(v::right));
-// 	ta.w_wall(v::back,for_write_walls1(v::back));
-// 	ta.w_wall(ta.ac_next(v::back,1),v::front,for_write_walls1(v::back));
 	for_w_w(v::left);
 	for_w_w(v::front);
 	for_w_w(v::right);
@@ -361,18 +353,19 @@ void go_home(){
 
 bool movetoa(node* a){//move to A. If A is neighbor of now_node , move to A.
 	lcd_putstr(LCD1_TWI,"back");
-	if(ta.ac_next(v::left,1)==a){
+	write_walls();
+	if(ta.ac_next(v::left,1)==a && ta.r_wall(v::left)!= v::nowall){
 		move(v::left);
 		move(v::front);
 		return true;
-	}else if(ta.ac_next(v::front,1)==a){
+	}else if(ta.ac_next(v::front,1)==a && ta.r_wall(v::front) != v::nowall ){
 		move(v::front);
 		return true;
-	}else if(ta.ac_next(v::right,1)==a){
+	}else if(ta.ac_next(v::right,1)==a && ta.r_wall(v::right) != v::nowall ){
 		move(v::right);
 		move(v::front);
 		return true;
-	}else if(ta.ac_next(v::back,1)==a){
+	}else if(ta.ac_next(v::back,1)==a && ta.r_wall(v::back) != v::nowall ){
 		move(v::back);
 		return true;
 	}else{
@@ -382,7 +375,6 @@ bool movetoa(node* a){//move to A. If A is neighbor of now_node , move to A.
 }
 
 void real_dfs(node* t,node* s){
-	write_walls();
 	lcd_clear();
 	lcd_putstr(LCD1_TWI,"now:");
 	lcd_putdec(LCD1_TWI,check_ping(v::left));
@@ -390,33 +382,25 @@ void real_dfs(node* t,node* s){
 	_delay_ms(500);
 	lcd_clear();
 	lcd_putstr(LCD1_TWI,"go");
-	if(ta.ac_next(s,ta.r_dir(),v::left,1)!=np && ta.ac_next(s,ta.r_dir(),v::left,1)->type==v::unknown && ta.r_wall(s,v::left)!=v::wall && ta.r_wall(ta.ac_next(s,ta.r_dir(),v::left,1),v::right)!=v::wall){
-		move(v::left);
-		move(v::front);
-		write_walls();
-		real_dfs(s,ta.r_now());
-		write_walls();
+	node* a = ta.ac_next(s,ta.r_dir(),v::left,1);
+	node* b = ta.ac_next(s,ta.r_dir(),v::front,1);
+	node* c = ta.ac_next(s,ta.r_dir(),v::right,1);
+	node* d = ta.ac_next(s,ta.r_dir(),v::back,1);
+	if(a!=np && a->type==v::unknown){
+		if(movetoa(a))real_dfs(s,ta.r_now());
 	}
 	lcd_clear();
 	lcd_putstr(LCD1_TWI,"a");
-	if(ta.ac_next(s,ta.r_dir(),v::front,1)!=np && ta.ac_next(s,ta.r_dir(),v::front,1)->type==v::unknown && ta.r_wall(s,v::front)!=v::wall && ta.r_wall(ta.ac_next(s,ta.r_dir(),v::front,1),v::back)!=v::wall){
-		move(v::front);
-		write_walls();
-		real_dfs(s,ta.r_now());
+	if(b!=np && b->type==v::unknown){
+		if(movetoa(b))real_dfs(s,ta.r_now());
 	}
 	lcd_clear();
 	lcd_putstr(LCD1_TWI,"b");
-	if(ta.ac_next(s,ta.r_dir(),v::right,1)!=np && ta.ac_next(s,ta.r_dir(),v::right,1)->type==v::unknown && ta.r_wall(s,v::right)!=v::wall && ta.r_wall(ta.ac_next(s,ta.r_dir(),v::right,1),v::left)!=v::wall){
-		move(v::right);
-		move(v::front);
-		write_walls();
-		real_dfs(s,ta.r_now());
+	if(c!=np && c->type==v::unknown){
+		if(movetoa(c))real_dfs(s,ta.r_now());
 	}
-	if(ta.ac_next(s,ta.r_dir(),v::back,1)!=np && ta.ac_next(s,ta.r_dir(),v::back,1)->type==v::unknown && ta.r_wall(s,v::back)!=v::wall && ta.r_wall(ta.ac_next(s,ta.r_dir(),v::back,1),v::front)!=v::wall){
-		//move(v::right);
-		move(v::back);
-		write_walls();
-		real_dfs(s,ta.r_now());
+	if(d !=np && d->type==v::unknown){
+		if(movetoa(d))real_dfs(s,ta.r_now());
 	}
 	lcd_clear();
 	write_walls();

@@ -26,9 +26,9 @@ int main(){
 // 		_delay_ms(1000);
 // 	}
  	real_dfs(np,ta.r_now());
-	real_dfs(np,ta.r_now());
-    real_dfs(np,ta.r_now());
-    real_dfs(np,ta.r_now());
+	//real_dfs(np,ta.r_now());
+    //real_dfs(np,ta.r_now());
+    //real_dfs(np,ta.r_now());
 	//real_dfs(np,ta.r_now());
 	while(1){
 		lcd_putdec(LCD1_TWI,check_ping(v::front));
