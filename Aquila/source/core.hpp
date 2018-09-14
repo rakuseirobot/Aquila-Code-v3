@@ -99,6 +99,7 @@ class core{
     long long unsigned int countter;
     node* ans;//dfs's answer.
     node* begin;//歩数mapのbegin
+	int num_vertex;
     //for dfs
 public:
     core(){
@@ -108,6 +109,7 @@ public:
         //dir = v::left;
         dir = 0;
         counter=0;
+		num_vertex = 0;
         ans = np;
         begin = np;
         countter=0;
@@ -125,6 +127,7 @@ public:
         if(t!=np){
             if(t->depth>depth+1)t->depth=depth+1;
             if((long long int)(t->flag)<=counter){
+				num_vertex ++;
                 if(t->x==x && t->y==y && t->z==z){ ans=t; }
                 t->flag=counter+1;
                 dfs(t->next[0],x,y,z,t->depth);
@@ -194,6 +197,7 @@ public:
                         if(k->next[i]==np){k->next[i]=t; break; } 
                     }//conection of nodes.
                 }
+				num_vertex = 0;
                 find(x,y,z);//depth�ｿｽﾌ更�ｿｽV
             }
             k->back[0]=t;
@@ -205,7 +209,7 @@ public:
     }
 
     node* r_start(){ return start; }
-
+	int r_vnum(){ return num_vertex; }
     node* r_now(){ return now; }
     void w_now(int x,int y,int z){ now = find(x,y,z); }
     void w_now(node* ty){ now = ty; }

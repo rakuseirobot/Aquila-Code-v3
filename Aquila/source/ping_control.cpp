@@ -107,11 +107,11 @@ bool check_ping(int x){
 uint8_t check_ping2(int x){
  if(ping(x)<Sikiti){
 	return 1;
- }else if(ping(x)<Sikiti*2){//50=>60・ｽﾉ修・ｽ・ｽ9.05
+ }else if(ping(x)<1400){//50=>60・ｽﾉ修・ｽ・ｽ9.05
     return 2;
- }else if(ping(x)<Sikiti*3){
+ }else if(ping(x)<2360){
 	return 3;
- }else if(ping(x)<Sikiti*4){
+ }else if(ping(x)<3200){
 	return 4;
  }else{
 	return 0;
@@ -145,13 +145,6 @@ uint8_t check_ping(int x){//x::direction,return 1,2,3,4,0(0=error)
 			break;
 	}
 }
-
-// uint8_t check_ping(double x){
-//  if(x==73.18)return smaller(check_ping(2),check_ping(3));
-//  if(x==3.11)return smaller(check_ping(5),check_ping(6));
-//  else return 0;
-// }
-
 
 void ping_debug(void){
 	for(uint8_t i=1;i<=6;i++){

@@ -25,52 +25,52 @@ void for_w_w(int direc){
 	switch(check_ping(direc)){
 		case 1: //横に壁
 			ta.w_wall(direc,v::wall);
-			serial.string("1::");
-			serial.putdec(direc);
-			serial.string("\n");
+// 			serial.string("1::");
+// 			serial.putdec(direc);
+// 			serial.string("\n");
 			//serial.putdec(ta.ac_next(direc,1))
 			break;
 		case 2: //隣のマスに壁がある
 			ta.append_node(direc,1);
 			ta.w_wall(direc,v::nowall);
-			ta.w_wall(ta.ac_next(direc,1),direc,v::wall);//隣のマスに壁をwrite
-			serial.string("2::");
-			serial.putdec(direc);
-			serial.string("\n");
-			serial.putdec((uint16_t)ta.ac_next(direc,1));
-			serial.putdec(ta.ac_next(direc,1)->x);
-			serial.string(" , ");
-			serial.putdec(ta.ac_next(direc,1)->y);
-			serial.string(" , ");
-			serial.putdec(ta.ac_next(direc,1)->z);
-			serial.string("\n");
+		//	ta.w_wall(ta.ac_next(direc,1),direc,v::wall);//隣のマスに壁をwrite
+// 			serial.string("2::");
+// 			serial.putdec(direc);
+// 			serial.string("\n");
+// 			serial.putdec((uint16_t)ta.ac_next(direc,1));
+// 			serial.putdec(ta.ac_next(direc,1)->x);
+// 			serial.string(" , ");
+// 			serial.putdec(ta.ac_next(direc,1)->y);
+// 			serial.string(" , ");
+// 			serial.putdec(ta.ac_next(direc,1)->z);
+// 			serial.string("\n");
 			break;
 		case 3: //2つ隣のマスに壁がある
 			ta.append_node(direc,1);
 			ta.append_node(ta.ac_next(direc,1),direc,ta.r_dir(),1);//隣の隣のマス作成
 			ta.w_wall(direc,v::nowall);
 			ta.w_wall(ta.ac_next(direc,1),direc,v::nowall);
-			ta.w_wall(ta.ac_next(direc,2),direc,v::wall);
-			serial.string("3::");
-			serial.putdec(direc);
-			serial.string("\n");
-			serial.putdec((uint16_t)ta.ac_next(direc,1));
-						serial.putdec(ta.ac_next(direc,1)->x);
-						serial.string(" , ");
-						serial.putdec(ta.ac_next(direc,1)->y);
-						serial.string(" , ");
-						serial.putdec(ta.ac_next(direc,1)->z);
-						serial.string("\n");
-			serial.putdec((uint16_t)ta.ac_next(direc,2));
-						serial.putdec(ta.ac_next(direc,2)->x);
-						serial.string(" , ");
-						serial.putdec(ta.ac_next(direc,2)->y);
-						serial.string(" , ");
-						serial.putdec(ta.ac_next(direc,2)->z);
-						serial.string("\n");
-			serial.string("\n");
+		//	ta.w_wall(ta.ac_next(direc,2),direc,v::wall);
+// 			serial.string("3::");
+// 			serial.putdec(direc);
+// 			serial.string("\n");
+// 			serial.putdec((uint16_t)ta.ac_next(direc,1));
+// 						serial.putdec(ta.ac_next(direc,1)->x);
+// 						serial.string(" , ");
+// 						serial.putdec(ta.ac_next(direc,1)->y);
+// 						serial.string(" , ");
+// 						serial.putdec(ta.ac_next(direc,1)->z);
+// 						serial.string("\n");
+// 			serial.putdec((uint16_t)ta.ac_next(direc,2));
+// 						serial.putdec(ta.ac_next(direc,2)->x);
+// 						serial.string(" , ");
+// 						serial.putdec(ta.ac_next(direc,2)->y);
+// 						serial.string(" , ");
+// 						serial.putdec(ta.ac_next(direc,2)->z);
+// 						serial.string("\n");
+// 			serial.string("\n");
 			break;
-		case 4: //3つ隣のマスに壁がある
+		case -4: //3つ隣のマスに壁がある
 			ta.append_node(direc,1);
 			ta.append_node(ta.ac_next(direc,1),direc,ta.r_dir(),1);//隣の隣のマス作成
 			ta.append_node(ta.ac_next(direc,2),direc,ta.r_dir(),1);//隣の隣の隣のマス作成
@@ -84,7 +84,7 @@ void for_w_w(int direc){
 			serial.putdec((uint16_t)ta.ac_next(direc,3));
 			serial.string("\n");
 			break;
-		case 5: //4つ隣のマスに壁がある,実はcase 2:と全く同じ。
+		case -5: //4つ隣のマスに壁がある,実はcase 2:と全く同じ。
 			ta.append_node(direc,1);
 			ta.w_wall(direc,v::nowall);
 			ta.w_wall(ta.ac_next(direc,1),direc,v::wall);//隣のマスに壁をwrite
@@ -99,8 +99,15 @@ void for_w_w(int direc){
 			serial.putdec(ta.ac_next(direc,1)->z);
 			serial.string("\n");
 			break;
-		default:
+		case 0:
+		//case 2:
+		//case 3:
+		case 4:
+		case 5:
+			ta.append_node(direc,1);
+			ta.w_wall(direc,v::nowall);
 			break;
+		
 	}
 }
 
@@ -165,7 +172,9 @@ void move(int num){//num::0:turn_l(90deg),1:go_st,2:turn_r(90deg),3:back(turn),4
 			break;
 		case 3:
 			motor::move(9);
+			motor::fix_position();
 			motor::move(9);
+			motor::fix_position();
 			motor::move(0);
 			ta.turn_r();
 			ta.turn_r();
@@ -176,7 +185,7 @@ void move(int num){//num::0:turn_l(90deg),1:go_st,2:turn_r(90deg),3:back(turn),4
 	}
 	if(ta.r_now()->type==v::unknown){ta.r_now()->type = v::normal;}
 	write_walls();
-	//motor::fix_position();
+	motor::fix_position();
 	blacktile();
 	ondo();
 }
@@ -351,6 +360,7 @@ void go_home(){
 }
 
 bool movetoa(node* a){//move to A. If A is neighbor of now_node , move to A.
+	lcd_putstr(LCD1_TWI,"back");
 	if(ta.ac_next(v::left,1)==a){
 		move(v::left);
 		move(v::front);
@@ -372,32 +382,44 @@ bool movetoa(node* a){//move to A. If A is neighbor of now_node , move to A.
 }
 
 void real_dfs(node* t,node* s){
+	write_walls();
 	lcd_clear();
-	lcd_putstr(LCD1_TWI,"now:\n");
-	lcd_putdec(LCD1_TWI,(uint16_t)s);
+	lcd_putstr(LCD1_TWI,"now:");
+	lcd_putdec(LCD1_TWI,check_ping(v::left));
 	write_walls();
 	_delay_ms(500);
 	lcd_clear();
 	lcd_putstr(LCD1_TWI,"go");
-	if(ta.ac_next(s,ta.r_dir(),v::left,1)!=np && ta.ac_next(s,ta.r_dir(),v::left,1)->type==v::unknown && ta.r_wall(s,v::left)!=v::wall){
+	if(ta.ac_next(s,ta.r_dir(),v::left,1)!=np && ta.ac_next(s,ta.r_dir(),v::left,1)->type==v::unknown && ta.r_wall(s,v::left)!=v::wall && ta.r_wall(ta.ac_next(s,ta.r_dir(),v::left,1),v::right)!=v::wall){
 		move(v::left);
 		move(v::front);
-		real_dfs(s,ta.ac_next(s,ta.r_dir(),v::left,1));
+		write_walls();
+		real_dfs(s,ta.r_now());
+		write_walls();
 	}
 	lcd_clear();
 	lcd_putstr(LCD1_TWI,"a");
-	if(ta.ac_next(s,ta.r_dir(),v::front,1)!=np && ta.ac_next(s,ta.r_dir(),v::front,1)->type==v::unknown && ta.r_wall(s,v::front)!=v::wall){
+	if(ta.ac_next(s,ta.r_dir(),v::front,1)!=np && ta.ac_next(s,ta.r_dir(),v::front,1)->type==v::unknown && ta.r_wall(s,v::front)!=v::wall && ta.r_wall(ta.ac_next(s,ta.r_dir(),v::front,1),v::back)!=v::wall){
 		move(v::front);
-		real_dfs(s,ta.ac_next(s,ta.r_dir(),v::front,1));
+		write_walls();
+		real_dfs(s,ta.r_now());
 	}
 	lcd_clear();
 	lcd_putstr(LCD1_TWI,"b");
-	if(ta.ac_next(s,ta.r_dir(),v::right,1)!=np && ta.ac_next(s,ta.r_dir(),v::right,1)->type==v::unknown && ta.r_wall(s,v::right)!=v::wall){
+	if(ta.ac_next(s,ta.r_dir(),v::right,1)!=np && ta.ac_next(s,ta.r_dir(),v::right,1)->type==v::unknown && ta.r_wall(s,v::right)!=v::wall && ta.r_wall(ta.ac_next(s,ta.r_dir(),v::right,1),v::left)!=v::wall){
 		move(v::right);
 		move(v::front);
-		real_dfs(s,ta.ac_next(s,ta.r_dir(),v::right,1));
+		write_walls();
+		real_dfs(s,ta.r_now());
+	}
+	if(ta.ac_next(s,ta.r_dir(),v::back,1)!=np && ta.ac_next(s,ta.r_dir(),v::back,1)->type==v::unknown && ta.r_wall(s,v::back)!=v::wall && ta.r_wall(ta.ac_next(s,ta.r_dir(),v::back,1),v::front)!=v::wall){
+		//move(v::right);
+		move(v::back);
+		write_walls();
+		real_dfs(s,ta.r_now());
 	}
 	lcd_clear();
+	write_walls();
 	if(t!=np)movetoa(t);
 }
 
