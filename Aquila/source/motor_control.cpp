@@ -46,6 +46,7 @@ uint8_t mspi(uint8_t val,uint8_t i){
 	uint8_t dat = 0;
 	_delay_ms(5);
 	dat = motor_spi.send(val);
+	PORTB.OUTSET=PIN2_bm|PIN3_bm;
 	return dat;
 }
 void m_send(uint8_t rl,uint8_t x,uint8_t y,uint8_t z){//rl:Right or Left(1:L2:R)x:Go or Back(1:Back,2:Go)y:speed(max7(1 is for fixing movement))z:distance(1:1block,2:2blocks,3:turn,4:half))

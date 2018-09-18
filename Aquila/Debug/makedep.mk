@@ -16,6 +16,8 @@ source\lcd_control.cpp
 
 source\motor_control.cpp
 
+source\mv_control.cpp
+
 source\ping_control.cpp
 
 source\sermo_control.cpp

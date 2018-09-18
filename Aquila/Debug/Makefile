@@ -45,6 +45,7 @@ C_SRCS +=  \
 ../source/initializing.cpp \
 ../source/lcd_control.cpp \
 ../source/motor_control.cpp \
+../source/mv_control.cpp \
 ../source/ping_control.cpp \
 ../source/sermo_control.cpp \
 ../source/ui_control.cpp \
@@ -67,6 +68,7 @@ source/gyro_control.o \
 source/initializing.o \
 source/lcd_control.o \
 source/motor_control.o \
+source/mv_control.o \
 source/ping_control.o \
 source/sermo_control.o \
 source/ui_control.o \
@@ -82,6 +84,7 @@ source/gyro_control.o \
 source/initializing.o \
 source/lcd_control.o \
 source/motor_control.o \
+source/mv_control.o \
 source/ping_control.o \
 source/sermo_control.o \
 source/ui_control.o \
@@ -97,6 +100,7 @@ source/gyro_control.d \
 source/initializing.d \
 source/lcd_control.d \
 source/motor_control.d \
+source/mv_control.d \
 source/ping_control.d \
 source/sermo_control.d \
 source/ui_control.d \
@@ -112,6 +116,7 @@ source/gyro_control.d \
 source/initializing.d \
 source/lcd_control.d \
 source/motor_control.d \
+source/mv_control.d \
 source/ping_control.d \
 source/sermo_control.d \
 source/ui_control.d \
@@ -133,6 +138,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 

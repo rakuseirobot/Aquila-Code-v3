@@ -7,6 +7,7 @@
 
 #include "source/petal.hpp"
 #include "source/gyro_control.hpp"
+#include "source/mv_control.hpp"
 usart serial(&USARTC0,&PORTC);
 void print_num(int num){serial.putdec(num);serial.string("\n");}
 void print_num(int num,int num2,int num3){
@@ -63,7 +64,14 @@ void debugping(int direction){
 
 int main(){	
 	init_all();
+	init_mv();
 	_delay_ms(200);
+	uint8_t s = 30;
+	while(1){
+		s=mv_spi_send(30,1);
+		serial.putdec(s);
+		serial.string("\n\r");
+	}
 	lcd_putstr(LCD1_TWI,"Hello");
 	//motor::wait();
 	lcd_clear();
@@ -71,7 +79,7 @@ int main(){
 	//lcd_clear();
 	serial.string("wake_up\n");
 // 	while(1){
-// 		serial.putdec(1);
+// 		dserial.putdec(1);
 // 	}serial.string("wake_up\n");
 	serial.putdec(3.14*100);
 	init_bmx055();
