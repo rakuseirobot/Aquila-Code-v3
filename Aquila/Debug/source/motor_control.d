@@ -22,7 +22,8 @@ source/motor_control.d source/motor_control.o: \
  ../source/initializing.hpp ../source/xmega_usart.hpp \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\interrupt.h \
  ../source/xmega_spi.hpp ../source/ping_control.hpp \
- ../source/ui_control.hpp \
+ ../source/ui_control.hpp ../source/mv_control.hpp ../source/action.hpp \
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\eeprom.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h
 
 ../source/motor_control.hpp:
@@ -76,5 +77,11 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 ../source/ping_control.hpp:
 
 ../source/ui_control.hpp:
+
+../source/mv_control.hpp:
+
+../source/action.hpp:
+
+c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\eeprom.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h:

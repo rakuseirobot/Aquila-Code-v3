@@ -66,18 +66,49 @@ int main(){
 	init_all();
 	init_mv();
 	_delay_ms(200);
-	uint8_t s = 30;
-	while(1){
-		s=mv_spi_send(30,1);
-		serial.putdec(s);
-		serial.string("\n\r");
-	}
 	lcd_putstr(LCD1_TWI,"Hello");
-	//motor::wait();
+	motor::wait();
 	lcd_clear();
 	lcd_putstr(LCD1_TWI,"Ready!");
-	//lcd_clear();
+	lcd_clear();
 	serial.string("wake_up\n");
+	uint8_t s = 0;
+	while(1){
+		if(SW1){
+			PORTB.OUTCLR=PIN0_bm|PIN1_bm;
+			m_send(2,2,m_speed,1);
+			m_send(1,2,m_speed,1);
+			serial.string("sw1\n");
+			while(SW1);
+		}
+		if (SW2){
+			check_mv(1);
+			serial.string("sw2\n");
+			while(SW2);
+		}
+		if (SW3){
+			mv_cap(1,true);
+			serial.string("sw3\n");
+			while(SW3);
+		}
+	}
+	while(1){
+		if(SW1){
+			mv_cap(1,false);
+			serial.string("push1\n\r");
+			while(SW1);
+		}
+		if(SW2){
+			mv_cap(1,true);
+			serial.string("push2\n\r");
+			while(SW2);
+		}
+		if(SW3){
+			check_mv(1);
+			serial.putdec(s);
+			while(SW3);
+		}
+	}
 // 	while(1){
 // 		dserial.putdec(1);
 // 	}serial.string("wake_up\n");

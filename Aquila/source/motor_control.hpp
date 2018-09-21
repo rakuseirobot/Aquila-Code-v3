@@ -15,6 +15,7 @@
 #include "xmega_spi.hpp"
 #include "ping_control.hpp"
 #include "ui_control.hpp"
+#include "mv_control.hpp"
 #include "initializing.hpp"
 #include <stdlib.h>
 #include <util/delay.h>

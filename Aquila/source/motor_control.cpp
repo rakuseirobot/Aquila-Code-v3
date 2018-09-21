@@ -30,8 +30,8 @@ const int gbno=120;
 uint8_t data=000;
 
 void init_motor(void){
-	PORTB.DIRSET=PIN2_bm|PIN3_bm;
-	PORTB.OUTSET=PIN2_bm|PIN3_bm;
+	PORTB.DIRSET=PIN0_bm|PIN1_bm|PIN2_bm|PIN3_bm;
+	PORTB.OUTSET=PIN0_bm|PIN1_bm|PIN2_bm|PIN3_bm;
 }
 uint8_t mspi(uint8_t val,uint8_t i){
 	if(i==2){
@@ -106,7 +106,17 @@ namespace motor{
 		mcount = 0;
 	}*/
 	void wait(void){
-		while(mspi(0,1)!=1);
+		while(mspi(0,1)!=1){
+			//if((PORTJ.IN & PIN5_bm)==0){
+				//check_mv(1);
+			//}
+			//if((PORTJ.IN & PIN6_bm)==0){
+				//check_mv(2);
+			//}
+			//if((PORTJ.IN & PIN7_bm)==0){
+				//check_mv(3);
+			//}
+		}
 		while(mspi(0,2)!=1);
 		return;
 	}
