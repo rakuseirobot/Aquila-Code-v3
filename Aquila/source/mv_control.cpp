@@ -26,12 +26,12 @@ MV
 */
 
 #include "mv_control.hpp"
-spi mv(&SPID,&PORTD,SPI_PRESCALER_DIV16_gc);
+spi mv(&SPID,&PORTD,SPI_PRESCALER_DIV4_gc);
 void init_mv(void){
 	PORTD.DIRCLR=PIN2_bm|PIN3_bm|PIN4_bm;
 	PORTJ.DIRSET=PIN5_bm|PIN6_bm|PIN7_bm;
 	PORTJ.OUTSET=PIN5_bm|PIN6_bm|PIN7_bm;
-	PORTD.OUTSET=PIN2_bm|PIN3_bm|PIN4_bm;
+	//PORTD.OUTSET=PIN2_bm|PIN3_bm|PIN4_bm;
 	return;
 }
 void mv_cap(uint8_t di,bool st){
@@ -106,7 +106,10 @@ void check_mv(uint8_t dir){
 	PORTB.OUTSET=PIN0_bm|PIN1_bm;
 	mv_sig(dir,false);
 	_delay_ms(5);
+	led(Blueled,1);
 	uint8_t res = mv_spi_send(dir,1);
+	serial.putdec(res);
+	led(Blueled,0);
 	switch(res){
 		case 3://H  2kits
 			finded_victim(2);
@@ -126,7 +129,7 @@ void check_mv(uint8_t dir){
 		default:
 			break;
 	}
-	mv_sig(dir,true);
+	//mv_sig(dir,true);
 	_delay_ms(10);
 	PORTB.OUTCLR=PIN0_bm|PIN1_bm;
 	return;

@@ -65,6 +65,7 @@ void debugping(int direction){
 int main(){	
 	init_all();
 	init_mv();
+	finded_victim(1);
 	_delay_ms(200);
 	lcd_putstr(LCD1_TWI,"Hello");
 	motor::wait();
@@ -82,7 +83,9 @@ int main(){
 			while(SW1);
 		}
 		if (SW2){
-			check_mv(1);
+			//check_mv(1);
+			uint8_t res = mv_spi_send(1,1);
+			serial.putdec(res);
 			serial.string("sw2\n");
 			while(SW2);
 		}
