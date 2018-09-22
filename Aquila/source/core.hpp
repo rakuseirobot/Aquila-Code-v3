@@ -384,7 +384,7 @@ public:
    void cl_hs(node* t){
        if(t!=np && (long long)(t->flag)<=counter){
            t->flag=counter+1;
-           t->hosu=0;
+           t->hosu=1000;
            cl_hs(t->next[0]);
            cl_hs(t->next[1]);
            cl_hs(t->next[2]);

@@ -33,7 +33,7 @@ void for_w_w(int direc){
 		case 2: //隣のマスに壁がある
 			ta.append_node(direc,1);
 			ta.w_wall(direc,v::nowall);
-		//	ta.w_wall(ta.ac_next(direc,1),direc,v::wall);//隣のマスに壁をwrite
+			ta.w_wall(ta.ac_next(direc,1),direc,v::wall);//隣のマスに壁をwrite
 // 			serial.string("2::");
 // 			serial.putdec(direc);
 // 			serial.string("\n");
@@ -354,18 +354,18 @@ void go_home(){
 bool movetoa(node* a){//move to A. If A is neighbor of now_node , move to A.
 	lcd_putstr(LCD1_TWI,"back");
 	write_walls();
-	if(ta.ac_next(v::left,1)==a && ta.r_wall(v::left)!= v::nowall){
+	if(ta.ac_next(v::left,1)==a && ta.r_wall(v::left)!= v::wall){
 		move(v::left);
 		move(v::front);
 		return true;
-	}else if(ta.ac_next(v::front,1)==a && ta.r_wall(v::front) != v::nowall ){
+	}else if(ta.ac_next(v::front,1)==a && ta.r_wall(v::front) != v::wall ){
 		move(v::front);
 		return true;
-	}else if(ta.ac_next(v::right,1)==a && ta.r_wall(v::right) != v::nowall ){
+	}else if(ta.ac_next(v::right,1)==a && ta.r_wall(v::right) != v::wall ){
 		move(v::right);
 		move(v::front);
 		return true;
-	}else if(ta.ac_next(v::back,1)==a && ta.r_wall(v::back) != v::nowall ){
+	}else if(ta.ac_next(v::back,1)==a && ta.r_wall(v::back) != v::wall ){
 		move(v::back);
 		return true;
 	}else{
@@ -374,13 +374,25 @@ bool movetoa(node* a){//move to A. If A is neighbor of now_node , move to A.
 	}
 }
 
+int count_next(node* x){
+	for(int i=0;i<4;i++){
+		if(ta.ac_next(x,ta.r_dir(),i,1)->type != v::unknown && ta.r_wall(x,i,ta.r_dir())!=v::wall){
+			
+		}
+	}
+}
+
+void gobacktoa(node* ima){//imaから前の分岐点まで戻る
+	ta.bfs_type(ima,100);
+	node* bak = ima->back[0]->back[0];
+	while(ta.count_walls(bak)==2){
+		if()
+	}
+}
+
 void real_dfs(node* t,node* s){
 	lcd_clear();
-	lcd_putstr(LCD1_TWI,"now:");
-	lcd_putdec(LCD1_TWI,check_ping(v::left));
 	write_walls();
-	_delay_ms(500);
-	lcd_clear();
 	lcd_putstr(LCD1_TWI,"go");
 	node* a = ta.ac_next(s,ta.r_dir(),v::left,1);
 	node* b = ta.ac_next(s,ta.r_dir(),v::front,1);

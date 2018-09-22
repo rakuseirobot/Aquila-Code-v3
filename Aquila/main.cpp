@@ -30,13 +30,13 @@ int main(){
     //real_dfs(np,ta.r_now());
     //real_dfs(np,ta.r_now());
 	//real_dfs(np,ta.r_now());
-	while(1){
+	/*while(1){
 		lcd_putdec(LCD1_TWI,check_ping(v::front));
 		//lcd_putstr(LCD1_TWI,"\n");
 		//lcd_putdec(LCD1_TWI,ping(5));
 		_delay_ms(300);
 		lcd_clear();
-	}
+	}*/
 // 	while(1){
 // 		lcd_putdec(LCD1_TWI,check_ping(v::left));
 // 		_delay_ms(200);
