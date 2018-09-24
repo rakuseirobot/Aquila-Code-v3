@@ -73,11 +73,14 @@ Discarded input sections
  .group         0x00000000        0x8 main.o
  .group         0x00000000        0x8 main.o
  .group         0x00000000        0x8 main.o
+ .group         0x00000000        0x8 main.o
  .text          0x00000000        0x0 main.o
  .data          0x00000000        0x0 main.o
  .bss           0x00000000        0x0 main.o
+ .text._ZN4core5cl_hsEP4node
+                0x00000000     0x12ce main.o
  .text._Z10nachyleniev
-                0x00000000     0x3c38 main.o
+                0x00000000     0x1c8c main.o
  .text._ZN8for_func14check_neighborEP4nodeS1_
                 0x00000000       0xaa main.o
  .text._ZN8for_func17change_relativelyEii
@@ -94,6 +97,10 @@ Discarded input sections
                 0x00000000      0x124 main.o
  .text._Z7go_homev
                 0x00000000      0x142 main.o
+ .text._Z9gobacktoaP4node
+                0x00000000     0x22d0 main.o
+ .text._Z8gobacktoP4node
+                0x00000000       0x86 main.o
  .text          0x00000000        0x0 source/action.o
  .data          0x00000000        0x0 source/action.o
  .bss           0x00000000        0x0 source/action.o
@@ -657,7 +664,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000    0x12876
+.text           0x00000000    0x12832
  *(.vectors)
  .vectors       0x00000000      0x1fc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a1u/avrxmega7/crtatxmega128a1u.o
                 0x00000000                __vector_default
@@ -857,210 +864,210 @@ END GROUP
                 0x00000d80     0x48e2 main.o
                 0x00000d80                _ZN4core7move_toEP4nodeiii
  .text._ZN4core5go_stEv
-                0x00005662     0x5202 main.o
+                0x00005662     0x51fc main.o
                 0x00005662                _ZN4core5go_stEv
  .text._ZN4core7ac_nextEP4nodeiii
-                0x0000a864     0x51fa main.o
-                0x0000a864                _ZN4core7ac_nextEP4nodeiii
+                0x0000a85e     0x51f8 main.o
+                0x0000a85e                _ZN4core7ac_nextEP4nodeiii
  .text._Z7for_w_wi
-                0x0000fa5e      0x44a main.o
-                0x0000fa5e                _Z7for_w_wi
+                0x0000fa56      0x44a main.o
+                0x0000fa56                _Z7for_w_wi
  .text._Z11write_wallsv
-                0x0000fea8       0x22 main.o
-                0x0000fea8                _Z11write_wallsv
+                0x0000fea0       0x22 main.o
+                0x0000fea0                _Z11write_wallsv
  .text._Z4ondov
-                0x0000feca       0x5e main.o
-                0x0000feca                _Z4ondov
+                0x0000fec2       0x5e main.o
+                0x0000fec2                _Z4ondov
  .text._Z9blacktilev
-                0x0000ff28       0x24 main.o
-                0x0000ff28                _Z9blacktilev
+                0x0000ff20       0x24 main.o
+                0x0000ff20                _Z9blacktilev
  .text._Z4movei
-                0x0000ff4c      0x1ca main.o
-                0x0000ff4c                _Z4movei
+                0x0000ff44      0x1ca main.o
+                0x0000ff44                _Z4movei
  .text._Z7movetoaP4node
-                0x00010116      0x1a2 main.o
-                0x00010116                _Z7movetoaP4node
+                0x0001010e      0x1a2 main.o
+                0x0001010e                _Z7movetoaP4node
  .text._Z8real_dfsP4nodeS0_
-                0x000102b8      0x194 main.o
-                0x000102b8                _Z8real_dfsP4nodeS0_
- .text.main     0x0001044c       0xac main.o
-                0x0001044c                main
+                0x000102b0      0x17e main.o
+                0x000102b0                _Z8real_dfsP4nodeS0_
+ .text.main     0x0001042e       0x86 main.o
+                0x0001042e                main
  .text._GLOBAL__sub_I_q
-                0x000104f8      0xd5c main.o
+                0x000104b4      0xd5c main.o
  .text._Z9throw_kitv
-                0x00011254       0x66 source/action.o
-                0x00011254                _Z9throw_kitv
+                0x00011210       0x66 source/action.o
+                0x00011210                _Z9throw_kitv
  .text._Z13finded_victimh
-                0x000112ba       0x96 source/action.o
-                0x000112ba                _Z13finded_victimh
+                0x00011276       0x96 source/action.o
+                0x00011276                _Z13finded_victimh
  .text._Z10init_colorv
-                0x00011350        0x8 source/color_control.o
-                0x00011350                _Z10init_colorv
+                0x0001130c        0x8 source/color_control.o
+                0x0001130c                _Z10init_colorv
  .text._Z11color_shiftv
-                0x00011358       0x52 source/color_control.o
-                0x00011358                _Z11color_shiftv
+                0x00011314       0x52 source/color_control.o
+                0x00011314                _Z11color_shiftv
  .text._Z10color_readv
-                0x000113aa       0x84 source/color_control.o
-                0x000113aa                _Z10color_readv
+                0x00011366       0x84 source/color_control.o
+                0x00011366                _Z10color_readv
  .text._Z11color_checkv
-                0x0001142e       0x3c source/color_control.o
-                0x0001142e                _Z11color_checkv
+                0x000113ea       0x3c source/color_control.o
+                0x000113ea                _Z11color_checkv
  .text._Z10init_clockv
-                0x0001146a       0x2c source/initializing.o
-                0x0001146a                _Z10init_clockv
- .text._Z3rtcv  0x00011496       0x1e source/initializing.o
-                0x00011496                _Z3rtcv
+                0x00011426       0x2c source/initializing.o
+                0x00011426                _Z10init_clockv
+ .text._Z3rtcv  0x00011452       0x1e source/initializing.o
+                0x00011452                _Z3rtcv
  .text._Z8init_avrv
-                0x000114b4       0x1e source/initializing.o
-                0x000114b4                _Z8init_avrv
+                0x00011470       0x1e source/initializing.o
+                0x00011470                _Z8init_avrv
  .text._Z8init_allv
-                0x000114d2       0x1a source/initializing.o
-                0x000114d2                _Z8init_allv
+                0x0001148e       0x1a source/initializing.o
+                0x0001148e                _Z8init_allv
  .text._Z8init_lcdv
-                0x000114ec      0x29a source/lcd_control.o
-                0x000114ec                _Z8init_lcdv
+                0x000114a8      0x29a source/lcd_control.o
+                0x000114a8                _Z8init_lcdv
  .text._Z10lcd_putstrP10TWI_structPKc
-                0x00011786       0xc4 source/lcd_control.o
-                0x00011786                _Z10lcd_putstrP10TWI_structPKc
+                0x00011742       0xc4 source/lcd_control.o
+                0x00011742                _Z10lcd_putstrP10TWI_structPKc
  .text._Z10lcd_putdecP10TWI_structj
-                0x0001184a      0x160 source/lcd_control.o
-                0x0001184a                _Z10lcd_putdecP10TWI_structj
+                0x00011806      0x160 source/lcd_control.o
+                0x00011806                _Z10lcd_putdecP10TWI_structj
  .text._Z9lcd_clearv
-                0x000119aa       0x66 source/lcd_control.o
-                0x000119aa                _Z9lcd_clearv
+                0x00011966       0x66 source/lcd_control.o
+                0x00011966                _Z9lcd_clearv
  .text._Z10init_motorv
-                0x00011a10        0xc source/motor_control.o
-                0x00011a10                _Z10init_motorv
+                0x000119cc        0xc source/motor_control.o
+                0x000119cc                _Z10init_motorv
  .text._Z4mspihh
-                0x00011a1c       0x32 source/motor_control.o
-                0x00011a1c                _Z4mspihh
+                0x000119d8       0x32 source/motor_control.o
+                0x000119d8                _Z4mspihh
  .text._Z6m_sendhhhh
-                0x00011a4e       0x66 source/motor_control.o
-                0x00011a4e                _Z6m_sendhhhh
+                0x00011a0a       0x66 source/motor_control.o
+                0x00011a0a                _Z6m_sendhhhh
  .text._ZN5motor5brakeEh
-                0x00011ab4        0xc source/motor_control.o
-                0x00011ab4                _ZN5motor5brakeEh
+                0x00011a70        0xc source/motor_control.o
+                0x00011a70                _ZN5motor5brakeEh
  .text._ZN5motor4waitEv
-                0x00011ac0       0x1a source/motor_control.o
-                0x00011ac0                _ZN5motor4waitEv
+                0x00011a7c       0x1a source/motor_control.o
+                0x00011a7c                _ZN5motor4waitEv
  .text._ZN5motor4moveEh
-                0x00011ada      0x138 source/motor_control.o
-                0x00011ada                _ZN5motor4moveEh
+                0x00011a96      0x138 source/motor_control.o
+                0x00011a96                _ZN5motor4moveEh
  .text._ZN5motor6gb_fixEv
-                0x00011c12      0x160 source/motor_control.o
-                0x00011c12                _ZN5motor6gb_fixEv
+                0x00011bce      0x160 source/motor_control.o
+                0x00011bce                _ZN5motor6gb_fixEv
  .text._ZN5motor8turn_fixEh
-                0x00011d72      0x208 source/motor_control.o
-                0x00011d72                _ZN5motor8turn_fixEh
+                0x00011d2e      0x208 source/motor_control.o
+                0x00011d2e                _ZN5motor8turn_fixEh
  .text._ZN5motor12fix_positionEv
-                0x00011f7a       0x12 source/motor_control.o
-                0x00011f7a                _ZN5motor12fix_positionEv
+                0x00011f36       0x12 source/motor_control.o
+                0x00011f36                _ZN5motor12fix_positionEv
  .text._GLOBAL__sub_I_motor_spi
-                0x00011f8c       0x14 source/motor_control.o
+                0x00011f48       0x14 source/motor_control.o
  .text._Z10ping_checkP11PORT_structh
-                0x00011fa0       0x4a source/ping_control.o
-                0x00011fa0                _Z10ping_checkP11PORT_structh
+                0x00011f5c       0x4a source/ping_control.o
+                0x00011f5c                _Z10ping_checkP11PORT_structh
  .text._Z4pingi
-                0x00011fea       0x70 source/ping_control.o
-                0x00011fea                _Z4pingi
+                0x00011fa6       0x70 source/ping_control.o
+                0x00011fa6                _Z4pingi
  .text._Z11check_ping2i
-                0x0001205a       0x4c source/ping_control.o
-                0x0001205a                _Z11check_ping2i
+                0x00012016       0x4c source/ping_control.o
+                0x00012016                _Z11check_ping2i
  .text._Z10check_pingi
-                0x000120a6       0x7c source/ping_control.o
-                0x000120a6                _Z10check_pingi
+                0x00012062       0x7c source/ping_control.o
+                0x00012062                _Z10check_pingi
  .text._Z10select_bush
-                0x00012122       0x9c source/sermo_control.o
-                0x00012122                _Z10select_bush
+                0x000120de       0x9c source/sermo_control.o
+                0x000120de                _Z10select_bush
  .text._Z16ReadFromMLX90614P10TWI_structcc
-                0x000121be       0xde source/sermo_control.o
-                0x000121be                _Z16ReadFromMLX90614P10TWI_structcc
+                0x0001217a       0xde source/sermo_control.o
+                0x0001217a                _Z16ReadFromMLX90614P10TWI_structcc
  .text._Z20ReadTempFromMLX90614P10TWI_structc
-                0x0001229c       0x40 source/sermo_control.o
-                0x0001229c                _Z20ReadTempFromMLX90614P10TWI_structc
+                0x00012258       0x40 source/sermo_control.o
+                0x00012258                _Z20ReadTempFromMLX90614P10TWI_structc
  .text._Z11check_sermov
-                0x000122dc      0x108 source/sermo_control.o
-                0x000122dc                _Z11check_sermov
+                0x00012298      0x108 source/sermo_control.o
+                0x00012298                _Z11check_sermov
  .text.__vector_77
-                0x000123e4       0x1e source/ui_control.o
-                0x000123e4                __vector_77
+                0x000123a0       0x1e source/ui_control.o
+                0x000123a0                __vector_77
  .text._Z3ledhh
-                0x00012402       0x1c source/ui_control.o
-                0x00012402                _Z3ledhh
+                0x000123be       0x1c source/ui_control.o
+                0x000123be                _Z3ledhh
  .text._ZN3spiC2EP10SPI_structP11PORT_struct18SPI_PRESCALER_enum
-                0x0001241e       0x28 source/xmega_spi.o
-                0x0001241e                _ZN3spiC1EP10SPI_structP11PORT_struct18SPI_PRESCALER_enum
-                0x0001241e                _ZN3spiC2EP10SPI_structP11PORT_struct18SPI_PRESCALER_enum
+                0x000123da       0x28 source/xmega_spi.o
+                0x000123da                _ZN3spiC1EP10SPI_structP11PORT_struct18SPI_PRESCALER_enum
+                0x000123da                _ZN3spiC2EP10SPI_structP11PORT_struct18SPI_PRESCALER_enum
  .text._ZN3spi4sendEh
-                0x00012446       0x20 source/xmega_spi.o
-                0x00012446                _ZN3spi4sendEh
+                0x00012402       0x20 source/xmega_spi.o
+                0x00012402                _ZN3spi4sendEh
  .text._ZN3twiC2EP10TWI_structm
-                0x00012466       0x5e source/xmega_twi.o
-                0x00012466                _ZN3twiC1EP10TWI_structm
-                0x00012466                _ZN3twiC2EP10TWI_structm
+                0x00012422       0x5e source/xmega_twi.o
+                0x00012422                _ZN3twiC1EP10TWI_structm
+                0x00012422                _ZN3twiC2EP10TWI_structm
  .text._ZN3twi10errorCheckEv
-                0x000124c4       0x2e source/xmega_twi.o
-                0x000124c4                _ZN3twi10errorCheckEv
+                0x00012480       0x2e source/xmega_twi.o
+                0x00012480                _ZN3twi10errorCheckEv
  .text._ZN3twi7AddressEhh
-                0x000124f2       0x5c source/xmega_twi.o
-                0x000124f2                _ZN3twi7AddressEhh
+                0x000124ae       0x5c source/xmega_twi.o
+                0x000124ae                _ZN3twi7AddressEhh
  .text._ZN3twi11WriteSingleEi
-                0x0001254e       0x48 source/xmega_twi.o
-                0x0001254e                _ZN3twi11WriteSingleEi
+                0x0001250a       0x48 source/xmega_twi.o
+                0x0001250a                _ZN3twi11WriteSingleEi
  .text._ZN3twi10ReadSingleEh
-                0x00012596       0x30 source/xmega_twi.o
-                0x00012596                _ZN3twi10ReadSingleEh
+                0x00012552       0x30 source/xmega_twi.o
+                0x00012552                _ZN3twi10ReadSingleEh
  .text._ZN3twi4StopEv
-                0x000125c6       0x24 source/xmega_twi.o
-                0x000125c6                _ZN3twi4StopEv
+                0x00012582       0x24 source/xmega_twi.o
+                0x00012582                _ZN3twi4StopEv
  .text._ZN5usartC2EP12USART_structP11PORT_struct
-                0x000125ea       0x44 source/xmega_usart.o
-                0x000125ea                _ZN5usartC2EP12USART_structP11PORT_struct
-                0x000125ea                _ZN5usartC1EP12USART_structP11PORT_struct
+                0x000125a6       0x44 source/xmega_usart.o
+                0x000125a6                _ZN5usartC2EP12USART_structP11PORT_struct
+                0x000125a6                _ZN5usartC1EP12USART_structP11PORT_struct
  .text._ZN5usart4sendEc
-                0x0001262e       0x14 source/xmega_usart.o
-                0x0001262e                _ZN5usart4sendEc
+                0x000125ea       0x14 source/xmega_usart.o
+                0x000125ea                _ZN5usart4sendEc
  .text._ZN5usart6stringEPKc
-                0x00012642       0x2a source/xmega_usart.o
-                0x00012642                _ZN5usart6stringEPKc
+                0x000125fe       0x2a source/xmega_usart.o
+                0x000125fe                _ZN5usart6stringEPKc
  .text.avr-libc.fplib
-                0x0001266c       0x5e c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avrxmega7\libm.a(fixunssfsi.o)
-                0x0001266c                __fixunssfsi
+                0x00012628       0x5e c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avrxmega7\libm.a(fixunssfsi.o)
+                0x00012628                __fixunssfsi
  .text.avr-libc.fplib
-                0x000126ca       0x7a c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avrxmega7\libm.a(floatsisf.o)
-                0x000126ca                __floatunsisf
-                0x000126ce                __floatsisf
+                0x00012686       0x7a c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avrxmega7\libm.a(floatsisf.o)
+                0x00012686                __floatunsisf
+                0x0001268a                __floatsisf
  .text.avr-libc.fplib
-                0x00012744       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avrxmega7\libm.a(fp_split3.o)
-                0x00012744                __fp_split3
-                0x00012754                __fp_splitA
+                0x00012700       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avrxmega7\libm.a(fp_split3.o)
+                0x00012700                __fp_split3
+                0x00012710                __fp_splitA
  .text.avr-libc.fplib
-                0x00012788        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avrxmega7\libm.a(fp_zero.o)
-                0x00012788                __fp_zero
-                0x0001278a                __fp_szero
+                0x00012744        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avrxmega7\libm.a(fp_zero.o)
+                0x00012744                __fp_zero
+                0x00012746                __fp_szero
  .text.libgcc.div
-                0x00012796       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_udivmodsi4.o)
-                0x00012796                __udivmodsi4
+                0x00012752       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_udivmodsi4.o)
+                0x00012752                __udivmodsi4
  .text.libgcc.div
-                0x000127da       0x2e c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_divmodsi4.o)
-                0x000127da                __divmodsi4
+                0x00012796       0x2e c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_divmodsi4.o)
+                0x00012796                __divmodsi4
  .text.libgcc.div
-                0x00012808       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_negsi2.o)
-                0x00012808                __negsi2
- .text.libgcc   0x00012818       0x12 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_tablejump2.o)
-                0x00012818                __tablejump2__
+                0x000127c4       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_negsi2.o)
+                0x000127c4                __negsi2
+ .text.libgcc   0x000127d4       0x12 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_tablejump2.o)
+                0x000127d4                __tablejump2__
  .text.libgcc.mul
-                0x0001282a       0x1e c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_umulhisi3.o)
-                0x0001282a                __umulhisi3
- .text.libgcc   0x00012848       0x18 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_adddi3_s8.o)
-                0x00012848                __adddi3_s8
- .text.libgcc   0x00012860       0x12 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_cmpdi2.o)
-                0x00012860                __cmpdi2
-                0x00012872                . = ALIGN (0x2)
+                0x000127e6       0x1e c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_umulhisi3.o)
+                0x000127e6                __umulhisi3
+ .text.libgcc   0x00012804       0x18 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_adddi3_s8.o)
+                0x00012804                __adddi3_s8
+ .text.libgcc   0x0001281c       0x12 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_cmpdi2.o)
+                0x0001281c                __cmpdi2
+                0x0001282e                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00012872        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_exit.o)
-                0x00012872                _exit
-                0x00012872                exit
+ .fini9         0x0001282e        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_exit.o)
+                0x0001282e                _exit
+                0x0001282e                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -1079,11 +1086,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00012872        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_exit.o)
+ .fini0         0x0001282e        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega7\libgcc.a(_exit.o)
  *(.fini0)
-                0x00012876                _etext = .
+                0x00012832                _etext = .
 
-.data           0x00802000       0x60 load address 0x00012876
+.data           0x00802000       0x60 load address 0x00012832
                 0x00802000                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -1130,8 +1137,8 @@ END GROUP
                 0x00803b23                dat
  *(COMMON)
                 0x00803b3b                PROVIDE (__bss_end, .)
-                0x00012876                __data_load_start = LOADADDR (.data)
-                0x000128d6                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00012832                __data_load_start = LOADADDR (.data)
+                0x00012892                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00803b3b        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
@@ -1214,140 +1221,140 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x3f8
+.debug_aranges  0x00000000      0x410
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0xc8 main.o
+                0x00000000       0xe0 main.o
  .debug_aranges
-                0x000000c8       0x38 source/action.o
+                0x000000e0       0x38 source/action.o
  .debug_aranges
-                0x00000100       0x38 source/color_control.o
+                0x00000118       0x38 source/color_control.o
  .debug_aranges
-                0x00000138       0x38 source/initializing.o
+                0x00000150       0x38 source/initializing.o
  .debug_aranges
-                0x00000170       0x40 source/lcd_control.o
+                0x00000188       0x40 source/lcd_control.o
  .debug_aranges
-                0x000001b0       0xa0 source/motor_control.o
+                0x000001c8       0xa0 source/motor_control.o
  .debug_aranges
-                0x00000250       0x48 source/ping_control.o
+                0x00000268       0x48 source/ping_control.o
  .debug_aranges
-                0x00000298       0x40 source/sermo_control.o
+                0x000002b0       0x40 source/sermo_control.o
  .debug_aranges
-                0x000002d8       0x48 source/ui_control.o
+                0x000002f0       0x48 source/ui_control.o
  .debug_aranges
-                0x00000320       0x30 source/xmega_spi.o
+                0x00000338       0x30 source/xmega_spi.o
  .debug_aranges
-                0x00000350       0x60 source/xmega_twi.o
+                0x00000368       0x60 source/xmega_twi.o
  .debug_aranges
-                0x000003b0       0x48 source/xmega_usart.o
+                0x000003c8       0x48 source/xmega_usart.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000    0x1e320
+.debug_info     0x00000000    0x1e8ae
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000     0x3e5a C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a1u/avrxmega7/crtatxmega128a1u.o
- .debug_info    0x00003e5a    0x12907 main.o
- .debug_info    0x00016761      0x5c8 source/action.o
- .debug_info    0x00016d29      0x530 source/color_control.o
- .debug_info    0x00017259      0x5a2 source/initializing.o
- .debug_info    0x000177fb      0xf43 source/lcd_control.o
- .debug_info    0x0001873e     0x1fa9 source/motor_control.o
- .debug_info    0x0001a6e7      0xe97 source/ping_control.o
- .debug_info    0x0001b57e      0xcf3 source/sermo_control.o
- .debug_info    0x0001c271      0xe42 source/ui_control.o
- .debug_info    0x0001d0b3      0x411 source/xmega_spi.o
- .debug_info    0x0001d4c4      0x6cc source/xmega_twi.o
- .debug_info    0x0001db90      0x790 source/xmega_usart.o
+ .debug_info    0x00003e5a    0x12e95 main.o
+ .debug_info    0x00016cef      0x5c8 source/action.o
+ .debug_info    0x000172b7      0x530 source/color_control.o
+ .debug_info    0x000177e7      0x5a2 source/initializing.o
+ .debug_info    0x00017d89      0xf43 source/lcd_control.o
+ .debug_info    0x00018ccc     0x1fa9 source/motor_control.o
+ .debug_info    0x0001ac75      0xe97 source/ping_control.o
+ .debug_info    0x0001bb0c      0xcf3 source/sermo_control.o
+ .debug_info    0x0001c7ff      0xe42 source/ui_control.o
+ .debug_info    0x0001d641      0x411 source/xmega_spi.o
+ .debug_info    0x0001da52      0x6cc source/xmega_twi.o
+ .debug_info    0x0001e11e      0x790 source/xmega_usart.o
 
-.debug_abbrev   0x00000000     0x5ac4
+.debug_abbrev   0x00000000     0x5ae9
  *(.debug_abbrev)
  .debug_abbrev  0x00000000     0x3b0e C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a1u/avrxmega7/crtatxmega128a1u.o
- .debug_abbrev  0x00003b0e      0x603 main.o
- .debug_abbrev  0x00004111      0x1d0 source/action.o
- .debug_abbrev  0x000042e1      0x1c2 source/color_control.o
- .debug_abbrev  0x000044a3      0x14c source/initializing.o
- .debug_abbrev  0x000045ef      0x24c source/lcd_control.o
- .debug_abbrev  0x0000483b      0x49e source/motor_control.o
- .debug_abbrev  0x00004cd9      0x306 source/ping_control.o
- .debug_abbrev  0x00004fdf      0x2f2 source/sermo_control.o
- .debug_abbrev  0x000052d1      0x263 source/ui_control.o
- .debug_abbrev  0x00005534      0x1b0 source/xmega_spi.o
- .debug_abbrev  0x000056e4      0x217 source/xmega_twi.o
- .debug_abbrev  0x000058fb      0x1c9 source/xmega_usart.o
+ .debug_abbrev  0x00003b0e      0x628 main.o
+ .debug_abbrev  0x00004136      0x1d0 source/action.o
+ .debug_abbrev  0x00004306      0x1c2 source/color_control.o
+ .debug_abbrev  0x000044c8      0x14c source/initializing.o
+ .debug_abbrev  0x00004614      0x24c source/lcd_control.o
+ .debug_abbrev  0x00004860      0x49e source/motor_control.o
+ .debug_abbrev  0x00004cfe      0x306 source/ping_control.o
+ .debug_abbrev  0x00005004      0x2f2 source/sermo_control.o
+ .debug_abbrev  0x000052f6      0x263 source/ui_control.o
+ .debug_abbrev  0x00005559      0x1b0 source/xmega_spi.o
+ .debug_abbrev  0x00005709      0x217 source/xmega_twi.o
+ .debug_abbrev  0x00005920      0x1c9 source/xmega_usart.o
 
-.debug_line     0x00000000     0x6d06
+.debug_line     0x00000000     0x7348
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x3b5 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a1u/avrxmega7/crtatxmega128a1u.o
- .debug_line    0x000003b5     0x4068 main.o
- .debug_line    0x0000441d      0x3f5 source/action.o
- .debug_line    0x00004812      0x28c source/color_control.o
- .debug_line    0x00004a9e      0x1f6 source/initializing.o
- .debug_line    0x00004c94      0x481 source/lcd_control.o
- .debug_line    0x00005115      0x9f1 source/motor_control.o
- .debug_line    0x00005b06      0x31e source/ping_control.o
- .debug_line    0x00005e24      0x3d9 source/sermo_control.o
- .debug_line    0x000061fd      0x391 source/ui_control.o
- .debug_line    0x0000658e      0x181 source/xmega_spi.o
- .debug_line    0x0000670f      0x35d source/xmega_twi.o
- .debug_line    0x00006a6c      0x29a source/xmega_usart.o
+ .debug_line    0x000003b5     0x46aa main.o
+ .debug_line    0x00004a5f      0x3f5 source/action.o
+ .debug_line    0x00004e54      0x28c source/color_control.o
+ .debug_line    0x000050e0      0x1f6 source/initializing.o
+ .debug_line    0x000052d6      0x481 source/lcd_control.o
+ .debug_line    0x00005757      0x9f1 source/motor_control.o
+ .debug_line    0x00006148      0x31e source/ping_control.o
+ .debug_line    0x00006466      0x3d9 source/sermo_control.o
+ .debug_line    0x0000683f      0x391 source/ui_control.o
+ .debug_line    0x00006bd0      0x181 source/xmega_spi.o
+ .debug_line    0x00006d51      0x35d source/xmega_twi.o
+ .debug_line    0x000070ae      0x29a source/xmega_usart.o
 
-.debug_frame    0x00000000      0xd10
+.debug_frame    0x00000000      0xe14
  *(.debug_frame)
- .debug_frame   0x00000000      0x470 main.o
- .debug_frame   0x00000470       0x74 source/action.o
- .debug_frame   0x000004e4       0x64 source/color_control.o
- .debug_frame   0x00000548       0x54 source/initializing.o
- .debug_frame   0x0000059c      0x10c source/lcd_control.o
- .debug_frame   0x000006a8      0x1e0 source/motor_control.o
- .debug_frame   0x00000888       0x94 source/ping_control.o
- .debug_frame   0x0000091c       0xd4 source/sermo_control.o
- .debug_frame   0x000009f0       0x90 source/ui_control.o
- .debug_frame   0x00000a80       0x44 source/xmega_spi.o
- .debug_frame   0x00000ac4      0x124 source/xmega_twi.o
- .debug_frame   0x00000be8      0x128 source/xmega_usart.o
+ .debug_frame   0x00000000      0x574 main.o
+ .debug_frame   0x00000574       0x74 source/action.o
+ .debug_frame   0x000005e8       0x64 source/color_control.o
+ .debug_frame   0x0000064c       0x54 source/initializing.o
+ .debug_frame   0x000006a0      0x10c source/lcd_control.o
+ .debug_frame   0x000007ac      0x1e0 source/motor_control.o
+ .debug_frame   0x0000098c       0x94 source/ping_control.o
+ .debug_frame   0x00000a20       0xd4 source/sermo_control.o
+ .debug_frame   0x00000af4       0x90 source/ui_control.o
+ .debug_frame   0x00000b84       0x44 source/xmega_spi.o
+ .debug_frame   0x00000bc8      0x124 source/xmega_twi.o
+ .debug_frame   0x00000cec      0x128 source/xmega_usart.o
 
-.debug_str      0x00000000     0x4618
+.debug_str      0x00000000     0x4677
  *(.debug_str)
  .debug_str     0x00000000     0x2969 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a1u/avrxmega7/crtatxmega128a1u.o
- .debug_str     0x00002969      0xbde main.o
-                                0xc84 (size before relaxing)
- .debug_str     0x00003547       0x7e source/action.o
+ .debug_str     0x00002969      0xc3d main.o
+                                0xce3 (size before relaxing)
+ .debug_str     0x000035a6       0x7e source/action.o
                                 0x3c2 (size before relaxing)
- .debug_str     0x000035c5       0x95 source/color_control.o
+ .debug_str     0x00003624       0x95 source/color_control.o
                                 0x390 (size before relaxing)
- .debug_str     0x0000365a      0x22a source/initializing.o
+ .debug_str     0x000036b9      0x22a source/initializing.o
                                 0x51d (size before relaxing)
- .debug_str     0x00003884      0x18c source/lcd_control.o
+ .debug_str     0x000038e3      0x18c source/lcd_control.o
                                 0x4ce (size before relaxing)
- .debug_str     0x00003a10      0x314 source/motor_control.o
+ .debug_str     0x00003a6f      0x314 source/motor_control.o
                                 0x899 (size before relaxing)
- .debug_str     0x00003d24      0x44c source/ping_control.o
+ .debug_str     0x00003d83      0x44c source/ping_control.o
                                 0x8be (size before relaxing)
- .debug_str     0x00004170       0xe6 source/sermo_control.o
+ .debug_str     0x000041cf       0xe6 source/sermo_control.o
                                 0x6d0 (size before relaxing)
- .debug_str     0x00004256      0x1b7 source/ui_control.o
+ .debug_str     0x000042b5      0x1b7 source/ui_control.o
                                 0x8a4 (size before relaxing)
- .debug_str     0x0000440d       0x64 source/xmega_spi.o
+ .debug_str     0x0000446c       0x64 source/xmega_spi.o
                                 0x3f4 (size before relaxing)
- .debug_str     0x00004471      0x15e source/xmega_twi.o
+ .debug_str     0x000044d0      0x15e source/xmega_twi.o
                                 0x4fe (size before relaxing)
- .debug_str     0x000045cf       0x49 source/xmega_usart.o
+ .debug_str     0x0000462e       0x49 source/xmega_usart.o
                                 0x41c (size before relaxing)
 
-.debug_loc      0x00000000     0xd982
+.debug_loc      0x00000000     0xd9b0
  *(.debug_loc)
- .debug_loc     0x00000000     0xa583 main.o
- .debug_loc     0x0000a583      0x372 source/action.o
- .debug_loc     0x0000a8f5      0x239 source/color_control.o
- .debug_loc     0x0000ab2e      0x76d source/lcd_control.o
- .debug_loc     0x0000b29b      0xc3e source/motor_control.o
- .debug_loc     0x0000bed9      0x41a source/ping_control.o
- .debug_loc     0x0000c2f3      0x4d7 source/sermo_control.o
- .debug_loc     0x0000c7ca      0x52a source/ui_control.o
- .debug_loc     0x0000ccf4       0xa7 source/xmega_spi.o
- .debug_loc     0x0000cd9b      0x58b source/xmega_twi.o
- .debug_loc     0x0000d326      0x65c source/xmega_usart.o
+ .debug_loc     0x00000000     0xa5b1 main.o
+ .debug_loc     0x0000a5b1      0x372 source/action.o
+ .debug_loc     0x0000a923      0x239 source/color_control.o
+ .debug_loc     0x0000ab5c      0x76d source/lcd_control.o
+ .debug_loc     0x0000b2c9      0xc3e source/motor_control.o
+ .debug_loc     0x0000bf07      0x41a source/ping_control.o
+ .debug_loc     0x0000c321      0x4d7 source/sermo_control.o
+ .debug_loc     0x0000c7f8      0x52a source/ui_control.o
+ .debug_loc     0x0000cd22       0xa7 source/xmega_spi.o
+ .debug_loc     0x0000cdc9      0x58b source/xmega_twi.o
+ .debug_loc     0x0000d354      0x65c source/xmega_usart.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -1367,20 +1374,20 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x4a0
+.debug_ranges   0x00000000      0x560
  *(.debug_ranges)
- .debug_ranges  0x00000000      0x190 main.o
- .debug_ranges  0x00000190       0x28 source/action.o
- .debug_ranges  0x000001b8       0x28 source/color_control.o
- .debug_ranges  0x000001e0       0x28 source/initializing.o
- .debug_ranges  0x00000208       0x30 source/lcd_control.o
- .debug_ranges  0x00000238       0xa8 source/motor_control.o
- .debug_ranges  0x000002e0       0x38 source/ping_control.o
- .debug_ranges  0x00000318       0x30 source/sermo_control.o
- .debug_ranges  0x00000348       0xb0 source/ui_control.o
- .debug_ranges  0x000003f8       0x20 source/xmega_spi.o
- .debug_ranges  0x00000418       0x50 source/xmega_twi.o
- .debug_ranges  0x00000468       0x38 source/xmega_usart.o
+ .debug_ranges  0x00000000      0x250 main.o
+ .debug_ranges  0x00000250       0x28 source/action.o
+ .debug_ranges  0x00000278       0x28 source/color_control.o
+ .debug_ranges  0x000002a0       0x28 source/initializing.o
+ .debug_ranges  0x000002c8       0x30 source/lcd_control.o
+ .debug_ranges  0x000002f8       0xa8 source/motor_control.o
+ .debug_ranges  0x000003a0       0x38 source/ping_control.o
+ .debug_ranges  0x000003d8       0x30 source/sermo_control.o
+ .debug_ranges  0x00000408       0xb0 source/ui_control.o
+ .debug_ranges  0x000004b8       0x20 source/xmega_spi.o
+ .debug_ranges  0x000004d8       0x50 source/xmega_twi.o
+ .debug_ranges  0x00000528       0x38 source/xmega_usart.o
 
 .debug_macro
  *(.debug_macro)

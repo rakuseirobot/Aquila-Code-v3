@@ -250,6 +250,16 @@ public:
         return ans;
     }
 
+	int count_next(node* x){
+		int ans = 0;
+		for(int i=0;i<4;i++){
+			if(x->next[i]!=np && x->next[i]->type!=v::unknown){
+				ans++;
+			}
+		}
+		return ans;
+	}
+
     node* ac_next(node* t,int dire,int now_dir,int dist){//(node*,int,int,int)->node* | nullptr(error)
         int direction = (dire+now_dir+3)%4;
         switch(direction){

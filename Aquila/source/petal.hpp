@@ -136,7 +136,7 @@ void blacktile(){
 	if(color_check()==1){
 		write_walls();
 		ta.r_now()->type=v::black;
-		motor::move(4);
+		motor::move(v::back);
 	}else{/*no action*/}	
 }
 
@@ -374,19 +374,48 @@ bool movetoa(node* a){//move to A. If A is neighbor of now_node , move to A.
 	}
 }
 
-int count_next(node* x){
-	for(int i=0;i<4;i++){
-		if(ta.ac_next(x,ta.r_dir(),i,1)->type != v::unknown && ta.r_wall(x,i,ta.r_dir())!=v::wall){
-			
+
+
+void gobacktoa(node* ima){//imaから前の分岐点まで戻る
+	if(ta.count_next(ima)!=0){
+		//no action
+	}else{
+		ta.clear_hosu();
+		node* bak=ima;
+		while(1){
+			if(bak==ta.r_start() ){
+				//end
+				break;
+			}else if(ta.count_next(bak)==0 ){
+				bak = bak->back[0];	
+			}else if(ta.count_next(bak)!=0 ){
+				//finded!!
+				break;
+			}else{
+				//error
+			}
 		}
+		ta.bfs_type(bak,100);
+		gobacktoa(ima);
+		ta.clear_hosu();
 	}
 }
 
-void gobacktoa(node* ima){//imaから前の分岐点まで戻る
-	ta.bfs_type(ima,100);
-	node* bak = ima->back[0]->back[0];
-	while(ta.count_walls(bak)==2){
-		if()
+void gobackto(node* im){//imからhosuよんで、imよりhosu小さい方へ移動。0でストップ
+	if(im->hosu==0){
+		//end
+	}else if(im==ta.r_now()){
+		for(int i=0;i<4;i++){
+			if(im->next[i]->hosu < im->hosu){
+				movetoa(im->next[i]);
+				gobackto(im->next[i]);
+				break;
+			}else{
+				//no action
+			}
+		}
+	}else{
+		//error
 	}
 }
 
