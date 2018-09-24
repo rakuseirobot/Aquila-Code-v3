@@ -143,7 +143,7 @@ public:
 			if(t->next[i]!=np && (int)t->next[i]->flag <= counter){
 				q.push(t->next[i]);
                 t->next[i]->flag = counter+1;
-                t->next[i]->hosu=t->hosu+1;
+                if(t->next[i]->hosu > t->hosu+1)t->next[i]->hosu=t->hosu+1;
 			}
 		}
 	}
@@ -200,7 +200,7 @@ public:
 				num_vertex = 0;
                 find(x,y,z);//depth�ｿｽﾌ更�ｿｽV
             }
-            k->back[0]=t;
+            if(k->back[0]==np)k->back[0]=t;
         }
     };
     void move_to(int x,int y,int z){

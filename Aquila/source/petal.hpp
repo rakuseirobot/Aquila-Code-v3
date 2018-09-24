@@ -374,9 +374,18 @@ bool movetoa(node* a){//move to A. If A is neighbor of now_node , move to A.
 	}
 }
 
+void goback(node *saki){
+	if(ta.r_now()==saki){
+		//end
+	}else{
+		for(int i=0;i<4;i++){
+			if(ta.ac_next(i,1)->hosu +1 == ta.r_now()->hosu){	movetoa(ta.ac_next(i,1)); goback(saki);  break;  }
+		}
+	}
+}
 
 
-void gobacktoa(node* ima){//imaから前の分岐点まで戻る
+void gobacktoa(node* ima){//imaから前の分岐点まで戻るx
 	if(ta.count_next(ima)!=0){
 		//no action
 	}else{
@@ -396,26 +405,8 @@ void gobacktoa(node* ima){//imaから前の分岐点まで戻る
 			}
 		}
 		ta.bfs_type(bak,100);
-		gobacktoa(ima);
+		goback(bak);
 		ta.clear_hosu();
-	}
-}
-
-void gobackto(node* im){//imからhosuよんで、imよりhosu小さい方へ移動。0でストップ
-	if(im->hosu==0){
-		//end
-	}else if(im==ta.r_now()){
-		for(int i=0;i<4;i++){
-			if(im->next[i]->hosu < im->hosu){
-				movetoa(im->next[i]);
-				gobackto(im->next[i]);
-				break;
-			}else{
-				//no action
-			}
-		}
-	}else{
-		//error
 	}
 }
 
@@ -427,25 +418,14 @@ void real_dfs(node* t,node* s){
 	node* b = ta.ac_next(s,ta.r_dir(),v::front,1);
 	node* c = ta.ac_next(s,ta.r_dir(),v::right,1);
 	node* d = ta.ac_next(s,ta.r_dir(),v::back,1);
-	if(a!=np && a->type==v::unknown){
-		if(movetoa(a))real_dfs(s,ta.r_now());
-	}
-	lcd_clear();
-	lcd_putstr(LCD1_TWI,"a");
-	if(b!=np && b->type==v::unknown){
-		if(movetoa(b))real_dfs(s,ta.r_now());
-	}
-	lcd_clear();
-	lcd_putstr(LCD1_TWI,"b");
-	if(c!=np && c->type==v::unknown){
-		if(movetoa(c))real_dfs(s,ta.r_now());
-	}
-	if(d !=np && d->type==v::unknown){
-		if(movetoa(d))real_dfs(s,ta.r_now());
-	}
+	if(a!=np && a->type==v::unknown){ if(movetoa(a))real_dfs(s,ta.r_now()); }
+	if(b!=np && b->type==v::unknown){ if(movetoa(b))real_dfs(s,ta.r_now()); }
+	if(c!=np && c->type==v::unknown){ if(movetoa(c))real_dfs(s,ta.r_now()); }
+	if(d !=np && d->type==v::unknown){ if(movetoa(d))real_dfs(s,ta.r_now()); }
 	lcd_clear();
 	write_walls();
-	if(t!=np)movetoa(t);
+	//if(t!=np)movetoa(t);
+	if(t!=np)gobacktoa(t);
 }
 
 
