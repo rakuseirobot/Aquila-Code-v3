@@ -105,19 +105,29 @@ namespace motor{
 		}
 		mcount = 0;
 	}*/
-	void wait(void){
+	void wait(bool check){
 		while(mspi(0,1)!=1){
-			//if((PORTJ.IN & PIN5_bm)==0){
-				//check_mv(1);
-			//}
-			//if((PORTJ.IN & PIN6_bm)==0){
+			if((PORTJ.IN & PIN5_bm)==0 && check){
+				check_mv(1);
+				mv_cap(1,false);
+				check=false;
+			}
+			//if((PORTJ.IN & PIN6_bm)==0 && check){
 				//check_mv(2);
+				//mv_cap(2,false);
 			//}
-			//if((PORTJ.IN & PIN7_bm)==0){
+			//if((PORTJ.IN & PIN7_bm)==0 && check){
 				//check_mv(3);
+				//mv_cap(3,false);
 			//}
 		}
-		while(mspi(0,2)!=1);
+		while(mspi(0,2)!=1){
+			if((PORTJ.IN & PIN5_bm)==0 && check){
+				check_mv(1);
+				mv_cap(1,false);
+				check=false;
+			}
+		}
 		return;
 	}
 

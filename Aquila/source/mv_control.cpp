@@ -26,37 +26,55 @@ MV
 */
 
 #include "mv_control.hpp"
-spi mv(&SPID,&PORTD,SPI_PRESCALER_DIV4_gc);
+spi mv(&SPID,&PORTD,SPI_PRESCALER_DIV128_gc);
 void init_mv(void){
-	PORTD.DIRCLR=PIN2_bm|PIN3_bm|PIN4_bm;
-	PORTJ.DIRSET=PIN5_bm|PIN6_bm|PIN7_bm;
+	PORTD.DIRSET=PIN2_bm|PIN3_bm|PIN4_bm;
+	PORTJ.DIRCLR=PIN5_bm|PIN6_bm|PIN7_bm;
 	PORTJ.OUTSET=PIN5_bm|PIN6_bm|PIN7_bm;
-	//PORTD.OUTSET=PIN2_bm|PIN3_bm|PIN4_bm;
+	PORTD.OUTCLR=PIN2_bm|PIN3_bm|PIN4_bm;
 	return;
 }
 void mv_cap(uint8_t di,bool st){
-	uint8_t resp = 0;
-	if (st){
-		resp=mv_spi_send(di,1);
+	switch(di){
+		case 1:
+			if (st){
+				PORTD.OUTCLR=PIN2_bm;
+			}
+			else{
+				PORTD.OUTSET=PIN2_bm;
+			}
+			break;
+		case 2:
+			if (st){
+				PORTD.OUTCLR=PIN3_bm;
+			}
+			else{
+				PORTD.OUTSET=PIN3_bm;
+			}
+			break;
+		case 3:
+			if (st){
+				PORTD.OUTCLR=PIN4_bm;
+			}
+			else{
+				PORTD.OUTSET=PIN4_bm;
+			}
+			break;
+		default:
+			break;
 	}
-	else {
-		resp=mv_spi_send(di,2);
-	}
-	//if(resp!=90){
-		//mv_cap(di,st);
-	//}
 	return;
 }
 void mv_sig(uint8_t i,bool ud){
 	if (ud){
 		if (i==1){
-			PORTJ.OUTSET=PIN5_bm;
+			PORTD.OUTSET=PIN2_bm;
 		}
 		else if (i==2){	
-			PORTJ.OUTSET=PIN6_bm;
+			PORTD.OUTSET=PIN3_bm;
 		}
 		else if(i==3){
-			PORTJ.OUTSET=PIN7_bm;
+			PORTD.OUTSET=PIN4_bm;
 		}
 		else{
 			return;
@@ -64,15 +82,13 @@ void mv_sig(uint8_t i,bool ud){
 	}
 	else{
 		if (i==1){
-			PORTJ.OUTCLR=PIN5_bm;
+			PORTD.OUTCLR=PIN2_bm;
 		}
 		else if (i==2){
-			
-			PORTJ.OUTCLR=PIN6_bm;
+			PORTD.OUTCLR=PIN3_bm;
 		}
 		else if(i==3){
-			
-			PORTJ.OUTCLR=PIN7_bm;
+			PORTD.OUTCLR=PIN4_bm;
 		}
 		else{
 			return;
@@ -82,54 +98,94 @@ void mv_sig(uint8_t i,bool ud){
 }
 uint8_t mv_spi_send(uint8_t val, uint8_t i){
 	if (i==1){
-		PORTJ.OUTCLR=PIN5_bm;
+		PORTD.OUTSET=PIN2_bm;
 	}
 	else if (i==2){
-		
-		PORTJ.OUTCLR=PIN6_bm;
+		PORTD.OUTSET=PIN3_bm;
 	}
 	else if(i==3){
-		
-		PORTJ.OUTCLR=PIN7_bm;
+		PORTD.OUTSET=PIN4_bm;
+	}
+	else{
+		return 0;
+	}
+	_delay_ms(1);
+	if (i==1){
+		PORTD.OUTCLR=PIN2_bm;
+	}
+	else if (i==2){
+		PORTD.OUTCLR=PIN3_bm;
+	}
+	else if(i==3){
+		PORTD.OUTCLR=PIN4_bm;
 	}
 	else{
 		return 0;
 	}
 	uint8_t dat = 0;
-	_delay_ms(5);
+	_delay_ms(100);
 	dat = mv.send(val);
-	PORTJ.OUTSET=PIN5_bm|PIN6_bm|PIN7_bm;
+	if (i==1){
+		PORTD.OUTSET=PIN2_bm;
+	}
+	else if (i==2){
+		PORTD.OUTSET=PIN3_bm;	
+	}
+	else if(i==3){
+		PORTD.OUTSET=PIN4_bm;
+	}
+	else{
+		return 0;
+	}
+	_delay_ms(10);
+	PORTD.OUTCLR=PIN2_bm|PIN3_bm|PIN4_bm;
+	//while((PORTJ.IN & PIN5_bm)==0||(PORTJ.IN & PIN6_bm)==0||(PORTJ.IN & PIN7_bm)==0);
 	return dat;
 }
 
 void check_mv(uint8_t dir){
 	PORTB.OUTSET=PIN0_bm|PIN1_bm;
-	mv_sig(dir,false);
+	//mv_sig(dir,false);
 	_delay_ms(5);
 	led(Blueled,1);
 	uint8_t res = mv_spi_send(dir,1);
+	mv_cap(dir,false);
+	serial.string("ch");
 	serial.putdec(res);
+	serial.string("\n\r");
+	mv_cap(dir,false);
 	led(Blueled,0);
 	switch(res){
 		case 3://H  2kits
+			lcd_clear();
+			lcd_putstr(LCD1_TWI,"Find H!");
 			finded_victim(2);
 			break;
 		case 4://S  1kits
+			lcd_clear();
+			lcd_putstr(LCD1_TWI,"Find S!");
 			finded_victim(1);
 			break;
-		case 5:
+		case 5://U 0kits
+			lcd_clear();
+			lcd_putstr(LCD1_TWI,"Find U!");
 			finded_victim(0);
 			break;
 		case 6:
+			lcd_clear();
+			lcd_putstr(LCD1_TWI,"Find Sermo");
 			finded_victim(1);
 			break;
 		case 7:
+		case 8:
+			lcd_clear();
+			lcd_putstr(LCD1_TWI,"Find Error");
 			finded_victim(1);
 			break;
 		default:
 			break;
-	}
-	//mv_sig(dir,true);
+	};
+	lcd_clear();
 	_delay_ms(10);
 	PORTB.OUTCLR=PIN0_bm|PIN1_bm;
 	return;

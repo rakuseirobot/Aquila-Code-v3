@@ -28,7 +28,7 @@ main.d main.o: .././main.cpp .././source/petal.hpp \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h \
  .././source/color_control.hpp .././source/sermo_control.hpp \
  .././source/serial.hpp .././source/gyro_control.hpp \
- .././source/mv_control.hpp
+ .././source/mv_control.hpp .././source/mpu9250.hpp
 
 .././source/petal.hpp:
 
@@ -103,3 +103,5 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 .././source/gyro_control.hpp:
 
 .././source/mv_control.hpp:
+
+.././source/mpu9250.hpp:

@@ -16,7 +16,7 @@
 #include "xmega_twi.hpp"
 #include "initializing.hpp"
 
-#define sermo_fre 120000UL
+#define sermo_fre 130000UL
 
 #define BUS_TWI &TWID
 void select_bus(uint8_t busnumber);

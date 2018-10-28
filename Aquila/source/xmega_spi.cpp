@@ -10,8 +10,8 @@
 spi::spi(SPI_t *ports,PORT_t *portg,SPI_PRESCALER_enum scale){
 	sport = ports;
 	gport = portg;
-	gport->DIRCLR = PIN6_bm;
-	gport->DIRSET = PIN4_bm | PIN5_bm | PIN7_bm;//MOSI,MISO
+	gport->DIRCLR = PIN6_bm;//MISO
+	gport->DIRSET = PIN4_bm | PIN5_bm | PIN7_bm;//MOSI,SCK
 	sport->CTRL = SPI_ENABLE_bm | SPI_MASTER_bm | SPI_MODE_0_gc | scale;
 	return;
 }

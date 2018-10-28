@@ -67,7 +67,15 @@ void usart::puthex(uint32_t data){//5Œ…®”
 	usart::send(data + '0');
 	return;
 }
-void usart::puthex2(uint64_t data){//12Œ…®”
+void usart::puthex2(int64_t data){//12Œ…®”
+	//if(data<0){
+		//usart::string("-");
+		//data=data*-1;
+	//}
+	if(data & 0x8000000000000000){
+		usart::string("-");
+		data=data&0x7FFFFFFFFFFFFFFF;
+	}
 	usart::send(data/100000000000 + '0');
 	data %= 100000000000;
 	usart::send(data/10000000000 + '0');

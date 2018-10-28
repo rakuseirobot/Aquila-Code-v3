@@ -8,6 +8,7 @@
 #include "source/petal.hpp"
 #include "source/gyro_control.hpp"
 #include "source/mv_control.hpp"
+#include "source/mpu9250.hpp"
 usart serial(&USARTC0,&PORTC);
 void print_num(int num){serial.putdec(num);serial.string("\n");}
 void print_num(int num,int num2,int num3){
@@ -65,27 +66,45 @@ void debugping(int direction){
 int main(){	
 	init_all();
 	init_mv();
-	finded_victim(1);
+	//finded_victim(1);
 	_delay_ms(200);
-	lcd_putstr(LCD1_TWI,"Hello");
+	/*lcd_putstr(LCD1_TWI,"Hello");
 	motor::wait();
 	lcd_clear();
 	lcd_putstr(LCD1_TWI,"Ready!");
-	lcd_clear();
+	lcd_clear();*/
 	serial.string("wake_up\n");
 	uint8_t s = 0;
+	//_delay_ms(500);
+	//init_mpu();
+	select_bus(7);
 	while(1){
+		sermo_test();
+		serial.string("\n\r");
+	}
+	while(1){
+		mpu_read();
+		mpu_debug();
+	}
+	while(1){
+		mv_cap(1,true);
+		motor::move(1);
+		led(Redled,1);
+		_delay_ms(1000);
+		led(Redled,0);
+	}
+	while(1){
+		if((PORTJ.IN & PIN5_bm)==0){
+			_delay_ms(1);
+			check_mv(1);
+			_delay_ms(100);
+			mv_cap(1,false);
+		}
 		if(SW1){
-			PORTB.OUTCLR=PIN0_bm|PIN1_bm;
-			m_send(2,2,m_speed,1);
-			m_send(1,2,m_speed,1);
-			serial.string("sw1\n");
 			while(SW1);
 		}
 		if (SW2){
-			//check_mv(1);
-			uint8_t res = mv_spi_send(1,1);
-			serial.putdec(res);
+			mv_cap(1,false);
 			serial.string("sw2\n");
 			while(SW2);
 		}

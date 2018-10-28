@@ -12,6 +12,7 @@
 #include <util/delay.h>
 #include "xmega_spi.hpp"
 #include "action.hpp"
+#include "lcd_control.hpp"
 
 void mv_sig(uint8_t i,bool ud);
 void init_mv(void);
