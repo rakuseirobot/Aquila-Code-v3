@@ -13,5 +13,12 @@
 #include <util/delay.h>
 #include "xmega_usart.hpp"
 #include "xmega_twi.hpp"
+#include "initializing.hpp"
+
+void gyro_mes(void);
+void gyro_cali(void);
+void gyro_set200hz(void);
+void gyro_Save(void);
+
 
 #endif /* GYRO_CONTROL_H_ */

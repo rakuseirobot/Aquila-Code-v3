@@ -229,9 +229,6 @@
     <Compile Include="source\lcd_control.hpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="source\main.hpp">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="source\motor_control.cpp">
       <SubType>compile</SubType>
     </Compile>

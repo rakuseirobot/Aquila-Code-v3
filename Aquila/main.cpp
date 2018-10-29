@@ -1,67 +1,14 @@
 /*
  * main.cpp
  *
- * Created: 2018/08/25 1:27:46
+ * Created: 2018/08/25 0:59:49
  *  Author: TOMOKI
  */ 
 
 #include "source/petal.hpp"
-#include "source/gyro_control.hpp"
 #include "source/mv_control.hpp"
-#include "source/mpu9250.hpp"
 usart serial(&USARTC0,&PORTC);
-void print_num(int num){serial.putdec(num);serial.string("\n");}
-void print_num(int num,int num2,int num3){
-	serial.putdec(num);
-	serial.string(" , ");
-	serial.putdec(num2);
-	serial.string(" , ");
-	serial.putdec(num3);
-	serial.string("\n");
-}
-void lcd_num(int x,int y,int z){
-	lcd_putdec(LCD1_TWI,x);
-	_delay_ms(1000);
-	lcd_clear();
-	lcd_putdec(LCD1_TWI,y);
-	_delay_ms(1000);
-	lcd_clear();
-	lcd_putdec(LCD1_TWI,z);
-	_delay_ms(1000);
-	lcd_clear();
-}
-void debugping(int direction){
-	int x,x2;
-	switch(direction){
-		case v::left:
-			x=1;
-			x2=2;
-			break;
-		case v::front:
-			x=3;
-			x2=3;
-			break;
-		case v::right:
-			x=4;
-			x2=5;
-			break;
-		case v::back:
-			x=6;
-			x2=6;
-			break;
-		default:
-			break;
-	}
-	lcd_num(direction,x,x2);
-	lcd_num(ping(x),ping(x2),for_cp(direction));
-	write_walls();
-	lcd_num(for_cp(direction),for_write_walls1(direction),ta.r_wall(direction));
-	serial.string("\n");
-	lcd_putstr(LCD1_TWI,"end");
-	_delay_ms(200);
-	lcd_clear();
-	//ping->for_cp(ping_control)->for_write_walls1->write_walls(petal)
-}
+#include "source/gyro_control.hpp"
 
 int main(){	
 	init_all();
@@ -77,14 +24,20 @@ int main(){
 	uint8_t s = 0;
 	//_delay_ms(500);
 	//init_mpu();
+	//gyro_set200hz();
+	//gyro_Save();
+	//serial.string("finish!");
+	//while(1){
+		//
+	//}
+	gyro_cali();
+	while(1){
+		gyro_mes();
+	}
 	select_bus(7);
 	while(1){
 		sermo_test();
 		serial.string("\n\r");
-	}
-	while(1){
-		mpu_read();
-		mpu_debug();
 	}
 	while(1){
 		mv_cap(1,true);
@@ -135,11 +88,7 @@ int main(){
 // 		dserial.putdec(1);
 // 	}serial.string("wake_up\n");
 	serial.putdec(3.14*100);
-	init_bmx055();
-	//while(1){
-		//motor::move(0);
-	//}
-	bmx_test();
+
 	//while(1){
 		//BMX055_Accl();
 		//serial.string("Accl= ");
@@ -201,24 +150,22 @@ int main(){
 	////////////////////////////////////////////////
 	while(1){
 		write_walls();
-		hidarite(); //¶è–@
+		hidarite(); //ï¿½ï¿½ï¿½ï¿½@
 		//buzzer();
 		//serial.string("saka\n");
-		//nachylenie();  //â
+		//nachylenie();  //ï¿½ï¿½
 		//serial.string("k_start\n");
-		float_killer();//Ä‹A
+		float_killer();//ï¿½Ä‹A
 	//	serial.string("k_end\n");
-		//float_killer2();//‘O‚Æ“¯‚¶Œ´—‚Ì“zB
+		//float_killer2();//ï¿½Oï¿½Æ“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì“zï¿½B
 		//serial.string("k2_end\n");
 	}
 	//motor::notify_long_ex();
 	*/
-	while(1){
-		debugping(v::left);
-		debugping(v::front);
-		debugping(v::right);
-		debugping(v::back);
-		_delay_ms(500);
-	}
+	//while(1){
+		//debugping(v::left);
+		//debugping(v::front);
+		//debugping(v::right);
+		//debugping(v::back);
 	return 0;
 }

@@ -14,54 +14,109 @@
  #include "action.hpp"
  #include "color_control.hpp"
  #include "sermo_control.hpp"
- #include "serial.hpp" //荳逡ｪ譛蠕後↓・・ｼ・
- #include <avr/eeprom.h>
+ #include "serial.hpp" //荳逡ｪ譛蠕後↓・・ｼ・#include <avr/eeprom.h>
  #include <util/delay.h>
+
+ //usart serial(&USARTC0,&PORTC);
 
 core ta;
 
-int for_write_walls1(int num){
-	if(for_cp(num)==1){
-		return v::wall;
-	}else{
-		return v::nowall;
+void for_w_w(int direc){
+	switch(check_ping(direc)){
+		case 1: //横に壁
+			ta.w_wall(direc,v::wall);
+// 			serial.string("1::");
+// 			serial.putdec(direc);
+// 			serial.string("\n");
+			//serial.putdec(ta.ac_next(direc,1))
+			break;
+		case 2: //隣のマスに壁がある
+			ta.append_node(direc,1);
+			ta.w_wall(direc,v::nowall);
+			ta.w_wall(ta.ac_next(direc,1),direc,v::wall);//隣のマスに壁をwrite
+// 			serial.string("2::");
+// 			serial.putdec(direc);
+// 			serial.string("\n");
+// 			serial.putdec((uint16_t)ta.ac_next(direc,1));
+// 			serial.putdec(ta.ac_next(direc,1)->x);
+// 			serial.string(" , ");
+// 			serial.putdec(ta.ac_next(direc,1)->y);
+// 			serial.string(" , ");
+// 			serial.putdec(ta.ac_next(direc,1)->z);
+// 			serial.string("\n");
+			break;
+		case 3: //2つ隣のマスに壁がある
+			ta.append_node(direc,1);
+			ta.append_node(ta.ac_next(direc,1),direc,ta.r_dir(),1);//隣の隣のマス作成
+			ta.w_wall(direc,v::nowall);
+			ta.w_wall(ta.ac_next(direc,1),direc,v::nowall);
+		//	ta.w_wall(ta.ac_next(direc,2),direc,v::wall);
+// 			serial.string("3::");
+// 			serial.putdec(direc);
+// 			serial.string("\n");
+// 			serial.putdec((uint16_t)ta.ac_next(direc,1));
+// 						serial.putdec(ta.ac_next(direc,1)->x);
+// 						serial.string(" , ");
+// 						serial.putdec(ta.ac_next(direc,1)->y);
+// 						serial.string(" , ");
+// 						serial.putdec(ta.ac_next(direc,1)->z);
+// 						serial.string("\n");
+// 			serial.putdec((uint16_t)ta.ac_next(direc,2));
+// 						serial.putdec(ta.ac_next(direc,2)->x);
+// 						serial.string(" , ");
+// 						serial.putdec(ta.ac_next(direc,2)->y);
+// 						serial.string(" , ");
+// 						serial.putdec(ta.ac_next(direc,2)->z);
+// 						serial.string("\n");
+// 			serial.string("\n");
+			break;
+		case -4: //3つ隣のマスに壁がある
+			ta.append_node(direc,1);
+			ta.append_node(ta.ac_next(direc,1),direc,ta.r_dir(),1);//隣の隣のマス作成
+			ta.append_node(ta.ac_next(direc,2),direc,ta.r_dir(),1);//隣の隣の隣のマス作成
+			ta.w_wall(direc,v::nowall);
+			ta.w_wall(ta.ac_next(direc,1),direc,v::nowall);
+			ta.w_wall(ta.ac_next(direc,2),direc,v::nowall);
+			ta.w_wall(ta.ac_next(direc,3),direc,v::wall);
+			serial.string("4:: \n");
+			serial.putdec((uint16_t)ta.ac_next(direc,1));
+			serial.putdec((uint16_t)ta.ac_next(direc,2));
+			serial.putdec((uint16_t)ta.ac_next(direc,3));
+			serial.string("\n");
+			break;
+		case -5: //4つ隣のマスに壁がある,実はcase 2:と全く同じ。
+			ta.append_node(direc,1);
+			ta.w_wall(direc,v::nowall);
+			ta.w_wall(ta.ac_next(direc,1),direc,v::wall);//隣のマスに壁をwrite
+			serial.string("5::");
+			serial.putdec(direc);
+			serial.string("\n");
+			serial.putdec((uint16_t)ta.ac_next(direc,1));
+			serial.putdec(ta.ac_next(direc,1)->x);
+			serial.string(" , ");
+			serial.putdec(ta.ac_next(direc,1)->y);
+			serial.string(" , ");
+			serial.putdec(ta.ac_next(direc,1)->z);
+			serial.string("\n");
+			break;
+		case 0:
+		//case 2:
+		//case 3:
+		case 4:
+		case 5:
+			ta.append_node(direc,1);
+			ta.w_wall(direc,v::nowall);
+			break;
+		
 	}
 }
 
-void for_write_walls2(int direc){
-	if(check_ping2(direc)==2){
-		ta.w_wall(direc,v::nowall);
-		ta.append_node(direc,1);
-		ta.w_wall(ta.ac_next(direc,1),3-direc,v::nowall);
-		ta.w_wall(ta.ac_next(direc,1),direc,v::wall);
-		ta.append_node(ta.ac_next(direc,1),direc,ta.r_dir(),1);
-		ta.w_wall(ta.ac_next(direc,2),3-direc,v::wall);
-	}else if(check_ping2(direc)==3){
-		ta.w_wall(direc,v::nowall);
-		ta.append_node(direc,1);
-		ta.w_wall(ta.ac_next(direc,1),3-direc,v::nowall);
-		ta.w_wall(ta.ac_next(direc,1),direc,v::nowall);
-		ta.append_node(ta.ac_next(direc,1),direc,ta.r_dir(),1);
-		ta.w_wall(ta.ac_next(direc,2),3-direc,v::nowall);
-		ta.w_wall(ta.ac_next(direc,2),direc,v::wall);
-		ta.append_node(ta.ac_next(direc,2),direc,ta.r_dir(),1);
-		ta.w_wall(ta.ac_next(direc,3),3-direc,v::wall);
-	}else if(check_ping2(direc)==4){
-		 
-	}else{
-		 
-	}
-}
 
 void write_walls(){
-	ta.w_wall(v::left,for_write_walls1(v::left));
-	ta.w_wall(ta.ac_next(v::left,1),v::right,for_write_walls1(v::left));
-	ta.w_wall(v::front,for_write_walls1(v::front));
-	ta.w_wall(ta.ac_next(v::front,1),v::back,for_write_walls1(v::front));
-	ta.w_wall(v::right,for_write_walls1(v::right));
-	ta.w_wall(ta.ac_next(v::right,1),v::left,for_write_walls1(v::right));
-	ta.w_wall(v::back,for_write_walls1(v::back));
-	ta.w_wall(ta.ac_next(v::back,1),v::front,for_write_walls1(v::back));
+	for_w_w(v::left);
+	for_w_w(v::front);
+	for_w_w(v::right);
+	for_w_w(v::back);
 }
 
 void ondo(){
@@ -81,24 +136,14 @@ void blacktile(){
 	if(color_check()==1){
 		write_walls();
 		ta.r_now()->type=v::black;
-		motor::move(4);
+		motor::move(v::back);
 	}else{/*no action*/}	
-}
-
-void saka(){
-	 //実際に坂を下る関数。
-	 //map系の処理はしなくてよい。
-}
-
-bool saka_check(){//未定。
-	 bool t;
-	 return t;
 }
 
 void move(int num){//num::0:turn_l(90deg),1:go_st,2:turn_r(90deg),3:back(turn),4:back(usiro)
 	switch(num){
 		case 0:
-			motor::move(8);
+			motor::move(9);
 			ta.turn_l();
 			break;
 		case 1:
@@ -114,7 +159,7 @@ void move(int num){//num::0:turn_l(90deg),1:go_st,2:turn_r(90deg),3:back(turn),4
 			ta.turn_l();
 			break;
 		case 2:
-			motor::move(9);
+			motor::move(8);
 			ta.turn_r();
 			break;
 		case 3:
@@ -145,7 +190,6 @@ void nachylenie(){//多分モーター回した後に入れるべきやつ。//�
 		ta.move_to(t->x,t->y,t->z+1);//???
 		//ta.r_now()->type=v::slope;
 	}else if(ta.r_now()->type==v::slope){
-		saka();
 		//node* t=ta.r_now()->back[0]->back[0];
 		node* t=ta.r_now()->back[0];
 		ta.w_now(t);
@@ -189,7 +233,6 @@ int change_relatively(int now_dir,int di){//diは絶対的な方向,now_dirは�
 	}else if(num ==3||num == -1){
 		return v::right;
 	}else{/*error*/}
-	return 0;
 }
 					 
 int _change_relatively(int now_dir,int dir){/*now_dir::今のdir,dir::direction from now_dir,ans::絶対的なdir,,,,(now_dir,dir)->ans*/}
@@ -197,7 +240,7 @@ int _change_relatively(int now_dir,int dir){/*now_dir::今のdir,dir::direction 
 
 void float_killer(){
 	node* a=ta.r_now();
-	if(ta.count_walls(a)==3 || ta.count_walls(a)<=1 ||saka_check()==true){
+	if(ta.count_walls(a)==3 || ta.count_walls(a)<=1){
 						 //終了条件
 	}else{
 	if(ta.r_wall(a,v::left)==v::nowall){
@@ -248,28 +291,26 @@ void hidarite(){
 	if(ta.r_wall(v::left)==v::wall || ta.ac_next(v::left,1)->type==v::black){
 		if(ta.r_wall(v::front)==v::wall || ta.ac_next(v::left,1)->type==v::black){
 			if(ta.r_wall(v::right)==v::wall || ta.ac_next(v::right,1)->type==v::black){
-				//後ろへ->右へ
-				move(v::right);
-				//move(0);
-				move(v::front);
+				move(0);
+				move(0);
+				move(1);
 			}else{
-				move(v::left);
-				move(v::left);
-				move(v::front);
+				move(2);
+				//move(0);
+				move(1);
 				//右へ
 			}
 		}else{
-			move(v::front);
+			move(1);
 			//前へ
 		}
 	}else{
-		move(v::left);
-		move(v::front);
+		move(0);
+		move(1);
 		//左へ
 	}
  //壁書き込み。
- write_walls();
-}	
+}
 
 void go_home(){
 	node* t = ta.r_now();
@@ -308,6 +349,83 @@ void go_home(){
 				break;
 		}
 	}
+}
+
+bool movetoa(node* a){//move to A. If A is neighbor of now_node , move to A.
+	lcd_putstr(LCD1_TWI,"back");
+	write_walls();
+	if(ta.ac_next(v::left,1)==a && ta.r_wall(v::left)!= v::wall){
+		move(v::left);
+		move(v::front);
+		return true;
+	}else if(ta.ac_next(v::front,1)==a && ta.r_wall(v::front) != v::wall ){
+		move(v::front);
+		return true;
+	}else if(ta.ac_next(v::right,1)==a && ta.r_wall(v::right) != v::wall ){
+		move(v::right);
+		move(v::front);
+		return true;
+	}else if(ta.ac_next(v::back,1)==a && ta.r_wall(v::back) != v::wall ){
+		move(v::back);
+		return true;
+	}else{
+		//error
+		return false;
+	}
+}
+
+void goback(node *saki){
+	if(ta.r_now()==saki){
+		//end
+	}else{
+		for(int i=0;i<4;i++){
+			if(ta.ac_next(i,1)->hosu +1 == ta.r_now()->hosu){	movetoa(ta.ac_next(i,1)); goback(saki);  break;  }
+		}
+	}
+}
+
+
+void gobacktoa(node* ima){//imaから前の分岐点まで戻るx
+	if(ta.count_next(ima)!=0){
+		//no action
+	}else{
+		ta.clear_hosu();
+		node* bak=ima;
+		while(1){
+			if(bak==ta.r_start() ){
+				//end
+				break;
+			}else if(ta.count_next(bak)==0 ){
+				bak = bak->back[0];	
+			}else if(ta.count_next(bak)!=0 ){
+				//finded!!
+				break;
+			}else{
+				//error
+			}
+		}
+		ta.bfs_type(bak,100);
+		goback(bak);
+		ta.clear_hosu();
+	}
+}
+
+void real_dfs(node* t,node* s){
+	lcd_clear();
+	write_walls();
+	lcd_putstr(LCD1_TWI,"go");
+	node* a = ta.ac_next(s,ta.r_dir(),v::left,1);
+	node* b = ta.ac_next(s,ta.r_dir(),v::front,1);
+	node* c = ta.ac_next(s,ta.r_dir(),v::right,1);
+	node* d = ta.ac_next(s,ta.r_dir(),v::back,1);
+	if(a!=np && a->type==v::unknown){ if(movetoa(a))real_dfs(s,ta.r_now()); }
+	if(b!=np && b->type==v::unknown){ if(movetoa(b))real_dfs(s,ta.r_now()); }
+	if(c!=np && c->type==v::unknown){ if(movetoa(c))real_dfs(s,ta.r_now()); }
+	if(d !=np && d->type==v::unknown){ if(movetoa(d))real_dfs(s,ta.r_now()); }
+	lcd_clear();
+	write_walls();
+	//if(t!=np)movetoa(t);
+	if(t!=np)gobacktoa(t);
 }
 
 
