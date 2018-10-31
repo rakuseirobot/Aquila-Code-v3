@@ -23,13 +23,7 @@ int main(){
 	serial.string("wake_up\n");
 	uint8_t s = 0;
 	//_delay_ms(500);
-	//init_mpu();
-	//gyro_set200hz();
-	//gyro_Save();
-	//serial.string("finish!");
-	//while(1){
-		//
-	//}
+	////init_mpu();
 	gyro_cali();
 	while(1){
 		gyro_mes();

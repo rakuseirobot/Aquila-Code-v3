@@ -15,6 +15,7 @@
 #include "xmega_twi.hpp"
 #include "initializing.hpp"
 
+void gyro_send(uint8_t reg,uint8_t dh,uint8_t dl);
 void gyro_mes(void);
 void gyro_cali(void);
 void gyro_set200hz(void);
