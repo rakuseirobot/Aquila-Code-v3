@@ -24,6 +24,9 @@ int main(){
 	uint8_t s = 0;
 	//_delay_ms(500);
 	////init_mpu();
+	write_walls();
+	real_dfs(np,ta.r_now());
+	while(1);
 	gyro_cali();
 	while(1){
 		gyro_mes();
