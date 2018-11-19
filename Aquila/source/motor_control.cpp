@@ -32,6 +32,7 @@ uint8_t data=000;
 void init_motor(void){
 	PORTB.DIRSET=PIN0_bm|PIN1_bm|PIN2_bm|PIN3_bm;
 	PORTB.OUTSET=PIN0_bm|PIN1_bm|PIN2_bm|PIN3_bm;
+	PORTB.OUTCLR=PIN0_bm|PIN1_bm;
 }
 uint8_t mspi(uint8_t val,uint8_t i){
 	if(i==2){
@@ -107,11 +108,11 @@ namespace motor{
 	}*/
 	void wait(bool check){
 		while(mspi(0,1)!=1){
-			if((PORTJ.IN & PIN5_bm)==0 && check){
-				check_mv(1);
-				mv_cap(1,false);
-				check=false;
-			}
+			//if((PORTJ.IN & PIN5_bm)==0 && check){
+				//check_mv(1);
+				//mv_cap(1,false);
+				//check=false;
+			//}
 			//if((PORTJ.IN & PIN6_bm)==0 && check){
 				//check_mv(2);
 				//mv_cap(2,false);
@@ -122,11 +123,11 @@ namespace motor{
 			//}
 		}
 		while(mspi(0,2)!=1){
-			if((PORTJ.IN & PIN5_bm)==0 && check){
-				check_mv(1);
-				mv_cap(1,false);
-				check=false;
-			}
+			//if((PORTJ.IN & PIN5_bm)==0 && check){
+				//check_mv(1);
+				//mv_cap(1,false);
+				//check=false;
+			//}
 		}
 		return;
 	}

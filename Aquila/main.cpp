@@ -12,22 +12,36 @@ usart serial(&USARTC0,&PORTC);
 
 int main(){	
 	init_all();
-	init_mv();
+	//init_mv();
 	//finded_victim(1);
 	_delay_ms(200);
-	/*lcd_putstr(LCD1_TWI,"Hello");
+	lcd_putstr(LCD1_TWI,"Hello");
 	motor::wait();
 	lcd_clear();
 	lcd_putstr(LCD1_TWI,"Ready!");
-	lcd_clear();*/
+	lcd_clear();
 	serial.string("wake_up\n");
 	uint8_t s = 0;
+	//motor::move(1);
+	write_walls();
+	move(v::front);
+	move(v::left);
+	move(v::right);
+	move(v::back);
+	real_dfs(np,ta.r_now());
+	while(1){
+		buzzer();
+	}
+	while(1){
+		ping_debug();
+	}
 	//_delay_ms(500);
 	////init_mpu();
-	write_walls();
-	real_dfs(np,ta.r_now());
-	while(1);
-	gyro_cali();
+	while(1){
+		mv_cap(1,true);
+		motor::move(1);
+		_delay_ms(500);
+	}
 	while(1){
 		gyro_mes();
 	}
