@@ -42,7 +42,7 @@ void ReadFromMLX90614(TWI_t *port ,char addr, char cmd){
 	twi serm(port,sermo_fre);
 	dat[4]=serm.Address(addr,0);	 // start recieve process
 	serm.WriteSingle(cmd);	// Write command
-	//twiStop(port);	 // publish repeat start condition
+	//serm.Stop();	 // publish repeat start condition
 	dat[5]=serm.Address(addr,1);
 	dat[0]=serm.ReadSingle(1);	 // request data+pec byte
 	dat[1]=serm.ReadSingle(1);

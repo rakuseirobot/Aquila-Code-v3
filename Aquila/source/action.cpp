@@ -42,10 +42,19 @@ void finded_victim(uint8_t co){//How many kits does victim need?
 		PORTK.OUTCLR = PIN0_bm|PIN1_bm|PIN2_bm;
 		_delay_ms(2);
 	}
+	PORTK.OUTCLR = PIN0_bm|PIN1_bm|PIN2_bm|PIN3_bm;
 	led(Redled,0);
 	led(Blueled,0);
 	led(Greenled,0);
-	PORTK.OUTCLR = PIN0_bm|PIN1_bm|PIN2_bm|PIN3_bm;
+	error_led(1,1);
+	for (int i = 0; i<=10; i++){
+	error_led(1,3);
+	error_led(2,4);
+	buzzer();
+	_delay_ms(300);
+	}
+	error_led(1,0);
+	error_led(2,0);
 }
 
 

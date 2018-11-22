@@ -13,21 +13,13 @@
 #include <util/delay.h>
 #include "xmega_usart.hpp"
 #include "xmega_twi.hpp"
+#include "initializing.hpp"
 
-#define bmx_fre 400000
+void gyro_send(uint8_t reg,uint8_t dh,uint8_t dl);
+void gyro_mes(void);
+void gyro_cali(void);
+void gyro_set200hz(void);
+void gyro_Save(void);
 
-#define Addr_Accl 0x19  // (JP1,JP2,JP3 = Openの時)
-// BMX055　ジャイロセンサのI2Cアドレス
-#define Addr_Gyro 0x69 // (JP1,JP2,JP3 = Openの時)
-// BMX055　磁気センサのI2Cアドレス
-#define Addr_Mag 0x13   // (JP1,JP2,JP3 = Openの時)
 
-//extern float xAccl,yAccl,zAccl,xGyro,yGyro,zGyro;
-//extern int yMag,xMag,zMag;
-
-void init_bmx055(void);
-void BMX055_Accl(void);
-void BMX055_Gyro(void);
-void BMX055_Mag(void);
-void bmx_test(void);
 #endif /* GYRO_CONTROL_H_ */

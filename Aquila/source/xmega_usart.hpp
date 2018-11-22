@@ -20,7 +20,7 @@ struct usart{
 	void string(const char *text);
 	void putdec(uint16_t data);
 	void puthex(uint32_t data);
-	void puthex2(uint64_t data);
+	void puthex2(int64_t data);
 };
 
 
