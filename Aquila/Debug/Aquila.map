@@ -1306,59 +1306,59 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000    0x1f94d
+.debug_info     0x00000000    0x1f934
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000     0x3e5a C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a1u/avrxmega7/crtatxmega128a1u.o
- .debug_info    0x00003e5a    0x12433 main.o
- .debug_info    0x0001628d      0x70c source/action.o
- .debug_info    0x00016999      0x530 source/color_control.o
- .debug_info    0x00016ec9      0xbd4 source/gyro_control.o
- .debug_info    0x00017a9d      0x5a2 source/initializing.o
- .debug_info    0x0001803f      0xf43 source/lcd_control.o
- .debug_info    0x00018f82     0x203b source/motor_control.o
- .debug_info    0x0001afbd      0xd30 source/mv_control.o
- .debug_info    0x0001bced      0xe97 source/ping_control.o
- .debug_info    0x0001cb84      0xcf3 source/sermo_control.o
- .debug_info    0x0001d877      0xe42 source/ui_control.o
- .debug_info    0x0001e6b9      0x411 source/xmega_spi.o
- .debug_info    0x0001eaca      0x6cc source/xmega_twi.o
- .debug_info    0x0001f196      0x7b7 source/xmega_usart.o
+ .debug_info    0x00003e5a    0x1241a main.o
+ .debug_info    0x00016274      0x70c source/action.o
+ .debug_info    0x00016980      0x530 source/color_control.o
+ .debug_info    0x00016eb0      0xbd4 source/gyro_control.o
+ .debug_info    0x00017a84      0x5a2 source/initializing.o
+ .debug_info    0x00018026      0xf43 source/lcd_control.o
+ .debug_info    0x00018f69     0x203b source/motor_control.o
+ .debug_info    0x0001afa4      0xd30 source/mv_control.o
+ .debug_info    0x0001bcd4      0xe97 source/ping_control.o
+ .debug_info    0x0001cb6b      0xcf3 source/sermo_control.o
+ .debug_info    0x0001d85e      0xe42 source/ui_control.o
+ .debug_info    0x0001e6a0      0x411 source/xmega_spi.o
+ .debug_info    0x0001eab1      0x6cc source/xmega_twi.o
+ .debug_info    0x0001f17d      0x7b7 source/xmega_usart.o
 
-.debug_abbrev   0x00000000     0x606c
+.debug_abbrev   0x00000000     0x5ffc
  *(.debug_abbrev)
  .debug_abbrev  0x00000000     0x3b0e C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a1u/avrxmega7/crtatxmega128a1u.o
- .debug_abbrev  0x00003b0e      0x56f main.o
- .debug_abbrev  0x0000407d      0x1f0 source/action.o
- .debug_abbrev  0x0000426d      0x1c2 source/color_control.o
- .debug_abbrev  0x0000442f      0x287 source/gyro_control.o
- .debug_abbrev  0x000046b6      0x14c source/initializing.o
- .debug_abbrev  0x00004802      0x24c source/lcd_control.o
- .debug_abbrev  0x00004a4e      0x4b4 source/motor_control.o
- .debug_abbrev  0x00004f02      0x37f source/mv_control.o
- .debug_abbrev  0x00005281      0x306 source/ping_control.o
- .debug_abbrev  0x00005587      0x2f2 source/sermo_control.o
- .debug_abbrev  0x00005879      0x263 source/ui_control.o
- .debug_abbrev  0x00005adc      0x1b0 source/xmega_spi.o
- .debug_abbrev  0x00005c8c      0x217 source/xmega_twi.o
- .debug_abbrev  0x00005ea3      0x1c9 source/xmega_usart.o
+ .debug_abbrev  0x00003b0e      0x4ff main.o
+ .debug_abbrev  0x0000400d      0x1f0 source/action.o
+ .debug_abbrev  0x000041fd      0x1c2 source/color_control.o
+ .debug_abbrev  0x000043bf      0x287 source/gyro_control.o
+ .debug_abbrev  0x00004646      0x14c source/initializing.o
+ .debug_abbrev  0x00004792      0x24c source/lcd_control.o
+ .debug_abbrev  0x000049de      0x4b4 source/motor_control.o
+ .debug_abbrev  0x00004e92      0x37f source/mv_control.o
+ .debug_abbrev  0x00005211      0x306 source/ping_control.o
+ .debug_abbrev  0x00005517      0x2f2 source/sermo_control.o
+ .debug_abbrev  0x00005809      0x263 source/ui_control.o
+ .debug_abbrev  0x00005a6c      0x1b0 source/xmega_spi.o
+ .debug_abbrev  0x00005c1c      0x217 source/xmega_twi.o
+ .debug_abbrev  0x00005e33      0x1c9 source/xmega_usart.o
 
-.debug_line     0x00000000     0x77a5
+.debug_line     0x00000000     0x77ce
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x3b5 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/XMEGAA_DFP/1.1.68/gcc/dev/atxmega128a1u/avrxmega7/crtatxmega128a1u.o
- .debug_line    0x000003b5     0x42ea main.o
- .debug_line    0x0000469f      0x459 source/action.o
- .debug_line    0x00004af8      0x28c source/color_control.o
- .debug_line    0x00004d84      0x329 source/gyro_control.o
- .debug_line    0x000050ad      0x1f6 source/initializing.o
- .debug_line    0x000052a3      0x481 source/lcd_control.o
- .debug_line    0x00005724      0x9fb source/motor_control.o
- .debug_line    0x0000611f      0x474 source/mv_control.o
- .debug_line    0x00006593      0x31e source/ping_control.o
- .debug_line    0x000068b1      0x3d9 source/sermo_control.o
- .debug_line    0x00006c8a      0x391 source/ui_control.o
- .debug_line    0x0000701b      0x181 source/xmega_spi.o
- .debug_line    0x0000719c      0x35d source/xmega_twi.o
- .debug_line    0x000074f9      0x2ac source/xmega_usart.o
+ .debug_line    0x000003b5     0x4313 main.o
+ .debug_line    0x000046c8      0x459 source/action.o
+ .debug_line    0x00004b21      0x28c source/color_control.o
+ .debug_line    0x00004dad      0x329 source/gyro_control.o
+ .debug_line    0x000050d6      0x1f6 source/initializing.o
+ .debug_line    0x000052cc      0x481 source/lcd_control.o
+ .debug_line    0x0000574d      0x9fb source/motor_control.o
+ .debug_line    0x00006148      0x474 source/mv_control.o
+ .debug_line    0x000065bc      0x31e source/ping_control.o
+ .debug_line    0x000068da      0x3d9 source/sermo_control.o
+ .debug_line    0x00006cb3      0x391 source/ui_control.o
+ .debug_line    0x00007044      0x181 source/xmega_spi.o
+ .debug_line    0x000071c5      0x35d source/xmega_twi.o
+ .debug_line    0x00007522      0x2ac source/xmega_usart.o
 
 .debug_frame    0x00000000      0xe48
  *(.debug_frame)
