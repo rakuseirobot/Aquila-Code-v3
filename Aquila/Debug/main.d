@@ -11,7 +11,7 @@ main.d main.o: .././main.cpp .././source/petal.hpp \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\xmega.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\fuse.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\lock.h \
- .././source/core.hpp .././source/data_structure.hpp \
+ .././source/test_core.hpp .././source/data_structure.hpp \
  .././source/initializing.hpp .././source/xmega_usart.hpp \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\interrupt.h \
  .././source/ui_control.hpp \
@@ -56,7 +56,7 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\lock.h:
 
-.././source/core.hpp:
+.././source/test_core.hpp:
 
 .././source/data_structure.hpp:
 

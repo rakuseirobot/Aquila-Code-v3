@@ -4,9 +4,12 @@
  * Created: 2018/08/25 0:59:49
  *  Author: TOMOKI
  */ 
+ #ifndef PETAL_HPP_
+ #define PETAL_HPP_
 
- #include <avr/io.h>
- #include "core.hpp"
+ #include "avr/io.h"
+ //#include "core.hpp"
+ #include "test_core.hpp"
  #include "initializing.hpp"
  #include "ui_control.hpp"
  #include "lcd_control.hpp"
@@ -15,8 +18,8 @@
  #include "color_control.hpp"
  #include "sermo_control.hpp"
  #include "serial.hpp" //荳逡ｪ譛蠕後↓・・ｼ・#include <avr/eeprom.h>
- #include <util/delay.h>
-
+ #include "mv_control.hpp"
+ #include "util/delay.h"
  //usart serial(&USARTC0,&PORTC);
 
 core ta;
@@ -94,14 +97,23 @@ void blacktile(){
 void move(int num){//num::0:turn_l(90deg),1:go_st,2:turn_r(90deg),3:back(turn),4:back(usiro)
 	switch(num){
 		case 0:
+			mv_cap(1,true);
+			mv_cap(2,true);
+			mv_cap(3,true);
 			motor::move(9);
 			ta.turn_l();
 			break;
 		case 1:
+			mv_cap(1,true);
+			mv_cap(2,true);
+			mv_cap(3,true);
 			motor::move(0);
 			ta.go_st();
 			break;
 		case 4:
+			mv_cap(1,true);
+			mv_cap(2,true);
+			mv_cap(3,true);
 			motor::move(4);
 			ta.turn_l();
 			ta.turn_l();
@@ -110,10 +122,16 @@ void move(int num){//num::0:turn_l(90deg),1:go_st,2:turn_r(90deg),3:back(turn),4
 			ta.turn_l();
 			break;
 		case 2:
+			mv_cap(1,true);
+			mv_cap(2,true);
+			mv_cap(3,true);
 			motor::move(8);
 			ta.turn_r();
 			break;
 		case 3:
+			mv_cap(1,true);
+			mv_cap(2,true);
+			mv_cap(3,true);
 			motor::move(9);
 			motor::fix_position();
 			motor::move(9);
@@ -127,10 +145,29 @@ void move(int num){//num::0:turn_l(90deg),1:go_st,2:turn_r(90deg),3:back(turn),4
 			break;
 	}
 	if(ta.r_now()->type==v::unknown){ta.r_now()->type = v::normal;}
-	//write_walls();
+	if(ta.r_now()->type==v::hisai){mv_cap(1,false);mv_cap(2,false);mv_cap(3,false);}
+	if(k_r_read()==6 && ta.r_now()->type==v::normal){ ta.r_now()->type=v::hisai; }//ondo
+	k_r_write(0);
+	serial.putdec(ta.r_now()->x);
+	serial.string("\n\r");
+	serial.putdec(ta.r_now()->y);
+	serial.string("\n\r");
+	serial.putdec(ta.r_now()->depth);
+	serial.string("\n\r");
+	serial.string("\n\r");
+	if(color_check()==1){//kuro
+		ta.r_now()->type=v::black;
+		motor::move(4);
+		ta.turn_l();
+		ta.turn_l();
+		ta.go_st();
+		ta.turn_l();
+		ta.turn_l();	
+	}
+	led(Greenled,1);
 	motor::fix_position();
-	//blacktile();//not needed;
-	ondo();
+	led(Blueled,1);
+	lcd_clear();
 }
 
 void nachylenie(){//多分モーター回した後に入れるべきやつ。//色々改善の余地がある。
@@ -146,9 +183,20 @@ void nachylenie(){//多分モーター回した後に入れるべきやつ。//�
 	}
 }
 
+node* check_node(node* x){
+	node* ans = np;
+	node* tmp= x;
+	while(){
+
+	}
+	return ans;
+}
+
 bool movetoa(node* a){//move to A. If A is neighbor of now_node , move to A.
-	lcd_putstr(LCD1_TWI,"MtoA");
+	//lcd_putstr(LCD1_TWI,"MtoA");
+	if(a==np)return false;
 	if(ta.ac_next(v::left,1)==a && ta.r_wall(v::left)!= v::wall){
+		lcd_clear();
 		move(v::left);
 		move(v::front);
 		lcd_clear();
@@ -163,7 +211,7 @@ bool movetoa(node* a){//move to A. If A is neighbor of now_node , move to A.
 		lcd_clear();
 		return true;
 	}else if(ta.ac_next(v::back,1)==a && ta.r_wall(v::back) != v::wall ){
-		move(v::back);
+		move(4);
 		lcd_clear();
 		return true;
 	}else{
@@ -182,27 +230,20 @@ void goback(node *saki){
 	}
 }
 
-
-void gobacktoa(node* ima){//imaから前の分岐点まで戻るx
-	if(ta.count_next(ima)!=0){
-		//no action
-	}else{
-		ta.clear_hosu();
-		node* bak=ima;
-		while(1){
-			if(bak==ta.r_start() ){
-				break;//end
-			}else if(ta.count_next(bak)==0 ){
-				bak = bak->back[0];	
-			}else if(ta.count_next(bak)!=0 ){
-				break;//finded
-			}else{
-				//error
+void go_bfs(node* x){
+	lcd_clear();
+	ta.bfs_type(x,v::damy);
+	lcd_putstr(LCD1_TWI,"bfs");
+	lcd_putdec(LCD1_TWI,ta.r_now()->hosu);
+	node* tmp=np;
+	while(ta.r_now()->hosu!=0){
+		tmp = ta.r_now();
+		for(int i=0;i<4;i++){
+			if(tmp->next[i]!=np && tmp->next[i]->hosu < tmp->hosu){
+				movetoa(tmp->next[i]);
+				break;
 			}
 		}
-		ta.bfs_type(bak,100);
-		goback(bak);
-		ta.clear_hosu();
 	}
 }
 
@@ -210,22 +251,38 @@ void real_dfs(node* t,node* s){
 	lcd_clear();
 	write_walls();
 	lcd_putstr(LCD1_TWI,"dfs");
-	if(false){//blacktile
-		lcd_putstr(LCD1_TWI,"black");
-		movetoa(t);
-	}
 	node* a = ta.ac_next(s,ta.r_dir(),v::left,1);
 	node* b = ta.ac_next(s,ta.r_dir(),v::front,1);
 	node* c = ta.ac_next(s,ta.r_dir(),v::right,1);
 	node* d = ta.ac_next(s,ta.r_dir(),v::back,1);
+	lcd_clear();
+	lcd_putdec(LCD1_TWI,ta.r_vnum());
 	if(a!=np && a->type==v::unknown){ if(movetoa(a))real_dfs(s,ta.r_now()); }
 	if(b!=np && b->type==v::unknown){ if(movetoa(b))real_dfs(s,ta.r_now()); }
 	if(c!=np && c->type==v::unknown){ if(movetoa(c))real_dfs(s,ta.r_now()); }
 	if(d!=np && d->type==v::unknown){ if(movetoa(d))real_dfs(s,ta.r_now()); }
 	lcd_clear();
 	write_walls();
-	if(t!=np)movetoa(t);
+	//if(s==ta.r_now() && t!=np)go_bfs(check_node(t));
+	go_bfs(check_node(ta.r_now()));
+	lcd_clear();
+	//if(t!=np)movetoa(t);
 	//if(t!=np)gobacktoa(t);
 }
 
+void stack_dfs(node* t){
+	lcd_clear();
+	lcd_putstr(LCD1_TWI,"s_dfs");
+	write_walls();
+	st.push(t);
+	for(int i=0;i<4;i++)if(ta.ac_next(i,1)!=np && ta.ac_next(i,1)->type==v::unknown && ta.ac_next(i,1)->color==0){ st.push(ta.ac_next(i,1)); ta.ac_next(i,1)->color=1;}
+	while(!st.empty()){
+		go_bfs(check_node(st.top()));
+		st.top()->color=2;
+		st.pop();
+		for(int i=0;i<4;i++)if(ta.ac_next(i,1)!=np && ta.ac_next(i,1)->type==v::unknown && ta.ac_next(i,1)->color==0){ st.push(ta.ac_next(i,1)); ta.ac_next(i,1)->color=1;}
+		write_walls();
+	}
+}
 
+#endif

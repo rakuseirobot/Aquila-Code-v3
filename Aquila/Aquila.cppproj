@@ -268,6 +268,9 @@
     <Compile Include="source\sermo_control.hpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="source\test_core.hpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="source\ui_control.cpp">
       <SubType>compile</SubType>
     </Compile>

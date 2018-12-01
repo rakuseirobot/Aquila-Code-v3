@@ -3,8 +3,10 @@
  * data_structure.hpp
  *
  * Created: 2018/11/27 23:03:16
- *  Author: TOMOKI
+ *  Author: TOMOKI NAKAO
  */ 
+ #ifndef DATA_STRUCTURE_HPP_
+ #define DATA_STRUCTURE_HPP_
 
  #define np nullptr
  using namespace std;
@@ -31,6 +33,7 @@
 	 //ci unknown=0;//type?øΩ?øΩunknown?øΩ∆àÍèè?øΩ?øΩ?øΩ?øΩ?øΩ?øΩA?øΩg?øΩ?øΩ?øΩ‹ÇÌÇ∑?øΩB
 	 ci wall=1;
 	 ci nowall=-1;
+	 ci damy=23;//for bfs_type , damy
 	 //wall
  }
 
@@ -39,7 +42,8 @@
 	 node* next[4] ={nullptr,nullptr,nullptr,nullptr};
 	 node* back[1] ={nullptr};
 	 uint8_t wall[4]={0};// 0|<=|2 wall[0].,if dir=1 then wall[v::left]=left.??????????????
-	 long int flag=0;
+	 uint8_t flag=0;
+	 uint8_t color=0;//0:unknown,1:in stack,2:checked
 	 int hosu=1000;
  };
 
@@ -63,14 +67,17 @@
 	 node* box[300]={np};
 	 int siz;
 	 stack(){siz=0;};
-	 node* front(){return box[siz-1];}
-
+	 node* top(){return box[siz-1];}
+	 void init(){siz=0;for(int i=0;i<300;i++)box[i]=np;};
+	 void push(node* n){box[siz]=n;siz++;};
+	 void pop(){box[siz-1]=np;siz--;};
+	 int size(){return siz;};
+	 bool empty(){ if(siz==0){ return true; }else{ return false; }; }//if empty return true;
  };
 
  struct queue{////test
 	 node* box[300]={np};
 	 int siz;
-
 	 queue(){siz = 0;}
 	 void push(node* x){ box[siz]=x; siz++; }
 	 node* front(){return box[0];}
@@ -89,5 +96,6 @@
 	 }
  };
 
- queue q;
- nodes mall;
+ stack st;
+
+ #endif
