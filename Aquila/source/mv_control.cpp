@@ -14,19 +14,17 @@ PJ5:MVS1
 PJ6:MVS2
 PJ7:MVS3  --SS
 
-
-
-
 MV
-
    2
-1  Å™  3 
-
+1  ÔøΩÔøΩ  3 
 
 */
 
 #include "mv_control.hpp"
 spi mv(&SPID,&PORTD,SPI_PRESCALER_DIV128_gc);
+kit_result bblk;
+int k_r_read(){ return bblk.read(); }
+void k_r_write(int x){ bblk.write(x); }
 void init_mv(void){
 	PORTD.DIRSET=PIN2_bm|PIN3_bm|PIN4_bm;
 	PORTJ.DIRCLR=PIN5_bm|PIN6_bm|PIN7_bm;
@@ -37,26 +35,23 @@ void init_mv(void){
 void mv_cap(uint8_t di,bool st){
 	switch(di){
 		case 1:
-			if (st){
+			if(st){
 				PORTD.OUTCLR=PIN2_bm;
-			}
-			else{
+			}else{
 				PORTD.OUTSET=PIN2_bm;
 			}
 			break;
 		case 2:
-			if (st){
+			if(st){
 				PORTD.OUTCLR=PIN3_bm;
-			}
-			else{
+			}else{
 				PORTD.OUTSET=PIN3_bm;
 			}
 			break;
 		case 3:
-			if (st){
+			if(st){
 				PORTD.OUTCLR=PIN4_bm;
-			}
-			else{
+			}else{
 				PORTD.OUTSET=PIN4_bm;
 			}
 			break;
@@ -155,6 +150,7 @@ void check_mv(uint8_t dir){
 	serial.string("\n\r");
 	mv_cap(dir,false);
 	led(Blueled,0);
+	bblk.write(res);
 	switch(res){
 		case 3://H  2kits
 			lcd_clear();

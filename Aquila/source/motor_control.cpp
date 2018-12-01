@@ -108,26 +108,50 @@ namespace motor{
 	}*/
 	void wait(bool check){
 		while(mspi(0,1)!=1){
-			//if((PORTJ.IN & PIN5_bm)==0 && check){
-				//check_mv(1);
-				//mv_cap(1,false);
-				//check=false;
-			//}
-			//if((PORTJ.IN & PIN6_bm)==0 && check){
-				//check_mv(2);
-				//mv_cap(2,false);
-			//}
-			//if((PORTJ.IN & PIN7_bm)==0 && check){
-				//check_mv(3);
-				//mv_cap(3,false);
-			//}
+			if((PORTJ.IN & PIN5_bm)==0 && check){
+				check_mv(1);
+				mv_cap(1,false);
+				mv_cap(2,false);
+				mv_cap(3,false);
+				check=false;
+			}
+			if((PORTJ.IN & PIN6_bm)==0 && check){
+				check_mv(2);
+				mv_cap(1,false);
+				mv_cap(2,false);
+				mv_cap(3,false);
+				check=false;
+			}
+			if((PORTJ.IN & PIN7_bm)==0 && check){
+				check_mv(3);
+				mv_cap(1,false);
+				mv_cap(2,false);
+				mv_cap(3,false);
+				check=false;
+			}
 		}
 		while(mspi(0,2)!=1){
-			//if((PORTJ.IN & PIN5_bm)==0 && check){
-				//check_mv(1);
-				//mv_cap(1,false);
-				//check=false;
-			//}
+			if((PORTJ.IN & PIN5_bm)==0 && check){
+				check_mv(1);
+				mv_cap(1,false);
+				mv_cap(2,false);
+				mv_cap(3,false);
+				check=false;
+			}
+			if((PORTJ.IN & PIN6_bm)==0 && check){
+				check_mv(2);
+				mv_cap(1,false);
+				mv_cap(2,false);
+				mv_cap(3,false);
+				check=false;
+			}
+			if((PORTJ.IN & PIN7_bm)==0 && check){
+				check_mv(3);
+				mv_cap(1,false);
+				mv_cap(2,false);
+				mv_cap(3,false);
+				check=false;
+			}
 		}
 		return;
 	}
@@ -229,7 +253,7 @@ namespace motor{
 				//_delay_ms(300);
 			//break;
 		}
-		_delay_ms(20);
+		_delay_ms(500);
 	}
 	void forever(void){
 		m_send(1,1,5,0);
@@ -469,10 +493,10 @@ namespace motor{
 	uint8_t notify_half(void){
 		uint8_t dis[10];
 		uint8_t i = 0;
-		dis[0] = check_ping(1);
-		dis[1] = check_ping(2);
-		dis[2] = check_ping(5);
-		dis[3] = check_ping(4);
+		dis[0] = check_ping2(1);
+		dis[1] = check_ping2(2);
+		dis[2] = check_ping2(4);
+		dis[3] = check_ping2(5);
 		if(dis[0]==1&&dis[1]==0){
 			i=1;
 		}else if(dis[0]==0&&dis[1]==1){
@@ -615,7 +639,7 @@ namespace motor{
 	// 	return e;
 	// }
 	void fix_position(void){
-		//notify_half();
+		notify_half();
 		turn_fix();
 		gb_fix();
 		turn_fix();

@@ -211,6 +211,9 @@
     <Compile Include="source\core.hpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="source\data_structure.hpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="source\gyro_control.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -229,6 +232,12 @@
     <Compile Include="source\lcd_control.hpp">
       <SubType>compile</SubType>
     </Compile>
+<<<<<<< HEAD
+=======
+    <Compile Include="source\legacy.hpp">
+      <SubType>compile</SubType>
+    </Compile>
+>>>>>>> a432630dccc103d6a2c52788f0dd3cea98f6b38f
     <Compile Include="source\motor_control.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -260,6 +269,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="source\sermo_control.hpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="source\test_core.hpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="source\ui_control.cpp">

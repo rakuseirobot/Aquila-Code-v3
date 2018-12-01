@@ -114,7 +114,7 @@ uint8_t check_ping2(int x){
  }else if(ping(x)<3200){
 	return 4;
  }else{
-	return 0;
+	return 5;
  }
  return 255;
 }
