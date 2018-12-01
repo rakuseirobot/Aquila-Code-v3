@@ -52,15 +52,15 @@
 	 int size,now;
 	 node mal[200];
 	 bl box[200]={0};
-	 public:
+  public:
 	 nodes(){size=0;now=0;};
 	 node* make(){
-		 if(now>=max-1){ return np; }else{
-		 now++;
-		 return &mal[now];
-	 }
- }
- bl full(){ if(now>=max-1){ return true; }else{ return false; } }
+		if(now>=max-1){ return np; }else{
+		   now++;
+		   return &mal[now];
+		}
+     }
+	bl full(){ if(now>=max-1){ return true; }else{ return false; } }
  };
 
  struct stack{
@@ -97,5 +97,6 @@
  };
 
  stack st;
-
+ nodes mall;
+ 
  #endif

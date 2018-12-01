@@ -36,7 +36,6 @@ class core{
 	int num_vertex;
     //for dfs
 	queue q;
-	nodes mall;
 	//data structure
 public:
     core(){
@@ -49,7 +48,7 @@ public:
 		num_vertex = 0;
         ans = np;
         begin = np;
-        tmp=1;
+        tmp=0;
 		q.clear();
     };
     void turn_r(){
@@ -64,7 +63,7 @@ public:
     void dfs(node* t,int x,int y,int z,int depth){
         if(t!=np){
             if(t->depth>depth+1)t->depth=depth+1;
-            if((long long int)(t->flag)!=tmp){ //<-[TEST]
+            if(t->flag!=tmp){ //<-[TEST]
 				num_vertex++;
                 if(t->x==x && t->y==y && t->z==z){ ans=t; }
                 t->flag=tmp; //<-[TEST]
@@ -126,6 +125,7 @@ public:
 	}
 
     node* find(int x,int y,int z){
+		num_vertex=0;
         ans=np;
         dfs(start,x,y,z,start->depth);
         tmp=(tmp+1)%2;//[TEST]
@@ -152,10 +152,10 @@ public:
                         if(k->next[i]==np){k->next[i]=t; break; } 
                     }//conection of nodes.
                 }
-				num_vertex = 0;
+				//num_vertex = 0;
                 find(x,y,z);//depth?¿½ÌX?¿½V
             }
-            if(k->back[0]==np)k->back[0]=t;
+            //if(k->back[0]==np)k->back[0]=t; //?????
         }
     };
     void move_to(int x,int y,int z){

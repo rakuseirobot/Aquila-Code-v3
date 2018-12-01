@@ -73,19 +73,6 @@ void write_walls(){
 	for_w_w(v::back);
 }
 
-void ondo(){
-	if(ta.r_now()->type==v::hisai||ta.r_now()->type==v::r_kit){
-		
-	}else if(check_sermo()==0 || check_sermo()==1 || check_sermo()==2){
-		ta.r_now()->type=v::hisai;
-		throw_kit();
-		ta.r_now()->type=v::r_kit;
-		finded_victim(1);//?????????error
-	}else{
-		
-	}
-}
-
 void blacktile(){
 	if(color_check()==1){
 		write_walls();
@@ -148,15 +135,24 @@ void move(int num){//num::0:turn_l(90deg),1:go_st,2:turn_r(90deg),3:back(turn),4
 	if(ta.r_now()->type==v::hisai){mv_cap(1,false);mv_cap(2,false);mv_cap(3,false);}
 	if(k_r_read()==6 && ta.r_now()->type==v::normal){ ta.r_now()->type=v::hisai; }//ondo
 	k_r_write(0);
+	lcd_putdec(LCD1_TWI,ta.r_now()->x);
+	_delay_ms(500);
 	serial.putdec(ta.r_now()->x);
 	serial.string("\n\r");
 	serial.putdec(ta.r_now()->y);
 	serial.string("\n\r");
-	serial.putdec(ta.r_now()->depth);
+	serial.putdec((uint16_t)ta.r_now());
+	serial.string("\n\r");
+	serial.putdec(ta.r_now()->hosu);
+	serial.string("\n\r");
+	serial.putdec(ta.r_now()->type);
+	serial.string("\n\r");
+	serial.putdec(ta.r_vnum());
 	serial.string("\n\r");
 	serial.string("\n\r");
 	if(color_check()==1){//kuro
 		ta.r_now()->type=v::black;
+		write_walls();
 		motor::move(4);
 		ta.turn_l();
 		ta.turn_l();
@@ -186,8 +182,13 @@ void nachylenie(){//多分モーター回した後に入れるべきやつ。//�
 node* check_node(node* x){
 	node* ans = np;
 	node* tmp= x;
-	while(){
-
+	while(tmp->type!=v::start){
+		for(int i=0;i<4;i++){
+			if(tmp->next[i] != np && tmp->next[i]->type == v::unknown){
+				tmp=tmp->next[i];
+				return tmp;
+			}
+		}
 	}
 	return ans;
 }
