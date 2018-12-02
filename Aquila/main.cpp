@@ -12,16 +12,11 @@ usart serial(&USARTC0,&PORTC);
 
 int main(){	
 	init_all();
-<<<<<<< HEAD
-	//init_mv();
-=======
 	init_mv();
->>>>>>> a432630dccc103d6a2c52788f0dd3cea98f6b38f
 	//finded_victim(1);
 	_delay_ms(200);
 	lcd_putstr(LCD1_TWI,"Hello");
 	motor::wait();
-<<<<<<< HEAD
 	lcd_clear();
 	lcd_putstr(LCD1_TWI,"Ready!");
 	lcd_clear();
@@ -182,9 +177,11 @@ int main(){
 		//debugping(v::left);
 		//debugping(v::front);
 		//debugping(v::right);
-		//debugping(v::back);
-	return 0;
-=======
+		//debugping(v::back)
+
+
+
+		/*
 	lcd_clear();
 	lcd_putstr(LCD1_TWI,"Ready!");
 	lcd_clear();
@@ -197,6 +194,9 @@ int main(){
 	ta.append_node(v::back,1);
 	ta.find(1,1,1);
 	lcd_putdec(LCD1_TWI,ta.r_vnum());
+
+
+	*/
 /*
 	_delay_ms(1000);
 	buzzer();
@@ -206,5 +206,4 @@ int main(){
 	lcd_clear();
 	lcd_putstr(LCD1_TWI,"THE_END");
 */	return 0;
->>>>>>> a432630dccc103d6a2c52788f0dd3cea98f6b38f
 }
