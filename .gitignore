@@ -1,6 +1,6 @@
 Aquila/Debug/*
-Aquila/main.cpp
-Aquila/Aquila.cppproj
-*json
 *.o
 *.hex
+*.json
+Aquila/main.cpp
+Aquila/Aquila.cppproj

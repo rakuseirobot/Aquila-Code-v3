@@ -185,6 +185,7 @@ int main(){
 	lcd_clear();
 	lcd_putstr(LCD1_TWI,"Ready!");
 	lcd_clear();
+<<<<<<< HEAD
 	serial.string("wake_up\n");
 	ta.append_node(v::front,1);
 	ta.go_st();
@@ -198,12 +199,27 @@ int main(){
 
 	*/
 /*
+=======
+>>>>>>> 82752fb0e9336857bc727f9da255bfcbffa7c10c
 	_delay_ms(1000);
+	motor::fix_position();
 	buzzer();
-	real_dfs(np,ta.r_start());
+	write_walls();
+	//real_dfs(np,ta.r_start());
 	//st.push(ta.r_now());
-	//stack_dfs(ta.r_now());
+	stack_dfs(ta.r_now());
+	lcd_clear();
+	lcd_putstr(LCD1_TWI,"HOME");
+	stack_dfs(ta.r_start());
 	lcd_clear();
 	lcd_putstr(LCD1_TWI,"THE_END");
+<<<<<<< HEAD
+	return 0;
+=======
 */	return 0;
+<<<<<<< HEAD
+=======
+>>>>>>> a432630dccc103d6a2c52788f0dd3cea98f6b38f
+>>>>>>> d1973c8107ec7ffc7ec39661514ab98df6158c03
+>>>>>>> 82752fb0e9336857bc727f9da255bfcbffa7c10c
 }

@@ -32,13 +32,13 @@ void for_w_w(int direc){
 		case 2: //隣のマスに壁がある
 			ta.append_node(direc,1);
 			ta.w_wall(direc,v::nowall);
-			ta.w_wall(ta.ac_next(direc,1),direc,v::wall);//隣のマスに壁をwrite
+			//ta.w_wall(ta.ac_next(direc,1),direc,v::wall);//隣のマスに壁をwrite
 			break;
 		case 3: //2つ隣のマスに壁がある
 			ta.append_node(direc,1);
 			ta.append_node(ta.ac_next(direc,1),direc,ta.r_dir(),1);//隣の隣のマス作成
-			ta.w_wall(direc,v::nowall);
-			ta.w_wall(ta.ac_next(direc,1),direc,v::nowall);
+// 			ta.w_wall(direc,v::nowall);
+// 			ta.w_wall(ta.ac_next(direc,1),direc,v::nowall);
 			break;
 		case -4: //3つ隣のマスに壁がある
 			ta.append_node(direc,1);
@@ -60,6 +60,7 @@ void for_w_w(int direc){
 		case 4:
 		case 5:
 			ta.append_node(direc,1);
+			ta.append_node(ta.ac_next(direc,1),direc,ta.r_dir(),1);//隣の隣のマス作成
 			ta.w_wall(direc,v::nowall);
 			break;
 		
@@ -82,6 +83,14 @@ void blacktile(){
 }
 
 void move(int num){//num::0:turn_l(90deg),1:go_st,2:turn_r(90deg),3:back(turn),4:back(usiro)
+// 		serial.string("x,y,n :");
+// 		serial.putdec(ta.r_now()->x);
+// 		serial.string("\n\r");
+// 		serial.putdec(ta.r_now()->y);
+// 		serial.string("\n\r");
+// 		serial.putdec((uint16_t)ta.r_now());
+// 		serial.string("\n\r");
+// 		serial.string("\n\r");
 	switch(num){
 		case 0:
 			mv_cap(1,true);
@@ -131,34 +140,30 @@ void move(int num){//num::0:turn_l(90deg),1:go_st,2:turn_r(90deg),3:back(turn),4
 		default:
 			break;
 	}
+	write_walls();
 	if(ta.r_now()->type==v::unknown){ta.r_now()->type = v::normal;}
 	if(ta.r_now()->type==v::hisai){mv_cap(1,false);mv_cap(2,false);mv_cap(3,false);}
 	if(k_r_read()==6 && ta.r_now()->type==v::normal){ ta.r_now()->type=v::hisai; }//ondo
 	k_r_write(0);
 	lcd_putdec(LCD1_TWI,ta.r_now()->x);
 	_delay_ms(500);
-	serial.putdec(ta.r_now()->x);
-	serial.string("\n\r");
-	serial.putdec(ta.r_now()->y);
-	serial.string("\n\r");
-	serial.putdec((uint16_t)ta.r_now());
-	serial.string("\n\r");
-	serial.putdec(ta.r_now()->hosu);
-	serial.string("\n\r");
-	serial.putdec(ta.r_now()->type);
-	serial.string("\n\r");
-	serial.putdec(ta.r_vnum());
-	serial.string("\n\r");
-	serial.string("\n\r");
+	lcd_putdec(LCD1_TWI,ta.r_now()->y);
 	if(color_check()==1){//kuro
 		ta.r_now()->type=v::black;
 		write_walls();
-		motor::move(4);
-		ta.turn_l();
-		ta.turn_l();
-		ta.go_st();
-		ta.turn_l();
-		ta.turn_l();	
+		if(ta.ac_next(v::front,1)==ta.r_now()->back[0]){
+			motor::move(0);		
+			ta.go_st();
+		}else if(ta.ac_next(v::back,1)==ta.r_now()->back[0]){
+			motor::move(4);
+			ta.turn_l();
+			ta.turn_l();
+			ta.go_st();	
+			ta.turn_l();
+			ta.turn_l();
+		}else{
+
+		}		
 	}
 	led(Greenled,1);
 	motor::fix_position();
@@ -180,17 +185,36 @@ void nachylenie(){//多分モーター回した後に入れるべきやつ。//�
 }
 
 node* check_node(node* x){
-	node* ans = np;
 	node* tmp= x;
+	lcd_clear();
+	lcd_putstr(LCD1_TWI,"ee");
+	_delay_ms(100);
 	while(tmp->type!=v::start){
 		for(int i=0;i<4;i++){
 			if(tmp->next[i] != np && tmp->next[i]->type == v::unknown){
 				tmp=tmp->next[i];
+// 				serial.string("c_n: ");
+// 				serial.putdec((uint16_t)tmp);
+// 				serial.string("\n\r");
 				return tmp;
 			}
 		}
+		if(tmp->back[0]!=np){
+			tmp = tmp->back[0];
+		}else{
+			ta.find(1,1,100);
+			for(int i=0;i<4;i++){
+				if(tmp->next[i]->depth < tmp->depth){
+					tmp = tmp->next[i];
+					break;
+				}
+			}
+		}
 	}
-	return ans;
+	serial.string("c_n: ");
+	serial.putdec((uint16_t)tmp);
+	serial.string("\n\r");
+	return tmp;
 }
 
 bool movetoa(node* a){//move to A. If A is neighbor of now_node , move to A.
@@ -233,37 +257,47 @@ void goback(node *saki){
 
 void go_bfs(node* x){
 	lcd_clear();
+// 	serial.string("bfsx:");
+// 	serial.putdec((uint16_t)x);
+// 	serial.string("\n\r");
 	ta.bfs_type(x,v::damy);
 	lcd_putstr(LCD1_TWI,"bfs");
 	lcd_putdec(LCD1_TWI,ta.r_now()->hosu);
-	node* tmp=np;
+	node* tmp=np;bool flg=false;
 	while(ta.r_now()->hosu!=0){
-		tmp = ta.r_now();
+		tmp = ta.r_now();flg=false;
+// 		serial.string("tmp : ");
+// 		serial.putdec((uint16_t)tmp);
+// 		serial.string("\n\r");
 		for(int i=0;i<4;i++){
-			if(tmp->next[i]!=np && tmp->next[i]->hosu < tmp->hosu){
-				movetoa(tmp->next[i]);
-				break;
+			if(tmp->next[i]!=np && tmp->next[i]->hosu < tmp->hosu && !flg){
+// 				serial.string("m_a :");
+// 				serial.putdec((uint16_t)tmp->next[i]);
+// 				serial.string("\n\r");
+				tmp=tmp->next[i];
+				movetoa(tmp);	
+				flg=true;
 			}
 		}
 	}
 }
 
 void real_dfs(node* t,node* s){
-	lcd_clear();
 	write_walls();
+	lcd_clear();
 	lcd_putstr(LCD1_TWI,"dfs");
-	node* a = ta.ac_next(s,ta.r_dir(),v::left,1);
-	node* b = ta.ac_next(s,ta.r_dir(),v::front,1);
-	node* c = ta.ac_next(s,ta.r_dir(),v::right,1);
-	node* d = ta.ac_next(s,ta.r_dir(),v::back,1);
+	node* a;bool flg=false;
+	for(int i=0;i<4;i++){
+		flg=false;
+		for(int j=0;j<4;j++){
+			a = ta.ac_next(s,ta.r_dir(),i,1);
+			if(!flg && a!=np && a->type==v::unknown){ 
+				flg=true;
+				if(movetoa(a))real_dfs(s,ta.r_now()); 
+			}
+		}
+	}
 	lcd_clear();
-	lcd_putdec(LCD1_TWI,ta.r_vnum());
-	if(a!=np && a->type==v::unknown){ if(movetoa(a))real_dfs(s,ta.r_now()); }
-	if(b!=np && b->type==v::unknown){ if(movetoa(b))real_dfs(s,ta.r_now()); }
-	if(c!=np && c->type==v::unknown){ if(movetoa(c))real_dfs(s,ta.r_now()); }
-	if(d!=np && d->type==v::unknown){ if(movetoa(d))real_dfs(s,ta.r_now()); }
-	lcd_clear();
-	write_walls();
 	//if(s==ta.r_now() && t!=np)go_bfs(check_node(t));
 	go_bfs(check_node(ta.r_now()));
 	lcd_clear();
@@ -272,17 +306,23 @@ void real_dfs(node* t,node* s){
 }
 
 void stack_dfs(node* t){
-	lcd_clear();
-	lcd_putstr(LCD1_TWI,"s_dfs");
-	write_walls();
-	st.push(t);
-	for(int i=0;i<4;i++)if(ta.ac_next(i,1)!=np && ta.ac_next(i,1)->type==v::unknown && ta.ac_next(i,1)->color==0){ st.push(ta.ac_next(i,1)); ta.ac_next(i,1)->color=1;}
-	while(!st.empty()){
-		go_bfs(check_node(st.top()));
-		st.top()->color=2;
-		st.pop();
-		for(int i=0;i<4;i++)if(ta.ac_next(i,1)!=np && ta.ac_next(i,1)->type==v::unknown && ta.ac_next(i,1)->color==0){ st.push(ta.ac_next(i,1)); ta.ac_next(i,1)->color=1;}
+	if(t!=np){
+		st.push(t);
 		write_walls();
+		node* k;node* nw;
+		for(int	i=3;i>=0;i--){
+			k = find(ta.ac_next(i,1)->x,ta.ac_next(i,1)->y,ta.ac_next(i,1)->z);
+			if(k!=np && k->type==v::unknown)st.push(k);
+		}
+		while(!st.empty()){
+			nw = ta.find(st.top()->x,st.top()->y,st.top()->z);
+			if(nw->type==v::unknown)go_bfs(nw);
+			st.pop();
+			for(int	i=3;i>=0;i--){
+				k = find(ta.ac_next(i,1)->x,ta.ac_next(i,1)->y,ta.ac_next(i,1)->z);
+				if(k!=np && k->type==v::unknown)st.push(k);
+			}	
+		}
 	}
 }
 
