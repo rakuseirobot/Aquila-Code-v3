@@ -57,6 +57,8 @@
 	 node* make(){
 		if(now>=max-1){ return np; }else{
 		   now++;
+		   mal[now].back[0]=np;
+		   mal[now].color=0;
 		   return &mal[now];
 		}
      }

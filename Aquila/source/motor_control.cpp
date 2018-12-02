@@ -253,7 +253,7 @@ namespace motor{
 				//_delay_ms(300);
 			//break;
 		}
-		_delay_ms(500);
+		_delay_ms(200);
 	}
 	void forever(void){
 		m_send(1,1,5,0);
@@ -495,15 +495,15 @@ namespace motor{
 		uint8_t i = 0;
 		dis[0] = check_ping2(1);
 		dis[1] = check_ping2(2);
-		dis[2] = check_ping2(4);
-		dis[3] = check_ping2(5);
-		if(dis[0]==1&&dis[1]==0){
+		dis[2] = check_ping2(5);
+		dis[3] = check_ping2(4);
+		if(dis[0]==1&&dis[1]!=1){
 			i=1;
-		}else if(dis[0]==0&&dis[1]==1){
-			i=1;	
-		}else if(dis[2]==1&&dis[3]==0){
+		}else if(dis[0]!=1&&dis[1]==1){
 			i=1;
-		}else if(dis[2]==0&&dis[3]==1){
+		}else if(dis[2]==1&&dis[3]!=1){
+			i=1;
+		}else if(dis[2]!=1&&dis[3]==1){
 			i=1;
 		}else{
 			i=0;
@@ -641,6 +641,7 @@ namespace motor{
 	void fix_position(void){
 		notify_half();
 		turn_fix();
+		notify_half();
 		gb_fix();
 		turn_fix();
 		//return;

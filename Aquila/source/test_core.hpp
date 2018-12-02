@@ -110,9 +110,10 @@ public:
 		node* x=np;
 		while(q.size()>0){
 			x = q.front();
+			q.pop();
 			if(x->type==typ){break;}
 			into_queue(x);
-			q.pop();
+			//q.pop();
 		}
 		tmp=(tmp+1)%2;//[test]
 		if(q.size()>0){
@@ -155,7 +156,7 @@ public:
 				//num_vertex = 0;
                 find(x,y,z);//depth?¿½ÌX?¿½V
             }
-            //if(k->back[0]==np)k->back[0]=t; //?????
+            if(k->back[0]==np)k->back[0]=t; //
         }
     };
     void move_to(int x,int y,int z){
@@ -230,7 +231,7 @@ public:
         node* k = find(x,y,z);
         if(k==np){
             node* n = mall.make();
-            n->x=x;n->y=y;n->z=z;
+            n->x=x;n->y=y;n->z=z;n->type==v::unknown;
             for(int i=0;i<4;i++)if(t->next[i]==np){t->next[i]=n;break;}
             n->next[0]=t;
         }else{
