@@ -1,2 +1,4 @@
-"Debug" 
-Aquila/Debug/
+Aquila/Debug/*
+*.o
+*.hex
+Aquila/main.cpp
