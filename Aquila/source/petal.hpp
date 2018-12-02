@@ -306,27 +306,23 @@ void real_dfs(node* t,node* s){
 }
 
 void stack_dfs(node* t){
-	lcd_clear();
-	lcd_putstr(LCD1_TWI,"s_dfs");
-	write_walls();
-	st.push(t);
-	for(int i=3;i>=0;i--){
-		if(ta.ac_next(i,1)!=np && ta.ac_next(i,1)->type==v::unknown && ta.ac_next(i,1)->color==0){
-			st.push(ta.ac_next(i,1)); 
-			//ta.ac_next(i,1)->color=1;
-		}
-	}
-	while(!st.empty()){
-		if(st.top()->type ==v::unknown && st.top()->color==0)go_bfs(check_node(st.top()));
-		st.top()->color=2;
-		st.pop();
-		for(int i=3;i>=0;i--){
-			if(ta.ac_next(i,1)!=np && ta.ac_next(i,1)->type==v::unknown && ta.ac_next(i,1)->color==0){
-				st.push(ta.ac_next(i,1));
-				//ta.ac_next(i,1)->color=1;
-			}
-		}
+	if(t!=np){
+		st.push(t);
 		write_walls();
+		node* k;node* nw;
+		for(int	i=3;i>=0;i--){
+			k = find(ta.ac_next(i,1)->x,ta.ac_next(i,1)->y,ta.ac_next(i,1)->z);
+			if(k!=np && k->type==v::unknown)st.push(k);
+		}
+		while(!st.empty()){
+			nw = ta.find(st.top()->x,st.top()->y,st.top()->z);
+			if(nw->type==v::unknown)go_bfs(nw);
+			st.pop();
+			for(int	i=3;i>=0;i--){
+				k = find(ta.ac_next(i,1)->x,ta.ac_next(i,1)->y,ta.ac_next(i,1)->z);
+				if(k!=np && k->type==v::unknown)st.push(k);
+			}	
+		}
 	}
 }
 
