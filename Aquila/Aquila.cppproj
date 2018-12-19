@@ -274,6 +274,12 @@
     <Compile Include="source\ui_control.hpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="source\vl53lox.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="source\vl53lox.hpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="source\xmega_spi.cpp">
       <SubType>compile</SubType>
     </Compile>

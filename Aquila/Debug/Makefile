@@ -49,6 +49,7 @@ C_SRCS +=  \
 ../source/ping_control.cpp \
 ../source/sermo_control.cpp \
 ../source/ui_control.cpp \
+../source/vl53lox.cpp \
 ../source/xmega_spi.cpp \
 ../source/xmega_twi.cpp \
 ../source/xmega_usart.cpp
@@ -72,6 +73,7 @@ source/mv_control.o \
 source/ping_control.o \
 source/sermo_control.o \
 source/ui_control.o \
+source/vl53lox.o \
 source/xmega_spi.o \
 source/xmega_twi.o \
 source/xmega_usart.o
@@ -88,6 +90,7 @@ source/mv_control.o \
 source/ping_control.o \
 source/sermo_control.o \
 source/ui_control.o \
+source/vl53lox.o \
 source/xmega_spi.o \
 source/xmega_twi.o \
 source/xmega_usart.o
@@ -104,6 +107,7 @@ source/mv_control.d \
 source/ping_control.d \
 source/sermo_control.d \
 source/ui_control.d \
+source/vl53lox.d \
 source/xmega_spi.d \
 source/xmega_twi.d \
 source/xmega_usart.d
@@ -120,6 +124,7 @@ source/mv_control.d \
 source/ping_control.d \
 source/sermo_control.d \
 source/ui_control.d \
+source/vl53lox.d \
 source/xmega_spi.d \
 source/xmega_twi.d \
 source/xmega_usart.d
@@ -138,6 +143,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 

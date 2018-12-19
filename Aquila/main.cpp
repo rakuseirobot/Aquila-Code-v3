@@ -9,6 +9,7 @@
 #include "source/mv_control.hpp"
 usart serial(&USARTC0,&PORTC);
 #include "source/gyro_control.hpp"
+#include "source/vl53lox.hpp"
 
 int main(){	
 	init_all();

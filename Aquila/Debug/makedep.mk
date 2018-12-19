@@ -24,6 +24,8 @@ source\sermo_control.cpp
 
 source\ui_control.cpp
 
+source\vl53lox.cpp
+
 source\xmega_spi.cpp
 
 source\xmega_twi.cpp
