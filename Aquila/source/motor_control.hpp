@@ -17,6 +17,7 @@
 #include "ui_control.hpp"
 #include "mv_control.hpp"
 #include "initializing.hpp"
+#include "gyro_control.hpp"
 #include <stdlib.h>
 #include <util/delay.h>
 
@@ -42,4 +43,5 @@ namespace motor{
 	#define m_speed 7
 	#define m_turnspeed 5
 }
+void enkaigei(void);
 #endif /* MOTOR_CONTROL_H_ */

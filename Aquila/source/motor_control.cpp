@@ -158,8 +158,8 @@ namespace motor{
 
 	void move(uint8_t x=6){// x = 0:1 block Advance 1:2 blocks Advance 2:Left Turn with Copass 3:Right Turn with Compass 4:1 block Back 5:2 block Back 6:Half block Advance 7:Half block Back 8:right Turn without Compass 9:left Turn without Compass 
 		_delay_ms(5);
-		uint16_t first = 0;
-		uint16_t now = 0;
+		float first = 0;
+		float now = 0;
 		switch(x){
 			case 0: //???u???b?N????
 			m_send(2,2,m_speed,1);
@@ -173,42 +173,44 @@ namespace motor{
 			motor::wait();
 			//_delay_ms(300);
 			break;
-			/*case 2:
-				first = compass_read();
-				//usart_putdec(first);
+			case 2:
+				first = gyro_angle();
+				serial.putint(first);
+				serial.string("\n\r");
 				m_send(1,2,m_turnspeed,5);
 				m_send(2,1,m_turnspeed,5);
 				_delay_ms(10);
-				now=compass_read();
-				//usart_putdec(now);
-				//usaort_string("\n\r");
+				now = gyro_angle();
+				serial.putint(now);
+				serial.string("\n\r");
 				do{
-					now=compass_read();
-					//usart_putdec(now);
-					//usart_string("\n\r");
-				}while((first<now?now-first:now-first+3600)>2700||(first<now?now-first:now-first+3600)<50);
+					now=gyro_angle();
+					serial.putint(now);
+					serial.string("\n\r");
+				}while((first<now?now-first:now-first+360)>270||(first<now?now-first:now-first+360)<90);
 				motor::brake(1);
 				motor::brake(2);
 				motor::wait();
 			break;
 			case 3:
-				first = compass_read();
-				//usart_putdec(first);
+				first = gyro_angle();
+				serial.putint(first);
+				serial.string("\n\r");
 				m_send(1,1,m_turnspeed,5);
 				m_send(2,2,m_turnspeed,5);
 				_delay_ms(10);
-				now=compass_read();
-				//usart_putdec(now);
-				//usart_string("\n\r");
+				now=gyro_angle();
+				serial.putint(now);
+				serial.string("\n\r");
 				do{
-					now=compass_read();
-					//usart_putdec(now);
-					//usart_string("\n\r");
-				}while((first<now?now-first:now-first+3600)<900||(first<now?now-first:now-first+3600)>3550);
+					now=gyro_angle();
+					serial.putint(now);
+					serial.string("\n\r");
+				}while((first<now?now-first:now-first+360)<90||(first<now?now-first:now-first+360)>270);
 				motor::brake(1);
 				motor::brake(2);
 				motor::wait();
-				break;*/
+				break;
 			case 4: //???u???b?N?O?i
 			m_send(1,1,m_speed,1);
 			m_send(2,1,m_speed,1);
@@ -648,3 +650,25 @@ namespace motor{
 	}
 }
 
+void enkaigei(void){
+	float first=gyro_angle(), now=0;
+	while(1){
+		now=gyro_angle();
+		if(abs(first-now)>2){
+			while(first<now){
+				m_send(1,2,5,3);
+				m_send(2,1,5,3);
+				now=gyro_angle();
+			}
+			while(first>now){
+				m_send(1,1,5,3);
+				m_send(2,2,5,3);
+				now=gyro_angle();
+			}
+		}
+		else{
+			motor::brake(1);
+			motor::brake(2);
+		}
+	}
+}

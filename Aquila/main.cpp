@@ -23,6 +23,17 @@ int main(){
 	serial.string("wake_up\n");
 	uint8_t s = 0;
 	//motor::move(1);
+	buzzer();
+	//gyro_cali();
+	buzzer();
+	while(1){
+		acc_mes();
+	}
+	enkaigei();
+	while(1){
+		motor::move(4);
+		motor::move(5);
+	}
 	write_walls();
 	move(v::front);
 	move(v::left);
@@ -217,9 +228,4 @@ int main(){
 	return 0;
 =======
 */	return 0;
-<<<<<<< HEAD
-=======
->>>>>>> a432630dccc103d6a2c52788f0dd3cea98f6b38f
->>>>>>> d1973c8107ec7ffc7ec39661514ab98df6158c03
->>>>>>> 82752fb0e9336857bc727f9da255bfcbffa7c10c
 }

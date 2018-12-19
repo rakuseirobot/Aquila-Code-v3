@@ -28,7 +28,8 @@ namespace menu{
 }
 
 void init_buzzer(void);
-void buzzer(void);
+void buzzer(uint16_t t = 800);
+void delay_us(uint16_t t);
 void led(uint8_t ledkind,uint8_t ledmode);
 void error_led(uint8_t no,uint8_t i);
 void start(void);

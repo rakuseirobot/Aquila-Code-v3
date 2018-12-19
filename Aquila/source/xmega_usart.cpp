@@ -49,6 +49,40 @@ void usart::putdec(uint16_t data){//4Œ…®”
 	}
 	return;
 }
+void usart::putfloat(float data){//floatŒ^(-‚ ‚è)
+	usart::putint((int16_t)data);
+	usart::string(".");
+	data = fmod(data,1);
+	while(data){
+		data =data*10.0;
+		usart::send((int)data + '0');
+		data=fmod(data,1);
+	}
+}
+void usart::putint(int16_t data){//®”(-‚ ‚è)
+	if(SWITCH_USART==true){
+		if(0>data){
+			usart::string("-");
+			data=data*-1;
+		}
+		for(int i = log10(data)+1;i<=0;i--){
+			usart::send(data/powf(10,(float)i) + '0');
+			data %= (int)powf(10,(float)i);
+		}
+		/*
+		usart::send(data/1000 + '0');
+		data %= 1000;
+		usart::send(data/100 + '0');
+		data %= 100;
+		usart::send(data/10 + '0');
+		data %= 10;
+		usart::send(data + '0');*/
+		}else{
+		//no aciton
+	}
+	return;
+}
+
 
 
 void usart::puthex(uint32_t data){//5Œ…®”

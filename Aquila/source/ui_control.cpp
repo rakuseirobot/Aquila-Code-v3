@@ -43,13 +43,20 @@ void init_buzzer(void){
 ISR(TCD0_OVF_vect){
 	
 }
-void buzzer(void){
-	for(int i=0;i<=200;i++){
+void buzzer(uint16_t t){
+	for(int i=0;i<=1000-t;i++){
 		PORTA.OUTSET=PIN0_bm;
-		_delay_us(800);
+		delay_us(t);
 		PORTA.OUTCLR=PIN0_bm;
-		_delay_us(800);
+		delay_us(t);
 	}
+}
+
+void delay_us(uint16_t t){
+	for (uint16_t i=0;i<=t;i++){
+		_delay_us(1);
+	}
+	return;
 }
 
 void led(uint8_t ledkind,uint8_t ledmode){
