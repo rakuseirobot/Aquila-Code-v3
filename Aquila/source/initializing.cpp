@@ -45,3 +45,11 @@ void init_avr(void){
 	PORTK.DIRSET = PIN0_bm|PIN1_bm|PIN2_bm|PIN3_bm;//ステッピングinit
 	PORTB.DIRSET = PIN0_bm|PIN1_bm;//モーター用SIG
 }
+
+void init_int(void){
+	PORTH.DIRCLR=PIN0_bm|PIN1_bm|PIN2_bm;
+	PORTH.INTCTRL=PORT_INT0LVL_LO_gc|PORT_INT1LVL_LO_gc;
+	PORTH.INT0MASK=PIN0_bm;
+	PORTH.INT1MASK=PIN1_bm;
+	PORTH.PIN0CTRL=PORT_ISC_BOTHEDGES_gc;
+}

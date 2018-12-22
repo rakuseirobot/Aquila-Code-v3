@@ -68,14 +68,15 @@ uint32_t timeoutMicrosecondsToMclks(uint32_t timeout_period_us, uint8_t vcsel_pe
 bool performSingleRefCalibration(uint8_t vhv_init_byte);
 bool init_vl(bool io_2v8);
 uint16_t decodeTimeout(uint16_t reg_val);
+bool setSignalRateLimit(float limit_Mcps);
 uint16_t readRangeSingleMillimeters(void);
 uint16_t readRangeContinuousMillimeters(void);
 void getSequenceStepTimeouts(SequenceStepEnables const * enables, SequenceStepTimeouts * timeouts);
 bool setVcselPulsePeriod(vcselPeriodType type, uint8_t period_pclks);
 uint16_t encodeTimeout(uint16_t timeout_mclks);
 uint32_t timeoutMclksToMicroseconds(uint16_t timeout_period_mclks, uint8_t vcsel_period_pclks);
-
-
+int8_t SetLimitCheckEnable(uint16_t LimitCheckId,uint8_t LimitCheckEnable);
+int8_t SetLimitCheckValue(uint16_t LimitCheckId,uint32_t LimitCheckValue);
 /*
 
 init_vl();
@@ -99,6 +100,34 @@ while(1){
 */
 
 
+
+/*
+rtc();
+select_bus(7);
+init_vl(false);
+_delay_ms(10);
+// lower the return signal rate limit (default is 0.25 MCPS)
+setSignalRateLimit(0.1);//0.1
+// increase laser pulse periods (defaults are 14 and 10 PCLKs)
+//setVcselPulsePeriod(VcselPeriodPreRange, 14);
+//setVcselPulsePeriod(VcselPeriodFinalRange, 10);
+// increase laser pulse periods (defaults are 14 and 10 PCLKs)
+SetLimitCheckValue(1,(uint32_t)(0.1*65536));//VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE
+setMeasurementTimingBudget(50000);
+setVcselPulsePeriod(VcselPeriodPreRange, 18);
+setVcselPulsePeriod(VcselPeriodFinalRange, 14);
+serial.string("initfinish!");
+_delay_ms(10);
+rtc();
+while(1){
+	serial.putint(RTC.CNT);
+	serial.string(",");
+	serial.putint(readRangeSingleMillimeters());
+	serial.string(",");
+	serial.putint(ping(3));
+	serial.string("\n\r");
+}
+*/
 
 
 #endif /* VL53LOX_H_ */

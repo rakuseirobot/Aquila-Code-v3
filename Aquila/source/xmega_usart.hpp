@@ -12,6 +12,7 @@
 #define SWITCH_USART true
 #include<avr/io.h>
 #include<math.h>
+#include <stdlib.h>
 
 struct usart{
 	PORT_t *gport;
@@ -21,7 +22,7 @@ struct usart{
 	void string(const char *text);
 	void putdec(uint16_t data);
 	void putfloat(float data);
-	void putint(int16_t data);
+	void putint(int32_t data);
 	void puthex(uint32_t data);
 	void puthex2(int64_t data);
 };

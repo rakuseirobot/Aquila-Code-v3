@@ -18,6 +18,7 @@ void init_all(void);
 void init_clock(void);
 void rtc(void);//About 16 hours past, it will be overflow.	
 void init_avr(void);
+void init_int(void);
 
 
 #endif /* INITIALIZING_H_ */

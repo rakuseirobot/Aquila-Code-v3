@@ -21,12 +21,6 @@
 #define SW2 (PORTH.IN & PIN1_bm)!=0
 #define SW3 (PORTH.IN & PIN2_bm)!=0
 
-namespace menu{
-	void kit(void);
-	void sensor(void);
-	void start(void);
-}
-
 void init_buzzer(void);
 void buzzer(uint16_t t = 800);
 void delay_us(uint16_t t);

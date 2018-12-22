@@ -6,7 +6,7 @@
  */ 
 
 #include "gyro_control.hpp"
-twi gyro(&TWIC,200000);
+twi gyro(&TWIC,250000);
 
 void gyro_send(uint8_t reg,uint8_t dh,uint8_t dl){
 	gyro.Address(0x50<<1,0); //J901との通信開始
@@ -27,6 +27,28 @@ float gyro_angle(void){
 	gyro.Stop();
 	angle = ((float)((yawh << 8) | yawl)  / 32768 * 180) + 180;
 	return angle;
+}
+
+float acc_x_mes(void){
+	uint8_t yawl=0, yawh=0;
+	gyro.Address(0x50<<1,0); //J901との通信開始
+	gyro.WriteSingle(0x34); //X軸の加速度を読み取るアドレスを送信
+	gyro.Address(0x50<<1,1); //J901との通信開始
+	yawl = gyro.ReadSingle(1); //1byte目受信
+	yawh = gyro.ReadSingle(0); //2byte目受信
+	gyro.Stop();
+	return ((float)((yawh << 8) | yawl)  / 32768 * 16 * 9.8);
+}
+
+float acc_y_mes(void){
+	uint8_t yawl=0, yawh=0;
+	gyro.Address(0x50<<1,0); //J901との通信開始
+	gyro.WriteSingle(0x35); //Y軸の加速度を読み取るアドレスを送信
+	gyro.Address(0x50<<1,1); //J901との通信開始
+	yawl = gyro.ReadSingle(1); //1byte目受信
+	yawh = gyro.ReadSingle(0); //2byte目受信
+	gyro.Stop();
+	return ((float)((yawh << 8) | yawl)  / 32768 * 16 * 9.8);
 }
 
 void acc_mes(void){
@@ -54,11 +76,54 @@ void acc_mes(void){
 	gyro.Stop();
 	data[2] = ((float)((yawh << 8) | yawl)  / 32768 * 16 * 9.8);
 	//angle=(angle-359)*(-1);
-	serial.putint(data[0]*10);
-	serial.string("|");
-	serial.putint(data[1]*10);
-	serial.string("|");
-	serial.putint(data[2]*10);
+	serial.string("x:");
+	serial.putfloat(data[0]);
+	serial.string("y:");
+	serial.putfloat(data[1]);
+	serial.string("z:");
+	serial.putfloat(data[2]);
+	serial.string("\n\r");
+}
+void gyro_time_mes(void){
+	int yawl=0, yawh=0;
+	gyro.Address(0x50<<1,0); //J901との通信開始
+	gyro.WriteSingle(0x30); //z軸の角度を読み取るアドレスを送信
+	gyro.Address(0x50<<1,1); //J901との通信開始
+	yawl = gyro.ReadSingle(1); //1byte目受信
+	yawh = gyro.ReadSingle(0); //2byte目受信
+	gyro.Stop();
+	serial.putint(yawl);
+	serial.string("年");
+	serial.putint(yawh);
+	serial.string("月");
+	gyro.Address(0x50<<1,0); //J901との通信開始
+	gyro.WriteSingle(0x31); //z軸の角度を読み取るアドレスを送信
+	gyro.Address(0x50<<1,1); //J901との通信開始
+	yawl = gyro.ReadSingle(1); //1byte目受信
+	yawh = gyro.ReadSingle(0); //2byte目受信
+	gyro.Stop();
+	serial.putint(yawl);
+	serial.string("日");
+	serial.putint(yawh);
+	serial.string("時");
+	gyro.Address(0x50<<1,0); //J901との通信開始
+	gyro.WriteSingle(0x32); //z軸の角度を読み取るアドレスを送信
+	gyro.Address(0x50<<1,1); //J901との通信開始
+	yawl = gyro.ReadSingle(1); //1byte目受信
+	yawh = gyro.ReadSingle(0); //2byte目受信
+	gyro.Stop();
+	serial.putint(yawl);
+	serial.string("分");
+	serial.putint(yawh);
+	serial.string("秒");
+	gyro.Address(0x50<<1,0); //J901との通信開始
+	gyro.WriteSingle(0x33); //z軸の角度を読み取るアドレスを送信
+	gyro.Address(0x50<<1,1); //J901との通信開始
+	yawl = gyro.ReadSingle(1); //1byte目受信
+	yawh = gyro.ReadSingle(0); //2byte目受信
+	gyro.Stop();
+	serial.putint((yawh<<8)|yawl);
+	serial.string("m秒");
 	serial.string("\n\r");
 }
 

@@ -7,7 +7,7 @@
 
 #include "vl53lox.hpp"
 
-twi vl(VL_TWI,200000);
+twi vl(VL_TWI,100000);
 
 uint8_t vl_addr = 0x29<<1;//0x14;//0x29//0b0101001;
 uint8_t stop_variable = 0;
@@ -58,7 +58,7 @@ uint16_t readReg16Bit(uint8_t reg){
 	vl.Stop();
 	vl.Address(vl_addr,1);
 	value  = (uint16_t)vl.ReadSingle(1) << 8; // value high byte
-	value |= vl.ReadSingle(0);      // value low byte
+	value |= (uint16_t)vl.ReadSingle(0);      // value low byte
 	vl.Stop();
 	return value;
 }
@@ -814,4 +814,82 @@ uint16_t readRangeContinuousMillimeters(void){
 	writeReg(0x0B, 0x01);
 
 	return range;
+}
+
+int8_t SetLimitCheckEnable(uint16_t LimitCheckId,uint8_t LimitCheckEnable)
+{
+	int8_t Status = 0;
+	uint32_t TempFix1616 = 0;
+	uint8_t LimitCheckEnableInt = 0;
+	uint8_t LimitCheckDisable = 0;
+	uint8_t Temp8;
+	if (LimitCheckId >= 6) {
+		Status = -4;
+	}
+	else {
+		if (LimitCheckEnable == 0) {
+			TempFix1616 = 0;
+			LimitCheckEnableInt = 0;
+			LimitCheckDisable = 1;
+			} else {
+			LimitCheckDisable = 0;
+			/* this to be sure to have either 0 or 1 */
+			LimitCheckEnableInt = 1;
+		}
+		switch (LimitCheckId) {
+			case 0:
+			/* internal computation: */
+			break;
+			case 1:
+			writeReg16Bit(0x0044,(uint16_t)((TempFix1616>>9)&0xFFFF));
+			break;
+			case 2:
+			/* internal computation: */
+			break;
+			case 3:
+			/* internal computation: */
+			break;
+			case 4:
+			Temp8 = (uint8_t)(LimitCheckDisable << 1);
+			writeReg(0x0060,(readReg(0x0060)&0xFE)|Temp8);
+			break;
+			case 5:
+			Temp8 = (uint8_t)(LimitCheckDisable << 4);
+			writeReg(0x0060,(readReg(0x0060)&0xFE)|Temp8);
+			break;
+			default:
+			Status = -4;
+		}
+	}
+	return Status;
+}
+
+int8_t SetLimitCheckValue(uint16_t LimitCheckId,uint32_t LimitCheckValue)
+{
+	int8_t Status = 0;
+	uint8_t Temp8 = 1;
+	if (Temp8 == 0) { /* disabled write only internal value */
+	} else {
+		switch (LimitCheckId) {
+			case 0://VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE
+			/* internal computation: */
+			break;
+			case 1://VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE
+			writeReg16Bit(0x0044,(uint16_t)((LimitCheckValue>>9)&0xFFFF));
+			break;
+			case 2://VL53L0X_CHECKENABLE_SIGNAL_REF_CLIP
+			/* internal computation: */
+			break;
+			case 3://VL53L0X_CHECKENABLE_RANGE_IGNORE_THRESHOLD
+			/* internal computation: */
+			break;
+			case 4://VL53L0X_CHECKENABLE_SIGNAL_RATE_MSRC
+			case 5://VL53L0X_CHECKENABLE_SIGNAL_RATE_PRE_RANGE
+			writeReg16Bit(0x0064,(uint16_t)((LimitCheckValue>>9)&0xFFFF));
+			break;
+			default:
+			Status = -4;
+		}
+	}
+	return Status;
 }

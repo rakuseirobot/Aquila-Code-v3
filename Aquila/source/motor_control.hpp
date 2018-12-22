@@ -21,6 +21,9 @@
 #include <stdlib.h>
 #include <util/delay.h>
 
+#define Acc_thre 2
+#define Acc_slope_thre 0.1
+void Save_angle(void);
 void init_motor(void);
 uint8_t mspi(uint8_t val,uint8_t i);
 void m_send(uint8_t rl,uint8_t x,uint8_t y,uint8_t z);
@@ -39,6 +42,7 @@ namespace motor{
 	void fix_position();
 	void gb_fix(void);
 	void turn_fix(uint8_t x=0);
+	uint8_t notify_long_acc(void);
 	uint8_t notify_long_ex();
 	#define m_speed 7
 	#define m_turnspeed 5

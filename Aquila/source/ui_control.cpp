@@ -5,34 +5,6 @@
  *  Author: shun2
  */ 
 #include "ui_control.hpp"
-/*
-void menu::kit(void){
-	if(){
-		
-	}
-	else if(){
-		
-	}
-	else if(){
-		return;
-	}
-}
-
-void menu::sensor(void){
-	uint8_t dno;
-	if(){//ping
-		
-	}
-	else if(){//sermo
-		
-	}
-	else if(){//color
-		
-	}
-}
-*/
-void menu::start();
-
 void init_buzzer(void){
 	TCD0.CTRLA=TC_CLKSEL_DIV1024_gc;
 	TCD0.CTRLB=TC_WGMODE_NORMAL_gc;

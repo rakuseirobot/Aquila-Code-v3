@@ -50,34 +50,68 @@ void usart::putdec(uint16_t data){//4Œ…®”
 	return;
 }
 void usart::putfloat(float data){//floatŒ^(-‚ ‚è)
-	usart::putint((int16_t)data);
-	usart::string(".");
-	data = fmod(data,1);
-	while(data){
-		data =data*10.0;
-		usart::send((int)data + '0');
-		data=fmod(data,1);
+	if(0>data){
+		usart::string("-");
+		data=data*-1;
 	}
+	usart::putint(data);
+	usart::string(".");
+	data=fmod(data,1);
+	data*=10;
+	usart::send(data + '0');
+	data=fmod(data,1);
+	data*=10;
+	usart::send(data + '0');
+	data=fmod(data,1);
+	data*=10;
+	usart::send(data + '0');
+	return;
 }
-void usart::putint(int16_t data){//®”(-‚ ‚è)
+void usart::putint(int32_t data){//10Œ…‚Ü‚Å!®”(-‚ ‚è)
 	if(SWITCH_USART==true){
 		if(0>data){
 			usart::string("-");
-			data=data*-1;
+			data=abs(data);
 		}
-		for(int i = log10(data)+1;i<=0;i--){
-			usart::send(data/powf(10,(float)i) + '0');
-			data %= (int)powf(10,(float)i);
+		uint8_t f = log10(data)+1;
+		if(data==0){
+			usart::send(0+'0');
 		}
-		/*
-		usart::send(data/1000 + '0');
-		data %= 1000;
-		usart::send(data/100 + '0');
-		data %= 100;
-		usart::send(data/10 + '0');
-		data %= 10;
-		usart::send(data + '0');*/
-		}else{
+		switch(f){
+			case 10:
+				usart::send(data/1000000000 + '0');
+				data %= 1000000000;
+			case 9:
+				usart::send(data/100000000 + '0');
+				data %= 100000000;
+			case 8:
+				usart::send(data/10000000 + '0');
+				data %= 10000000;
+			case 7:
+				usart::send(data/1000000 + '0');
+				data %= 1000000;
+			case 6:
+				usart::send(data/100000 + '0');
+				data %= 100000;
+			case 5:
+				usart::send(data/10000 + '0');
+				data %= 10000;
+			case 4:
+				usart::send(data/1000 + '0');
+				data %= 1000;
+			case 3:
+				usart::send(data/100 + '0');
+				data %= 100;
+			case 2:
+				usart::send(data/10 + '0');
+				data %= 10;
+			case 1:
+				usart::send(data + '0');
+				break;
+			default:
+				return;
+		}
+	}else{
 		//no aciton
 	}
 	return;

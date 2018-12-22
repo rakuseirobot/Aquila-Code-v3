@@ -24,8 +24,7 @@ const int16_t longway = 4500;
 #endif
 
 const int gbno=120;
-
-
+float Saved_angle=0;
 
 uint8_t data=000;
 
@@ -33,6 +32,9 @@ void init_motor(void){
 	PORTB.DIRSET=PIN0_bm|PIN1_bm|PIN2_bm|PIN3_bm;
 	PORTB.OUTSET=PIN0_bm|PIN1_bm|PIN2_bm|PIN3_bm;
 	PORTB.OUTCLR=PIN0_bm|PIN1_bm;
+}
+void Save_angle(void){
+	Saved_angle=gyro_angle();
 }
 uint8_t mspi(uint8_t val,uint8_t i){
 	if(i==2){
@@ -106,6 +108,9 @@ namespace motor{
 		}
 		mcount = 0;
 	}*/
+	uint8_t status(uint8_t m){//1:free 2:busy
+		return mspi(0,m);
+	}
 	void wait(bool check){
 		while(mspi(0,1)!=1){
 			if((PORTJ.IN & PIN5_bm)==0 && check){
@@ -629,6 +634,176 @@ namespace motor{
 			return 0;
 		}
 	}
+	uint8_t notify_long_acc(void){//0:‚È‚µ,1:‰º‚è,2:ã‚è
+		float ac=acc_x_mes();
+		uint8_t spos = 6;
+		float now=0;
+		if(ac>=Acc_thre){//ã‚è
+			lcd_clear();
+			lcd_putstr(LCD1_TWI,"NotiL!U");
+			m_send(1,2,spos,3);
+			m_send(2,2,spos,3);
+			ac=acc_x_mes();
+			while(ac>=Acc_thre){
+				ac=acc_x_mes();
+				if(!(ac>=Acc_thre)){
+					ac=acc_x_mes();
+				}
+				led(Redled,0);
+				now=acc_y_mes();
+				serial.putfloat(ac);
+				serial.string(",");
+				serial.putfloat(now);
+				serial.string("\n\r");
+				if(/*Acc_slope_thre*5>abs(now)&&*/abs(now)>Acc_slope_thre){//‚»‚±‚Ü‚ÅŒX‚¢‚Ä‚¢‚È‚¢
+					if(now>Acc_slope_thre){//‰EŒü‚¢‚Ä‚é
+						error_led(2,1);
+						error_led(1,0);
+						do 
+						{
+							now=acc_y_mes();
+							if(motor::status(1)==1||motor::status(2)==1){
+								m_send(1,2,spos-2,3);
+								m_send(2,2,spos,3);
+							}
+						} while (now>Acc_slope_thre);
+					}
+					else if(now<Acc_slope_thre*-1){//¶‚ðŒü‚¢‚Ä‚é
+						error_led(2,0);
+						error_led(1,1);
+						do
+						{
+							now=acc_y_mes();
+							if(motor::status(1)==1||motor::status(2)==1){
+								m_send(1,2,spos,3);
+								m_send(2,2,spos-2,3);
+							}
+						} while (now<Acc_slope_thre*-1);
+					}
+				}
+				/*else if(abs(now)>Acc_slope_thre*5){//‘å‚«‚­ŒX‚¢‚Ä‚¢‚é
+					led(Redled,1);
+					if(now>Acc_slope_thre){//‰EŒü‚¢‚Ä‚é
+						error_led(2,1);
+						error_led(1,0);
+					}
+					else if(now<Acc_slope_thre*-1){//¶‚ðŒü‚¢‚Ä‚é
+						error_led(2,0);
+						error_led(1,1);
+					}
+				}*/
+				else{
+					error_led(2,0);
+					error_led(1,0);
+				}
+				if(motor::status(1)==1||motor::status(2)==1){
+					m_send(1,2,spos,3);
+					m_send(2,2,spos,3);
+					error_led(2,0);
+					error_led(1,0);
+				}
+				
+				if(!(ac<=Acc_thre)){
+					ac=acc_x_mes();
+				}
+			}
+			led(Redled,0);
+			error_led(2,0);
+			error_led(1,0);
+			motor::move(10);
+			_delay_ms(1);
+			ac=acc_x_mes();
+			if(ac>=Acc_thre){
+				notify_long_acc();
+			}
+			return 2;
+		}
+		else if(ac<=Acc_thre*-1){//‰º‚è
+			lcd_clear();
+			lcd_putstr(LCD1_TWI,"NotiL!D");
+			m_send(1,2,spos,3);
+			m_send(2,2,spos,3);
+			ac=acc_x_mes();
+			while(ac<=Acc_thre*-1){
+				ac=acc_x_mes();
+				if(!(ac<=Acc_thre*-1)){
+					ac=acc_x_mes();
+				}
+				led(Redled,0);
+				now=acc_y_mes();
+				serial.putfloat(ac);
+				serial.string(",");
+				serial.putfloat(now);
+				serial.string("\n\r");
+				if(/*Acc_slope_thre*5>abs(now)&&*/abs(now)>Acc_slope_thre){//‚»‚±‚Ü‚ÅŒX‚¢‚Ä‚¢‚È‚¢
+					if(now>Acc_slope_thre){//‰EŒü‚¢‚Ä‚é
+						error_led(2,1);
+						error_led(1,0);
+						do 
+						{
+							now=acc_y_mes();
+							if(motor::status(1)==1||motor::status(2)==1){
+								m_send(1,2,spos,3);
+								m_send(2,2,spos-3,3);
+							}
+						} while (now>Acc_slope_thre);
+					}
+					else if(now<Acc_slope_thre*-1){//¶‚ðŒü‚¢‚Ä‚é
+						error_led(2,0);
+						error_led(1,1);
+						do
+						{
+							now=acc_y_mes();
+							if(motor::status(1)==1||motor::status(2)==1){
+								m_send(1,2,spos-3,3);
+								m_send(2,2,spos,3);
+							}
+						} while (now<Acc_slope_thre*-1);
+					}
+				}
+				/*else if(abs(now)>Acc_slope_thre*5){//‘å‚«‚­ŒX‚¢‚Ä‚¢‚é
+					led(Redled,1);
+					if(now>Acc_slope_thre){//‰EŒü‚¢‚Ä‚é
+						error_led(2,1);
+						error_led(1,0);
+					}
+					else if(now<Acc_slope_thre*-1){//¶‚ðŒü‚¢‚Ä‚é
+						error_led(2,0);
+						error_led(1,1);
+					}
+				}*/
+				else{
+					error_led(2,0);
+					error_led(1,0);
+				}
+				if(motor::status(1)==1||motor::status(2)==1){
+					m_send(1,2,spos,3);
+					m_send(2,2,spos,3);
+					error_led(2,0);
+					error_led(1,0);
+				}
+				
+				if(!(ac<Acc_thre*-1)){
+					ac=acc_x_mes();
+				}
+			}
+			led(Redled,0);
+			error_led(2,0);
+			error_led(1,0);
+			motor::move(10);
+			_delay_ms(1);
+			ac=acc_x_mes();
+			if(ac<=Acc_thre*-1){
+				notify_long_acc();
+			}
+			return 1;
+		}
+		else{
+			lcd_clear();
+			return 0;
+		}
+		return 0;
+	}
 	// uint8_t fix_position(void){
 	// 	uint8_t i=0;
 	// 	uint8_t e=0;
@@ -652,18 +827,29 @@ namespace motor{
 
 void enkaigei(void){
 	float first=gyro_angle(), now=0;
+	uint8_t spos=5;
 	while(1){
 		now=gyro_angle();
-		if(abs(first-now)>2){
-			while(first<now){
-				m_send(1,2,5,3);
-				m_send(2,1,5,3);
-				now=gyro_angle();
+		if(abs(now-first)>1){
+			if(now-first>0){
+				if(abs(now-first)<=180){
+					m_send(1,2,spos,3);
+					m_send(2,1,spos,3);
+				}
+				else if(abs(now-first)>180){
+					m_send(1,1,spos,3);
+					m_send(2,2,spos,3);
+				}
 			}
-			while(first>now){
-				m_send(1,1,5,3);
-				m_send(2,2,5,3);
-				now=gyro_angle();
+			else if(now-first<0){
+				if(abs(now-first)<=180){
+					m_send(1,1,spos,3);
+					m_send(2,2,spos,3);
+				}
+				else if(abs(now-first)>180){
+					m_send(1,2,spos,3);
+					m_send(2,1,spos,3);
+				}
 			}
 		}
 		else{

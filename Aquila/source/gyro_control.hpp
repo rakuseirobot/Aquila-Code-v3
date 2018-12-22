@@ -15,10 +15,13 @@
 #include "xmega_twi.hpp"
 #include "initializing.hpp"
 #include "ui_control.hpp"
+float acc_x_mes(void);
+float acc_y_mes(void);
 void acc_mes(void);
 void gyro_send(uint8_t reg,uint8_t dh,uint8_t dl);
 float gyro_angle(void);
 void gyro_mes(void);
+void gyro_time_mes(void);
 void gyro_cali(void);
 void gyro_set200hz(void);
 void gyro_Save(void);
