@@ -142,6 +142,7 @@ uint8_t check_ping(int x){//x::direction,return 1,2,3,4,0(0=error)
 			return c_p(6);
 			break;
 		default:
+			return 0;
 			break;
 	}
 }

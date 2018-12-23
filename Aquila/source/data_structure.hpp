@@ -88,6 +88,7 @@ public:
             now++;mal[now].dist=1000;mal[now].depth=1000;//init
             mal[now].x=x; mal[now].y=y; mal[now].z=z; mal[now].flag=flag;
 			mal[now].color=color::white;
+			mal[now].ac=false;
             return &mal[now];
         }
     }

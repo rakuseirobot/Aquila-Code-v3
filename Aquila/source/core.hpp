@@ -79,6 +79,12 @@ public:
     }
     node* ac_next(int dire,int dist){ return ac_next(now,dir,dire,dist); }
 
+	bl ck_conect(node* s,node* t){
+		bl ans = false;
+		rep(i,4)if(s->next[i]==t){ans = true;break;}
+		return ans;
+	}
+
     void go_st(){
         node* next = ac_next(v::front,1);
         if(next==np)ap_node(now,v::front);
@@ -120,6 +126,7 @@ public:
             }
             q.pop();
         }
+		ans = np;
         flg=(flg+1)%2;
     }
 
