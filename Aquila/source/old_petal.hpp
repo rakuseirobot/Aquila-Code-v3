@@ -311,7 +311,7 @@ void stack_dfs(node* t){
 		write_walls();
 		node* k;node* nw;
 		for(int	i=3;i>=0;i--){
-			k = ta.find(ta.ac_next(i,1)->x,ta.ac_next(i,1)->y,ta.ac_next(i,1)->z);
+			k = find(ta.ac_next(i,1)->x,ta.ac_next(i,1)->y,ta.ac_next(i,1)->z);
 			if(k!=np && k->type==v::unknown)st.push(k);
 		}
 		while(!st.empty()){
@@ -319,7 +319,7 @@ void stack_dfs(node* t){
 			if(nw->type==v::unknown)go_bfs(nw);
 			st.pop();
 			for(int	i=3;i>=0;i--){
-				k = ta.find(ta.ac_next(i,1)->x,ta.ac_next(i,1)->y,ta.ac_next(i,1)->z);
+				k = find(ta.ac_next(i,1)->x,ta.ac_next(i,1)->y,ta.ac_next(i,1)->z);
 				if(k!=np && k->type==v::unknown)st.push(k);
 			}	
 		}

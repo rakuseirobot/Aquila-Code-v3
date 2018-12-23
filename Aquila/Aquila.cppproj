@@ -226,6 +226,9 @@
     <Compile Include="source\initializing.hpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="source\iris.hpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="source\lcd_control.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -245,9 +248,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="source\mv_control.hpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="source\petal.hpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="source\ping_control.cpp">

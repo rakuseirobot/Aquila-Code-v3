@@ -104,7 +104,7 @@ bool check_ping(int x){
 // 	}
 // }
 
-uint8_t check_ping2(int x){
+uint8_t c_p(int x){
  if(ping(x)<Sikiti){
 	return 1;
  }else if(ping(x)<1400){//50=>60・ｽﾉ修・ｽ・ｽ9.05
@@ -130,16 +130,16 @@ uint16_t smaller(uint16_t x,uint16_t y){//・ｽ蛯ｫ・ｽ・ｽ・ｽ・ｽ
 uint8_t check_ping(int x){//x::direction,return 1,2,3,4,0(0=error)
 	switch(x){
 		case 0:
-			return smaller(check_ping2(1),check_ping2(2));
+			return smaller(c_p(1),c_p(2));
 			break;
 		case 1:
-			return check_ping2(3);
+			return c_p(3);
 			break;
 		case 2:
-			return smaller(check_ping2(4),check_ping2(5));
+			return smaller(c_p(4),c_p(5));
 			break;
 		case 3:
-			return check_ping2(6);
+			return c_p(6);
 			break;
 		default:
 			break;
