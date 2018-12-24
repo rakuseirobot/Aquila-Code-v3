@@ -19,7 +19,7 @@ source/sermo_control.d source/sermo_control.o: \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h \
  ../source/xmega_twi.hpp ../source/initializing.hpp \
- ../source/xmega_usart.hpp \
+ ../source/xmega_usart.hpp ../source/ping_control.hpp \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\interrupt.h
 
 ../source/sermo_control.hpp:
@@ -65,5 +65,7 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 ../source/initializing.hpp:
 
 ../source/xmega_usart.hpp:
+
+../source/ping_control.hpp:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\interrupt.h:

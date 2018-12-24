@@ -25,6 +25,7 @@ void gyro_time_mes(void);
 void gyro_cali(void);
 void gyro_set200hz(void);
 void gyro_Save(void);
+void jy_recv_wd(uint8_t sd,int16_t *d);
 
 
 #endif /* GYRO_CONTROL_H_ */

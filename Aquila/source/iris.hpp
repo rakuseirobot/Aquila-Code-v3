@@ -79,7 +79,7 @@ void black_tile(){
 void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:back(turn),3:back(usiro)
 	switch(num){
 		case 0:
-			motor::move(9);
+			motor::move(3);
 			motor::fix_position();
 			ta.turn_l();
 			motor::move(0);
@@ -92,7 +92,7 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 			ta.go_st();
 			break;
 		case 2:
-			motor::move(8);
+			motor::move(2);
 			motor::fix_position();
 			ta.turn_r();
 			motor::move(0);
