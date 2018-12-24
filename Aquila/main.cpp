@@ -10,6 +10,7 @@
 usart serial(&USARTC0,&PORTC);
 #include "source/gyro_control.hpp"
 #include "source/vl53lox.hpp"
+#include "source/initializing.hpp"
 #include <string.h>
 
 int main(){	
@@ -27,6 +28,12 @@ int main(){
 	//motor::move(1);
 	buzzer();
 	//gyro_cali();
+	while(1){
+		debug::color();
+		debug::ping_d(7,false);
+		debug::jy(false);
+		_delay_ms(10);
+	}
 	
 	while(1){
 		motor::move(2);

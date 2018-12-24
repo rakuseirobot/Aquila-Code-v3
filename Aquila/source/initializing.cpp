@@ -53,3 +53,109 @@ void init_int(void){
 	PORTH.INT1MASK=PIN1_bm;
 	PORTH.PIN0CTRL=PORT_ISC_BOTHEDGES_gc;
 }
+
+namespace debug{
+	void ping_d(uint8_t num,bool s){
+		if(s==true){
+			serial.string("\r");
+		}
+		else{
+			serial.string(" ");
+		}
+		lcd_clear();
+		lcd_putstr(LCD1_TWI,"D_ping");
+		serial.string("\x1b[42m[ping:");
+		if(num==7){
+			for(uint8_t i=1;i<=6;i++){
+				serial.putint(ping(i));
+				if (i!=6){
+					serial.string(",");
+				}else{
+					serial.string("]");
+				}
+			}
+		}
+		else{
+			serial.putint(ping(num));
+			serial.string("]");
+		}
+		lcd_clear();
+		return;
+	}
+	void mv(uint8_t num){
+		lcd_clear();
+		lcd_putstr(LCD1_TWI,"D_mv");
+		serial.string("mv:");
+		if(num==4){
+			serial.putint((PORTJ.IN & PIN5_bm));
+			serial.string(",");
+			serial.putint((PORTJ.IN & PIN6_bm));
+			serial.string(",");
+			serial.putint((PORTJ.IN & PIN7_bm));
+			serial.string("\n\r");
+		}
+		else{
+			switch (num)
+			{
+			case 1:
+				serial.putint((PORTJ.IN & PIN5_bm));
+				break;
+			case 2:
+				serial.putint((PORTJ.IN & PIN6_bm));
+				break;
+			case 3:
+				serial.putint((PORTJ.IN & PIN7_bm));
+				break;
+			default:
+				break;
+			}
+			serial.string("\n\r");
+		}
+		lcd_clear();
+		return;
+	}
+	void jy(bool s){
+		lcd_clear();
+		lcd_putstr(LCD1_TWI,"D_jy");
+		if(s==true){
+			serial.string("\r");
+		}
+		else{
+			serial.string(" ");
+		}
+		serial.string("\x1b[41m[Acceleration: ");
+		acc_mes();
+		serial.string("][Angle: ");
+		gyro_mes();
+		serial.string("][JY901--time: ");
+		gyro_time_mes();
+		serial.string("]\x1b[40m        ");
+		lcd_clear();
+	}
+	void color(bool s){
+		lcd_clear();
+		lcd_putstr(LCD1_TWI,"D_jy");
+		if(s==true){
+			serial.string("\r");
+		}
+		else{
+			serial.string(" ");
+		}
+		serial.string("\x1b[45m\x1b[30m[Color:\x1b[40m\x1b[37m");
+		uint8_t res = color_check();
+		if(res==1){
+			serial.string("Black");
+		}
+		else{
+			serial.string("\x1b[7mWhite\x1b[0m");
+		}
+		serial.string(" \x1b[31mRed:");//Red
+		serial.putint(red);
+		serial.string("\x1b[32m Green:");//Green
+		serial.putint(green);
+		serial.string("\x1b[34m Blue:");//Blue
+		serial.putint(blue);
+		serial.string("]\x1b[40m\x1b[37m");
+		lcd_clear();
+	}
+}

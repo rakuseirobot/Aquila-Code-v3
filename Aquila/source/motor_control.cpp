@@ -88,6 +88,7 @@ int16_t smaller_s(int16_t x,int16_t y){
 
 namespace motor{
 	//usart serial(&USARTC0,&PORTC);
+	float b_angle=0.0;
 	
 	void brake(uint8_t x){
 		m_send(x,3,0,0);
@@ -260,6 +261,7 @@ namespace motor{
 				//_delay_ms(300);
 			//break;
 		}
+		b_angle=gyro_angle();
 		_delay_ms(200);
 	}
 	void forever(void){
@@ -526,7 +528,6 @@ namespace motor{
 	}
 	uint8_t notify_long_ex(void){
 		int16_t dis[3];
-		uint8_t dev;
 		dis[0] = ping(3);
 		if(dis[0]>=longway){
 			led(Blueled,1);
@@ -536,15 +537,6 @@ namespace motor{
 			motor::turn_fix();
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"NotifyL");
-			if (PORTJ.IN && PIN7_bm == 0){
-				dev = 0x80;
-			}
-			else if (PORTJ.IN && PIN6_bm == 0){
-				dev = 0x40;
-			}
-			else{
-				dev = 0x00;
-			}
 			motor::move(0);
 			motor::turn_fix();
 			lcd_clear();
@@ -822,6 +814,41 @@ namespace motor{
 		gb_fix();
 		turn_fix();
 		//return;
+	}
+	
+	void fix_angle(void){
+		float now=0;
+		uint8_t spos=1;
+		uint8_t siki=1;//C³‚·‚éè‡’l
+		while(1){
+			now=gyro_angle();
+			if(abs(now-b_angle)>siki){
+				if(now-b_angle>0){
+					if(abs(now-b_angle)<=180){
+						m_send(1,2,spos,3);
+						m_send(2,1,spos,3);
+					}
+					else if(abs(now-b_angle)>180){
+						m_send(1,1,spos,3);
+						m_send(2,2,spos,3);
+					}
+				}
+				else if(now-b_angle<0){
+					if(abs(now-b_angle)<=180){
+						m_send(1,1,spos,3);
+						m_send(2,2,spos,3);
+					}
+					else if(abs(now-b_angle)>180){
+						m_send(1,2,spos,3);
+						m_send(2,1,spos,3);
+					}
+				}
+			}
+			else{
+				motor::brake(1);
+				motor::brake(2);
+			}
+		}
 	}
 }
 

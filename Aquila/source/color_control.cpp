@@ -50,12 +50,12 @@ uint16_t color_shift(void){//12ビット分のパルス送信と読み込み処理
 
 uint8_t color_check(void){	//カラーチェック 0:白 1:クロ 2:銀（チェックポイント）　　returnで帰ってきます。  //まだ値定まらない！
 	color_read();
-	if(blue+green+red>700){
-		return 2;
-	}
-	//else if(blue+green+red>=100){
-		//return 0;
+	//if(blue+green+red>700){
+	//	return 2;
 	//}
+	if(blue+green+red>=700){
+		return 0;
+	}
 	else{
 		return 1;
 	}
