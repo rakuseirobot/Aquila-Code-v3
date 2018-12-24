@@ -502,10 +502,10 @@ namespace motor{
 	uint8_t notify_half(void){
 		uint8_t dis[10];
 		uint8_t i = 0;
-		dis[0] = check_ping2(1);
-		dis[1] = check_ping2(2);
-		dis[2] = check_ping2(5);
-		dis[3] = check_ping2(4);
+		dis[0] = c_p(1);
+		dis[1] = c_p(2);
+		dis[2] = c_p(5);
+		dis[3] = c_p(4);
 		if(dis[0]==1&&dis[1]!=1){
 			i=1;
 		}else if(dis[0]!=1&&dis[1]==1){

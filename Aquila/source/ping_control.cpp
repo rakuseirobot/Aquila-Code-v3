@@ -5,7 +5,7 @@
  *  Author: shun2
  */ 
 #include "ping_control.hpp"
-/////////////////////////////・ｽs・ｽ・ｽ・ｽz・ｽu//////////////////////////
+/////////////////////////////繝ｻ・ｽs繝ｻ・ｽ繝ｻ・ｽ繝ｻ・ｽz繝ｻ・ｽu//////////////////////////
 /*
 ping1 PORTE0
 ping2 PORTE1
@@ -41,7 +41,7 @@ uint16_t ping(int no){
 	return ping_data;
 }
 uint16_t ping_check (PORT_t *p_port,uint8_t p_pin){
-	//PD2 ping4・ｽﾅ読みゑｿｽ・ｽ・ｽ・ｽﾆゑｿｽ
+	//PD2 ping4繝ｻ・ｽ・・ｪｭ縺ｿ繧托ｽｿ・ｽ繝ｻ・ｽ繝ｻ・ｽ繝ｻ・ｽ・・ｑ・ｿ・ｽ
 	//ping(&PORTD,PIN2_bm);
 	p_port->DIRSET=p_pin;//(*p_port).DIRSET
 	p_port->OUT=p_pin;
@@ -65,11 +65,11 @@ uint16_t ping_check (PORT_t *p_port,uint8_t p_pin){
 bool check_ping(int x){
  if(ping(x)<Sikiti){
 	return true;
-//  }else if(ping(x)<60){//50=>60・ｽﾉ修・ｽ・ｽ9.05
+//  }else if(ping(x)<60){//50=>60繝ｻ・ｽ・我ｿｮ繝ｻ・ｽ繝ｻ・ｽ9.05
 //   return 3;
 //  }else if(ping(x)<80){
 //   return 5;
- }else{//・ｽG・ｽ・ｽ・ｽ[
+ }else{//繝ｻ・ｽG繝ｻ・ｽ繝ｻ・ｽ繝ｻ・ｽ[
 	return false;
  }
  return false;
@@ -104,10 +104,10 @@ bool check_ping(int x){
 // 	}
 // }
 
-uint8_t check_ping2(int x){
+uint8_t c_p(int x){
  if(ping(x)<Sikiti){
 	return 1;
- }else if(ping(x)<1400){//50=>60・ｽﾉ修・ｽ・ｽ9.05
+ }else if(ping(x)<1400){//50=>60繝ｻ・ｽ・我ｿｮ繝ｻ・ｽ繝ｻ・ｽ9.05
     return 2;
  }else if(ping(x)<2360){
 	return 3;
@@ -119,7 +119,7 @@ uint8_t check_ping2(int x){
  return 255;
 }
 
-uint16_t smaller(uint16_t x,uint16_t y){//・ｽ蛯ｫ・ｽ・ｽ・ｽ・ｽ
+uint16_t smaller(uint16_t x,uint16_t y){//繝ｻ・ｽ陋ｯ・ｫ繝ｻ・ｽ繝ｻ・ｽ繝ｻ・ｽ繝ｻ・ｽ
  if(x<y){
   return x;
  }else{
@@ -130,18 +130,19 @@ uint16_t smaller(uint16_t x,uint16_t y){//・ｽ蛯ｫ・ｽ・ｽ・ｽ・ｽ
 uint8_t check_ping(int x){//x::direction,return 1,2,3,4,0(0=error)
 	switch(x){
 		case 0:
-			return smaller(check_ping2(1),check_ping2(2));
+			return smaller(c_p(1),c_p(2));
 			break;
 		case 1:
-			return check_ping2(3);
+			return c_p(3);
 			break;
 		case 2:
-			return smaller(check_ping2(4),check_ping2(5));
+			return smaller(c_p(4),c_p(5));
 			break;
 		case 3:
-			return check_ping2(6);
+			return c_p(6);
 			break;
 		default:
+			return 0;
 			break;
 	}
 }

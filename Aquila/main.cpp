@@ -5,7 +5,7 @@
  *  Author: TOMOKI
  */ 
 
-#include "source/petal.hpp"
+#include "source/iris.hpp"
 #include "source/mv_control.hpp"
 usart serial(&USARTC0,&PORTC);
 #include "source/gyro_control.hpp"
@@ -58,12 +58,10 @@ int main(){
 	serial.putint(in);
 	serial.string("\n\r");
 	enkaigei();
-	write_walls();
 	move(v::front);
 	move(v::left);
 	move(v::right);
 	move(v::back);
-	real_dfs(np,ta.r_now());
 	while(1){
 		buzzer();
 	}
@@ -246,10 +244,12 @@ int main(){
 	lcd_clear();
 	lcd_putstr(LCD1_TWI,"HOME");
 	stack_dfs(ta.r_start());
-	lcd_clear();
-	lcd_putstr(LCD1_TWI,"THE_END");
-<<<<<<< HEAD
-	return 0;
 =======
-*/	return 0;
+	stack_dfs();	
+	//move(v::left);
+	//move(v::front);
+>>>>>>> 8f7c16f790582ba192b64e71b342b1301591aa36
+	lcd_clear();
+	lcd_putstr(LCD1_TWI,"END");
+	return 0;*/
 }
