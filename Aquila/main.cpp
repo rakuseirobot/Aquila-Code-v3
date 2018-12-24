@@ -28,8 +28,6 @@ int main(){
 	buzzer();
 	//gyro_cali();
 	stack_dfs();	
-	//move(v::left);
-	//move(v::front);
 	lcd_clear();
 	lcd_putstr(LCD1_TWI,"END");
 	return 0;
