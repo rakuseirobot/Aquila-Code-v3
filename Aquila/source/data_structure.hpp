@@ -26,11 +26,8 @@ namespace v{
     ci slope=5;
     ci hisai=6;
     ci start = 7;
-    //type
-    //ci unknown=0;//type�ｿｽ�ｿｽunknown�ｿｽﾆ一緒�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽA�ｿｽg�ｿｽ�ｿｽ�ｿｽﾜわす�ｿｽB
-    ci wall=1;
-    ci nowall=-1;
-    //wall
+    ci kaidan = 8;
+	//type
     ci vv[4][2]={{-1,0},{0,1},{1,0},{0,-1}};//vv[dir][0]:=x,[1]:=y
 }
 

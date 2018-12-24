@@ -35,9 +35,46 @@ void make_nodes(){
     }
 }
 
-void nachylenie(){
-
+void black_tile(){
+	if(color_check()==1 || ta.r_now()->type==v::black){
+		ta.r_now()->type=v::black;
+		ta.r_now()->color=v::black;
+		motor::move(4);
+		motor::fix_position();
+		ta.turn_l();
+		ta.turn_l();
+		ta.go_st();
+		ta.turn_l();
+		ta.turn_l();
+	}
 }
+// 
+// void nachylenie(){
+// 	if(ta.r_now()->type==v::kaidan){
+// 		rep(i,4){
+// 			if(ta.r_now()->next[i]->type==v::kaidan){
+// 				ta.w_now(ta.r_now()->next[i]);
+// 				//ŠK’i‚Ì“®ì
+// 				break;
+// 			}
+// 		}
+// 	}else if(/*”»’èŠÖ”*/){
+// 		node* u = ta.r_now();
+// 		if(/*ãŒü‚«*/){
+// 			u->type=v::kaidan;
+// 			node* t = mall.make(100,100,u->z+1,(ta.r_flg()+1)%2);
+// 			ta.cn_graph(u,t);
+// 			//ŠK’i‚ðã‚é“®ì‚ð“ü‚ê‚é
+// 			ta.w_now(t);
+// 		}else if(/*‰ºŒü‚«*/){
+// 			u->type=v::kaidan;
+// 			node* t = mall.make(100,100,u->z-1,(ta.r_flg()+1)%2);
+// 			ta.cn_graph(u,t);
+// 			//ŠK’i‚ð‰º‚é“®ì‚ð“ü‚ê‚é
+// 			ta.w_now(t);
+// 		}else{ /*error*/ }
+// 	}
+// }
 
 void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:back(turn),3:back(usiro)
 	switch(num){
@@ -45,9 +82,9 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 			motor::move(9);
 			motor::fix_position();
 			ta.turn_l();
-						motor::fix_position();
-						motor::move(0);
-						ta.go_st();
+			motor::move(0);
+			motor::fix_position();
+			ta.go_st();
 			break;
 		case 1:
 			motor::move(0);
@@ -58,8 +95,8 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 			motor::move(8);
 			motor::fix_position();
 			ta.turn_r();
-			motor::fix_position();
 			motor::move(0);
+			motor::fix_position();
 			ta.go_st();
 			break;
 		case 4:
@@ -85,6 +122,7 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 			break;
 	}
 	if(ta.r_now()->type==v::unknown){ta.r_now()->type = v::normal;}
+	black_tile();
 	make_nodes();
 	if(ta.r_now()!=ta.r_start())ta.r_now()->color=color::black;
 }
@@ -93,7 +131,7 @@ void move_n(node* n){//move to neighborhood((node*)n)
 	//lcd_putstr(LCD1_TWI,"m");
 	if(n!=np){
 		//lcd_putstr(LCD1_TWI,"n");
-        rep(i,4)if(ta.ac_next(i,1)==n&&ta.ck_conect(ta.r_now(),ta.ac_next(i,1))){
+        rep(i,4)if(ta.ac_next(i,1)==n && ta.ck_conect(ta.r_now(),ta.ac_next(i,1)) && ta.ac_next(i,1)->type!=v::black){
 	        move(i);
 			break;
 		}
@@ -109,7 +147,7 @@ void move_toa(node* a){//move to (node*)a
 	while(ta.r_now()!=a){
 		fg = false;
 		rep(i,4){
-			if(!fg && ta.ac_next(i,1)!=np && ta.ck_conect(ta.r_now(),ta.ac_next(i,1)) && ta.ac_next(i,1)->dist<ta.r_now()->dist){ move_n(ta.ac_next(i,1)); fg=true; }
+			if(!fg && ta.ac_next(i,1)!=np && ta.ck_conect(ta.r_now(),ta.ac_next(i,1)) && ta.ac_next(i,1)->dist<ta.r_now()->dist && ta.ac_next(i,1)->type!=v::black){ move_n(ta.ac_next(i,1)); fg=true; }
 		}
 	}
 	ta.clear_dist();
@@ -123,10 +161,12 @@ void stack_dfs(){
 	bl fg;
 	while(!ta.stk.empty()){
 		if(ta.r_now()!=ta.r_start())ta.r_now()->color=color::black;
-		rep(i,4){
-			if(ta.ac_next(i,1)!=np&&ta.ac_next(i,1)->color==color::white&&ta.ck_conect(ta.r_now(),ta.ac_next(i,1))){
-				ta.stk.push(ta.ac_next(i,1));
-				ta.ac_next(i,1)->color=color::gray;
+		for(int j=1;j>=0;j--){
+			rep(i,4){
+				if(check_ping(i)>j+1)if(ta.ac_next(i,1)!=np&&ta.ac_next(i,1)->color==color::white&&ta.ck_conect(ta.r_now(),ta.ac_next(i,1))){
+					ta.stk.push(ta.ac_next(i,1));
+					ta.ac_next(i,1)->color=color::gray;
+				}
 			}
 		}
 		fg=false;

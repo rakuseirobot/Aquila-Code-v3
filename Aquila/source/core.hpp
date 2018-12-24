@@ -34,6 +34,8 @@ public:
     };
     void turn_r(){ dir=(dir+1)%4; };
     void turn_l(){ dir=(dir+4-1)%4; };
+	void w_now(node* u){ now = u; }
+	int r_flg(){ return flg; }
     node* r_now(){return now;}
 	node* r_start(){return start;}
     void dfs(node* t,int x,int y,int z,int depth){

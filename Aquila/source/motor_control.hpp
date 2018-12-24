@@ -4,11 +4,8 @@
  * Created: 2018/08/23 3:04:31
  *  Author: shun2
  */ 
-
-
 #ifndef MOTOR_CONTROL_H_
 #define MOTOR_CONTROL_H_
-
 
 #include <avr/io.h>
 #include "lcd_control.hpp"
