@@ -42,8 +42,8 @@ namespace motor{
 	void fix_position();
 	void gb_fix(void);
 	void turn_fix(uint8_t x=0);
-	uint8_t notify_long_acc(void);
-	uint8_t notify_long_ex();
+	uint8_t notify_long_acc(bool buz=true);
+	uint8_t notify_long_ex(void);
 	void fix_angle(void);
 	#define m_speed 7
 	#define m_turnspeed 5

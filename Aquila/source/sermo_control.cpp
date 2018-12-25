@@ -61,10 +61,10 @@ void ReadFromMLX90614(TWI_t *port ,char addr, char cmd){
 *************************************************/
 double ReadTempFromMLX90614(TWI_t *port , char addr){
 	uint32_t tmp;
-	double temp;
+	//double temp;
 	ReadFromMLX90614(port, addr, 0x07);	 // recieve from MLX90614
 	tmp = ( dat[1] << 8 )	+ dat[0];	 // to temperature in marge two bytes
-	temp = ( ( (double)tmp * 2.0 ) - 27315.0 ) / 100.0;	 // convert Absolute temperature to Degrees Celsius of temperature
+	//temp = ( ( (double)tmp * 2.0 ) - 27315.0 ) / 100.0;	 // convert Absolute temperature to Degrees Celsius of temperature
 	/*if(tmp>=20000){
 		tmp=0;
 	}*/

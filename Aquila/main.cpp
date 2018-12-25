@@ -25,7 +25,7 @@ int main(){
 	lcd_clear();
 	serial.string("wake_up\n");
 	buzzer();
-	while(1){
+	/*while(1){
 		motor::move(0);
 		motor::fix_angle();
 		motor::move(0);
@@ -46,19 +46,10 @@ int main(){
 		_delay_ms(1000);
 		led(Redled,0);
 	}
-	/*
-	_delay_ms(1000);
-	motor::fix_position();
-	buzzer();
-	write_walls();
-	//real_dfs(np,ta.r_start());
-	//st.push(ta.r_now());
-	stack_dfs(ta.r_now());
-	lcd_clear();
-	lcd_putstr(LCD1_TWI,"HOME");
-	stack_dfs(ta.r_start());
+	*/
+	//gyro_cali();
 	stack_dfs();
 	lcd_clear();
 	lcd_putstr(LCD1_TWI,"END");
-	return 0;*/
+	return 0;
 }
