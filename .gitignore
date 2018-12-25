@@ -1,9 +1,11 @@
+Aquila/Debug/
 Aquila/Debug/*
 Aquila/main.cpp
-Aquila/Aquila.cppproj
 *.json
 *.o
 *.hex
 *.atsln
 *.elf
 .vs/*
+.vs/Aquila/v14/.atsuo
+Aquila/Aquila.cppproj

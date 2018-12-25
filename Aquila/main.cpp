@@ -26,6 +26,14 @@ int main(){
 	serial.string("wake_up\n");
 	buzzer();
 	while(1){
+		motor::move(0);
+		motor::fix_angle();
+		motor::move(0);
+		motor::turn_fix();
+		motor::gb_fix();
+		motor::turn_fix();
+	}
+	while(1){
 		debug::color();
 		debug::ping_d(7,false);
 		debug::jy(false);
