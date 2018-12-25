@@ -113,6 +113,27 @@ namespace motor{
 		return mspi(0,m);
 	}
 	void wait(bool check){
+		if((PORTJ.IN & PIN5_bm)==0 && check){
+			check_mv(1);
+			mv_cap(1,false);
+			mv_cap(2,false);
+			mv_cap(3,false);
+			check=false;
+		}
+		if((PORTJ.IN & PIN6_bm)==0 && check){
+			check_mv(2);
+			mv_cap(1,false);
+			mv_cap(2,false);
+			mv_cap(3,false);
+			check=false;
+		}
+		if((PORTJ.IN & PIN7_bm)==0 && check){
+			check_mv(3);
+			mv_cap(1,false);
+			mv_cap(2,false);
+			mv_cap(3,false);
+			check=false;
+		}
 		while(mspi(0,1)!=1){
 			if((PORTJ.IN & PIN5_bm)==0 && check){
 				check_mv(1);
@@ -167,20 +188,26 @@ namespace motor{
 		float first = 0;
 		float now = 0;
 		b_angle=gyro_angle();
+		mv_cap(1,true);
+		mv_cap(2,true);
+		mv_cap(3,true);
 		switch(x){
 			case 0: //???u???b?N????
-			m_send(2,2,m_speed,1);
-			m_send(1,2,m_speed,1);
-			motor::wait();
-			//_delay_ms(300);
+				motor::wait();
+				m_send(2,2,m_speed,1);
+				m_send(1,2,m_speed,1);
+				motor::wait();
+				//_delay_ms(300);
 			break;
 			case 1: //2?u???b?N????
-			m_send(1,2,m_speed,2);
-			m_send(2,2,m_speed,2);
-			motor::wait();
-			//_delay_ms(300);
+				motor::wait();
+				m_send(1,2,m_speed,2);
+				m_send(2,2,m_speed,2);
+				motor::wait();
+				//_delay_ms(300);
 			break;
 			case 2:
+				motor::wait();
 				first = gyro_angle();
 				//serial.putint(first);
 				//serial.string("\n\r");
@@ -200,6 +227,7 @@ namespace motor{
 				motor::wait();
 			break;
 			case 3:
+				motor::wait();
 				first = gyro_angle();
 				//serial.putint(first);
 				//serial.string("\n\r");
@@ -219,49 +247,59 @@ namespace motor{
 				motor::wait();
 				break;
 			case 4: //???u???b?N?O?i
-			m_send(1,1,m_speed,1);
-			m_send(2,1,m_speed,1);
-			motor::wait();
+				motor::wait();
+				m_send(1,1,m_speed,1);
+				m_send(2,1,m_speed,1);
+				motor::wait();
 			//_delay_ms(300);
 			break;
 			case 5: //???u???b?N?O?
-			m_send(1,1,m_speed,2);
-			m_send(2,1,m_speed,2);
-			//_delay_ms(300);
-			motor::wait();
+				motor::wait();
+				m_send(1,1,m_speed,2);
+				m_send(2,1,m_speed,2);
+				//_delay_ms(300);
+				motor::wait();
 			break;
 
 			case 6:
+				motor::wait();
 				m_send(1,2,m_speed,4);
 				m_send(2,2,m_speed,4);
 				motor::wait();
 				//_delay_ms(300);
 			break;
 			case 7:
+				motor::wait();
 				m_send(1,1,m_speed,4);
 				m_send(2,1,m_speed,4);
 				motor::wait();
 				//_delay_ms(300);
 			break;
 			case 8: //?E????V?n????
+				motor::wait();
 				m_send(1,2,m_turnspeed,3);
 				m_send(2,1,m_turnspeed,3);
 				motor::wait();
 				//_delay_ms(300);
 			break;
 			case 9: //??????V?n????
+				motor::wait();
 				m_send(1,1,m_turnspeed,3);
 				m_send(2,2,m_turnspeed,3);
 				motor::wait();
 				//_delay_ms(300);
 			break;
 			default:
+				motor::wait();
 				motor::brake(1);
 				motor::brake(2);
 				motor::wait();
 				//_delay_ms(300);
 			//break;
 		}
+		mv_cap(1,true);
+		mv_cap(2,true);
+		mv_cap(3,true);
 		_delay_ms(200);
 	}
 	void forever(void){
