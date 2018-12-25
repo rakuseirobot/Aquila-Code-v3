@@ -181,18 +181,18 @@ namespace motor{
 			break;
 			case 2:
 				first = gyro_angle();
-				serial.putint(first);
-				serial.string("\n\r");
+				//serial.putint(first);
+				//serial.string("\n\r");
 				m_send(1,2,m_turnspeed,5);
 				m_send(2,1,m_turnspeed,5);
 				_delay_ms(10);
 				now = gyro_angle();
-				serial.putint(now);
-				serial.string("\n\r");
+				//serial.putint(now);
+				//serial.string("\n\r");
 				do{
 					now=gyro_angle();
-					serial.putint(now);
-					serial.string("\n\r");
+					//serial.putint(now);
+					//serial.string("\n\r");
 				}while((first<now?now-first:now-first+360)>270||(first<now?now-first:now-first+360)<90);
 				motor::brake(1);
 				motor::brake(2);
@@ -200,18 +200,18 @@ namespace motor{
 			break;
 			case 3:
 				first = gyro_angle();
-				serial.putint(first);
-				serial.string("\n\r");
+				//serial.putint(first);
+				//serial.string("\n\r");
 				m_send(1,1,m_turnspeed,5);
 				m_send(2,2,m_turnspeed,5);
 				_delay_ms(10);
 				now=gyro_angle();
-				serial.putint(now);
-				serial.string("\n\r");
+				//serial.putint(now);
+				//serial.string("\n\r");
 				do{
 					now=gyro_angle();
-					serial.putint(now);
-					serial.string("\n\r");
+					//serial.putint(now);
+					//serial.string("\n\r");
 				}while((first<now?now-first:now-first+360)<90||(first<now?now-first:now-first+360)>270);
 				motor::brake(1);
 				motor::brake(2);
@@ -643,10 +643,10 @@ namespace motor{
 				}
 				led(Redled,0);
 				now=acc_y_mes();
-				serial.putfloat(ac);
+				/*serial.putfloat(ac);
 				serial.string(",");
 				serial.putfloat(now);
-				serial.string("\n\r");
+				serial.string("\n\r");*/
 				if(/*Acc_slope_thre*5>abs(now)&&*/abs(now)>Acc_slope_thre){//‚»‚±‚Ü‚ÅŒX‚¢‚Ä‚¢‚È‚¢
 					if(now>Acc_slope_thre){//‰EŒü‚¢‚Ä‚é
 						error_led(2,1);
@@ -695,7 +695,7 @@ namespace motor{
 					error_led(1,0);
 				}
 				
-				if(!(ac<=Acc_thre)){
+				if(!(ac>=Acc_thre)){
 					ac=acc_x_mes();
 				}
 			}
@@ -708,6 +708,8 @@ namespace motor{
 			if(ac>=Acc_thre){
 				notify_long_acc();
 			}
+			lcd_clear();
+			motor::move(6);
 			return 2;
 		}
 		else if(ac<=Acc_thre*-1){//‰º‚è
@@ -723,10 +725,10 @@ namespace motor{
 				}
 				led(Redled,0);
 				now=acc_y_mes();
-				serial.putfloat(ac);
+				/*serial.putfloat(ac);
 				serial.string(",");
 				serial.putfloat(now);
-				serial.string("\n\r");
+				serial.string("\n\r");*/
 				if(/*Acc_slope_thre*5>abs(now)&&*/abs(now)>Acc_slope_thre){//‚»‚±‚Ü‚ÅŒX‚¢‚Ä‚¢‚È‚¢
 					if(now>Acc_slope_thre){//‰EŒü‚¢‚Ä‚é
 						error_led(2,1);
@@ -775,7 +777,7 @@ namespace motor{
 					error_led(1,0);
 				}
 				
-				if(!(ac<Acc_thre*-1)){
+				if(!(ac<=Acc_thre*-1)){
 					ac=acc_x_mes();
 				}
 			}
@@ -788,6 +790,8 @@ namespace motor{
 			if(ac<=Acc_thre*-1){
 				notify_long_acc();
 			}
+			lcd_clear();
+			motor::move(6);
 			return 1;
 		}
 		else{

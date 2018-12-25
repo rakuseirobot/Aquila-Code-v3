@@ -5,3 +5,5 @@ Aquila/Aquila.cppproj
 *.o
 *.hex
 *.atsln
+*.elf
+.vs/*
