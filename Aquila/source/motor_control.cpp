@@ -742,8 +742,8 @@ namespace motor{
 				ac=acc_x_mes();
 				if(ac>=Acc_thre){
 					if(buz==true){
-					buzzer(500);
-					buzzer(1000);
+					buzzer(400);
+					buzzer(800);
 					}
 				}
 				else{
@@ -843,8 +843,8 @@ namespace motor{
 				ac=acc_x_mes();
 				if(ac<=Acc_thre*-1){
 					if(buz==true){
-					buzzer(1000);
-					buzzer(500);
+					buzzer(800);
+					buzzer(400);
 					}
 				}
 				else{

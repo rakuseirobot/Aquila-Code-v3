@@ -48,10 +48,56 @@ void init_avr(void){
 
 void init_int(void){
 	PORTH.DIRCLR=PIN0_bm|PIN1_bm|PIN2_bm;
-	PORTH.INTCTRL=PORT_INT0LVL_LO_gc|PORT_INT1LVL_LO_gc;
+	PORTH.INTCTRL=PORT_INT0LVL_LO_gc|PORT_INT1LVL_HI_gc;
+	PORTH.PIN0CTRL=PORT_ISC_RISING_gc;
+	PORTH.PIN1CTRL=PORT_ISC_RISING_gc;
 	PORTH.INT0MASK=PIN0_bm;
 	PORTH.INT1MASK=PIN1_bm;
-	PORTH.PIN0CTRL=PORT_ISC_BOTHEDGES_gc;
+	PMIC.CTRL = PMIC_LOLVLEN_bm|PMIC_HILVLEN_bm;
+	sei();
+}
+bool pause=false;
+void pause_fun(void){
+	lcd_clear();
+	lcd_putstr(LCD1_TWI,"PAUSE!");
+	while(pause==true){
+		led(Redled,0);
+		led(Blueled,0);
+		led(Greenled,0);
+		error_led(1,0);
+		error_led(2,0);
+		buzzer(200);
+		led(Redled,1);
+		led(Blueled,1);
+		led(Greenled,1);
+		error_led(1,1);
+		error_led(2,1);
+		buzzer(700);
+		if(pause==false){
+			lcd_clear();
+			break;
+		}
+	}
+	return;
+}
+ISR(PORTH_INT0_vect){
+	PORTB.OUTSET=PIN0_bm|PIN1_bm;
+	led(Redled,1);
+	led(Blueled,1);
+	led(Greenled,1);
+	error_led(1,1);
+	error_led(2,1);
+	pause=true;
+	pause_fun();
+}
+ISR(PORTH_INT1_vect){
+	pause=false;
+	led(Redled,0);
+	led(Blueled,0);
+	led(Greenled,0);
+	error_led(1,0);
+	error_led(2,0);
+	PORTB.OUTCLR=PIN0_bm|PIN1_bm;
 }
 
 namespace debug{

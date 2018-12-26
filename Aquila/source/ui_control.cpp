@@ -31,12 +31,15 @@ void delay_us(uint16_t t){
 	return;
 }
 
-void led(uint8_t ledkind,uint8_t ledmode){
+void led(uint8_t ledkind,uint8_t ledmode){//0:è¡ìî1:ì_ìî3:TGL4:ëSïîè¡ìî
 	if(ledmode==1){
 		PORTQ.OUTCLR=ledkind;
 	}
 	else if(ledmode==0){
 		PORTQ.OUTSET=ledkind;
+	}
+	else if(ledmode==3){
+		PORTQ.OUTTGL=ledkind;
 	}
 	else {
 		PORTQ.OUTSET = PIN2_bm|PIN3_bm|PIN4_bm;

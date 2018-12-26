@@ -20,6 +20,7 @@ void init_clock(void);
 void rtc(void);//About 16 hours past, it will be overflow.	
 void init_avr(void);
 void init_int(void);
+void pause_fun(void);
 namespace debug{
 	void ping_d(uint8_t num=7,bool s=true);
 	void mv(uint8_t num=4);
