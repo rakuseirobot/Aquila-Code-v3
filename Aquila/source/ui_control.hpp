@@ -13,9 +13,9 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#define Greenled PIN0_bm
+#define Greenled PIN1_bm
 #define Blueled PIN2_bm
-#define Redled PIN1_bm
+#define Redled PIN0_bm
 
 #define SW1 (PORTH.IN & PIN0_bm)!=0
 #define SW2 (PORTH.IN & PIN1_bm)!=0

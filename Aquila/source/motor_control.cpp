@@ -476,7 +476,7 @@ namespace motor{
 		lcd_clear();
 		return;
 	}
-	const int32_t turnvalue = 1;
+	const int32_t turnvalue = 3;
 	void turn_fix(uint8_t force){
 		int val=0;
 		uint8_t chk[2]={0};
