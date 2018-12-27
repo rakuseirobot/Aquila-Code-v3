@@ -460,7 +460,7 @@ namespace motor{
 		lcd_clear();
 		return;
 	}
-	const int32_t turnvalue = 5;
+	const int32_t turnvalue = 8;
 	void turn_fix(uint8_t force){
 		int val=0;
 		uint8_t chk[2]={0};
@@ -480,8 +480,6 @@ namespace motor{
 			}
 			int ldiff = (ping(2)+ping(1))/2;
 			int rdiff = (ping(5)+ping(4))/2;
-			lcd_clear();
-			lcd_putstr(LCD1_TWI,"FixingTurn");
 			
 			if(rdiff>ldiff){
 				chk[0]=1;
@@ -501,6 +499,8 @@ namespace motor{
 			//usart_puthex2(abs(val));
 			//usart_string("\n\r");
 			if(val < turnvalue*-1){
+				lcd_clear();
+				lcd_putstr(LCD1_TWI,"FixingTurn");
 				m_send(1,1,1,2);
 				m_send(2,2,1,2);
 				do{
@@ -512,6 +512,8 @@ namespace motor{
 				}while(val<turnvalue);
 			}
 			else if(val > turnvalue){
+				lcd_clear();
+				lcd_putstr(LCD1_TWI,"FixingTurn");
 				m_send(1,2,1,2);
 				m_send(2,1,1,2);
 				do{

@@ -118,7 +118,7 @@ uint8_t mv_spi_send(uint8_t val, uint8_t i){
 		return 0;
 	}
 	uint8_t dat = 0;
-	_delay_ms(50);
+	_delay_ms(80);
 	dat = mv.send(val);
 	if (i==1){
 		PORTD.OUTSET=PIN2_bm;
@@ -144,6 +144,10 @@ void check_mv(uint8_t dir){
 	_delay_ms(2);
 	led(Blueled,1);
 	uint8_t res = mv_spi_send(dir,1);
+	/*if(bblk.read()!=0){
+		PORTB.OUTCLR=PIN0_bm|PIN1_bm;
+		return;
+	}*/
 	mv_cap(dir,false);
 	serial.string("ch");
 	serial.putdec(res);
