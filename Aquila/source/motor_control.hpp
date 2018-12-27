@@ -48,7 +48,7 @@ namespace motor{
 	void fix_angle_v(float angl);
 	void set_angle(float ang);
 	#define m_speed 7
-	#define m_turnspeed 5
+	#define m_turnspeed 6
 }
 void enkaigei(void);
 #endif /* MOTOR_CONTROL_H_ */

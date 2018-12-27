@@ -148,7 +148,9 @@ void check_mv(uint8_t dir){
 	serial.string("ch");
 	serial.putdec(res);
 	serial.string("\n\r");
-	mv_cap(dir,false);
+	mv_cap(1,false);
+	mv_cap(2,false);
+	mv_cap(3,false);
 	led(Blueled,0);
 	bblk.write(res);
 	switch(res){
@@ -182,6 +184,11 @@ void check_mv(uint8_t dir){
 			break;
 	};
 	lcd_clear();
+	
+	mv_cap(1,true);
+	mv_cap(2,true);
+	mv_cap(3,true);
+	mv_cap(dir,false);
 	_delay_ms(2);
 	PORTB.OUTCLR=PIN0_bm|PIN1_bm;
 	return;

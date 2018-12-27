@@ -47,7 +47,7 @@ void finded_victim(uint8_t co){//How many kits does victim need?
 	led(Blueled,0);
 	led(Greenled,0);
 	error_led(1,1);
-	for (int i = 0; i<=10; i++){
+	for (int i = 0; i<=8; i++){
 	error_led(1,3);
 	error_led(2,4);
 	buzzer();
