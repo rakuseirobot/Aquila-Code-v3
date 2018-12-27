@@ -104,7 +104,7 @@ uint8_t mv_spi_send(uint8_t val, uint8_t i){
 	else{
 		return 0;
 	}
-	_delay_ms(1);
+	_delay_ms(2);
 	if (i==1){
 		PORTD.OUTCLR=PIN2_bm;
 	}
@@ -118,7 +118,7 @@ uint8_t mv_spi_send(uint8_t val, uint8_t i){
 		return 0;
 	}
 	uint8_t dat = 0;
-	_delay_ms(100);
+	_delay_ms(50);
 	dat = mv.send(val);
 	if (i==1){
 		PORTD.OUTSET=PIN2_bm;
@@ -132,7 +132,7 @@ uint8_t mv_spi_send(uint8_t val, uint8_t i){
 	else{
 		return 0;
 	}
-	_delay_ms(10);
+	_delay_ms(2);
 	PORTD.OUTCLR=PIN2_bm|PIN3_bm|PIN4_bm;
 	//while((PORTJ.IN & PIN5_bm)==0||(PORTJ.IN & PIN6_bm)==0||(PORTJ.IN & PIN7_bm)==0);
 	return dat;
@@ -141,7 +141,7 @@ uint8_t mv_spi_send(uint8_t val, uint8_t i){
 void check_mv(uint8_t dir){
 	PORTB.OUTSET=PIN0_bm|PIN1_bm;
 	//mv_sig(dir,false);
-	_delay_ms(5);
+	_delay_ms(2);
 	led(Blueled,1);
 	uint8_t res = mv_spi_send(dir,1);
 	mv_cap(dir,false);
@@ -182,7 +182,7 @@ void check_mv(uint8_t dir){
 			break;
 	};
 	lcd_clear();
-	_delay_ms(10);
+	_delay_ms(2);
 	PORTB.OUTCLR=PIN0_bm|PIN1_bm;
 	return;
 }
