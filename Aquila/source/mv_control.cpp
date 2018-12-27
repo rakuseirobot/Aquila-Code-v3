@@ -35,21 +35,21 @@ void init_mv(void){
 void mv_cap(uint8_t di,bool st){
 	switch(di){
 		case 1:
-			if(st){
+			if(st==true){
 				PORTD.OUTCLR=PIN2_bm;
 			}else{
 				PORTD.OUTSET=PIN2_bm;
 			}
 			break;
 		case 2:
-			if(st){
+			if(st==true){
 				PORTD.OUTCLR=PIN3_bm;
 			}else{
 				PORTD.OUTSET=PIN3_bm;
 			}
 			break;
 		case 3:
-			if(st){
+			if(st==true){
 				PORTD.OUTCLR=PIN4_bm;
 			}else{
 				PORTD.OUTSET=PIN4_bm;

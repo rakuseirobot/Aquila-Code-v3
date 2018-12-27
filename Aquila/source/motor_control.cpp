@@ -113,21 +113,21 @@ namespace motor{
 		return mspi(0,m);
 	}
 	void wait(bool check){
-		if((PORTJ.IN & PIN5_bm)==0 && check){
+		if((PORTJ.IN & PIN5_bm)==0 && check==true){
 			mv_cap(1,false);
 			mv_cap(2,false);
 			mv_cap(3,false);
 			check_mv(1);
 			check=false;
 		}
-		if((PORTJ.IN & PIN6_bm)==0 && check){
+		if((PORTJ.IN & PIN6_bm)==0 && check==true){
 			mv_cap(1,false);
 			mv_cap(2,false);
 			mv_cap(3,false);
 			check_mv(2);
 			check=false;
 		}
-		if((PORTJ.IN & PIN7_bm)==0 && check){
+		if((PORTJ.IN & PIN7_bm)==0 && check==true){
 			mv_cap(1,false);
 			mv_cap(2,false);
 			mv_cap(3,false);
@@ -135,21 +135,21 @@ namespace motor{
 			check=false;
 		}
 		while(mspi(0,1)!=1){
-			if((PORTJ.IN & PIN5_bm)==0 && check){
+			if((PORTJ.IN & PIN5_bm)==0 && check==true){
 				mv_cap(1,false);
 				mv_cap(2,false);
 				mv_cap(3,false);
 				check_mv(1);
 				check=false;
 			}
-			if((PORTJ.IN & PIN6_bm)==0 && check){
+			if((PORTJ.IN & PIN6_bm)==0 && check==true){
 				mv_cap(1,false);
 				mv_cap(2,false);
 				mv_cap(3,false);
 				check_mv(2);
 				check=false;
 			}
-			if((PORTJ.IN & PIN7_bm)==0 && check){
+			if((PORTJ.IN & PIN7_bm)==0 && check==true){
 				mv_cap(1,false);
 				mv_cap(2,false);
 				mv_cap(3,false);
@@ -158,21 +158,21 @@ namespace motor{
 			}
 		}
 		while(mspi(0,2)!=1){
-			if((PORTJ.IN & PIN5_bm)==0 && check){
+			if((PORTJ.IN & PIN5_bm)==0 && check==true){
 				mv_cap(1,false);
 				mv_cap(2,false);
 				mv_cap(3,false);
 				check_mv(1);
 				check=false;
 			}
-			if((PORTJ.IN & PIN6_bm)==0 && check){
+			if((PORTJ.IN & PIN6_bm)==0 && check==true){
 				mv_cap(1,false);
 				mv_cap(2,false);
 				mv_cap(3,false);
 				check_mv(2);
 				check=false;
 			}
-			if((PORTJ.IN & PIN7_bm)==0 && check){
+			if((PORTJ.IN & PIN7_bm)==0 && check==true){
 				mv_cap(1,false);
 				mv_cap(2,false);
 				mv_cap(3,false);
@@ -530,7 +530,7 @@ namespace motor{
 			}
 			motor::brake(1);
 			motor::brake(2);
-			motor::wait();
+			//motor::wait();
 			lcd_clear();
 			//lcd_putstr(LCD1_TWI,"Succees");
 			//usart_string("Succees!\n\r");
