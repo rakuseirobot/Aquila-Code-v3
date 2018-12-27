@@ -113,99 +113,104 @@ namespace motor{
 		return mspi(0,m);
 	}
 	void wait(bool check){
+		bool chk[3]={true,true,true};
 		if(check==false){
-			check=false;
+			chk[0]=false;
+			chk[1]=false;
+			chk[2]=false;
 		}
 		else{
-			check=true;
+			chk[0]=true;
+			chk[1]=true;
+			chk[2]=true;
 		}
-		if((PORTJ.IN & PIN5_bm)==0 && check==true){
+		if((PORTJ.IN & PIN5_bm)==0 && chk[0]==true){
 			mv_cap(1,false);
 			mv_cap(2,false);
 			mv_cap(3,false);
 			check_mv(1);
-			check=false;
+			chk[0]=false;
 		}
-		if((PORTJ.IN & PIN6_bm)==0 && check==true){
+		if((PORTJ.IN & PIN6_bm)==0 && chk[1]==true){
 			mv_cap(1,false);
 			mv_cap(2,false);
 			mv_cap(3,false);
 			check_mv(2);
-			check=false;
+			chk[1]=false;
 		}
-		if((PORTJ.IN & PIN7_bm)==0 && check==true){
+		if((PORTJ.IN & PIN7_bm)==0 && chk[2]==true){
 			mv_cap(1,false);
 			mv_cap(2,false);
 			mv_cap(3,false);
 			check_mv(3);
-			check=false;
+			chk[2]=false;
 		}
 		while(mspi(0,1)!=1){
-			if((PORTJ.IN & PIN5_bm)==0 && check==true){
+			if((PORTJ.IN & PIN5_bm)==0 && chk[0]==true){
 				mv_cap(1,false);
 				mv_cap(2,false);
 				mv_cap(3,false);
 				check_mv(1);
-				check=false;
+				chk[0]=false;
 			}
-			if((PORTJ.IN & PIN6_bm)==0 && check==true){
+			if((PORTJ.IN & PIN6_bm)==0 && chk[1]==true){
 				mv_cap(1,false);
 				mv_cap(2,false);
 				mv_cap(3,false);
 				check_mv(2);
-				check=false;
+				chk[1]=false;
 			}
-			if((PORTJ.IN & PIN7_bm)==0 && check==true){
+			if((PORTJ.IN & PIN7_bm)==0 && chk[2]==true){
 				mv_cap(1,false);
 				mv_cap(2,false);
 				mv_cap(3,false);
 				check_mv(3);
-				check=false;
+				chk[2]=false;
 			}
 		}
 		while(mspi(0,2)!=1){
-			if((PORTJ.IN & PIN5_bm)==0 && check==true){
+			if((PORTJ.IN & PIN5_bm)==0 && chk[0]==true){
 				mv_cap(1,false);
 				mv_cap(2,false);
 				mv_cap(3,false);
 				check_mv(1);
-				check=false;
+				chk[0]=false;
 			}
-			if((PORTJ.IN & PIN6_bm)==0 && check==true){
+			if((PORTJ.IN & PIN6_bm)==0 && chk[1]==true){
 				mv_cap(1,false);
 				mv_cap(2,false);
 				mv_cap(3,false);
 				check_mv(2);
-				check=false;
+				chk[1]=false;
 			}
-			if((PORTJ.IN & PIN7_bm)==0 && check==true){
+			if((PORTJ.IN & PIN7_bm)==0 && chk[2]==true){
 				mv_cap(1,false);
 				mv_cap(2,false);
 				mv_cap(3,false);
 				check_mv(3);
-				check=false;
+				chk[2]=false;
 			}
 		}
-		if((PORTJ.IN & PIN5_bm)==0 && check==true){
+		if((PORTJ.IN & PIN5_bm)==0 && chk[0]==true){
 			mv_cap(1,false);
 			mv_cap(2,false);
 			mv_cap(3,false);
 			check_mv(1);
-			check=false;
+			chk[0]=false;
 		}
-		if((PORTJ.IN & PIN6_bm)==0 && check==true){
+		if((PORTJ.IN & PIN6_bm)==0 && chk[1]==true){
 			mv_cap(1,false);
 			mv_cap(2,false);
 			mv_cap(3,false);
 			check_mv(2);
-			check=false;
+			chk[1]=false;
 		}
-		if((PORTJ.IN & PIN7_bm)==0 && check==true){
+		if((PORTJ.IN & PIN7_bm)==0 && chk[2]==true){
 			mv_cap(1,false);
 			mv_cap(2,false);
 			mv_cap(3,false);
 			check_mv(3);
-			check=false;
+			chk[2]=false;
 		}
 		return;
 	}
@@ -487,7 +492,7 @@ namespace motor{
 		lcd_clear();
 		return;
 	}
-	const int32_t turnvalue = 8;
+	const int32_t turnvalue = 3;
 	void turn_fix(uint8_t force){
 		int val=0;
 		uint8_t chk[2]={0};

@@ -21,7 +21,7 @@ MV
 */
 
 #include "mv_control.hpp"
-spi mv(&SPID,&PORTD,SPI_PRESCALER_DIV128_gc);
+spi mv(&SPID,&PORTD,SPI_PRESCALER_DIV4_gc);
 kit_result bblk;
 int k_r_read(){ return bblk.read(); }
 void k_r_write(int x){ bblk.write(x); }
@@ -104,7 +104,7 @@ uint8_t mv_spi_send(uint8_t val, uint8_t i){
 	else{
 		return 0;
 	}
-	_delay_ms(2);
+	_delay_ms(10);
 	if (i==1){
 		PORTD.OUTCLR=PIN2_bm;
 	}
@@ -118,7 +118,7 @@ uint8_t mv_spi_send(uint8_t val, uint8_t i){
 		return 0;
 	}
 	uint8_t dat = 0;
-	_delay_ms(80);
+	_delay_ms(10);
 	dat = mv.send(val);
 	if (i==1){
 		PORTD.OUTSET=PIN2_bm;
@@ -132,7 +132,7 @@ uint8_t mv_spi_send(uint8_t val, uint8_t i){
 	else{
 		return 0;
 	}
-	_delay_ms(2);
+	_delay_ms(10);
 	PORTD.OUTCLR=PIN2_bm|PIN3_bm|PIN4_bm;
 	//while((PORTJ.IN & PIN5_bm)==0||(PORTJ.IN & PIN6_bm)==0||(PORTJ.IN & PIN7_bm)==0);
 	return dat;
