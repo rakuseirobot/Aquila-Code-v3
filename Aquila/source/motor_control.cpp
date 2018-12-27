@@ -183,31 +183,30 @@ namespace motor{
 		return;
 	}
 
-	void move(uint8_t x=6){// x = 0:1 block Advance 1:2 blocks Advance 2:Right Turn with Copass 3:Left Turn with Compass 4:1 block Back 5:2 block Back 6:Half block Advance 7:Half block Back 8:right Turn without Compass 9:left Turn without Compass 
+	void move(uint8_t x=6){// x = 0:1 block Advance 1:2 blocks Advance 2:Right Turn with Gyro 3:Left Turn with Gyro 4:1 block Back 5:2 block Back 6:Half block Advance 7:Half block Back 8:right Turn without Compass 9:left Turn without Compass 
 		_delay_ms(5);
 		float first = 0;
 		float now = 0;
+		bool st_f = false;
 		b_angle=gyro_angle();
 		mv_cap(1,true);
 		mv_cap(2,true);
 		mv_cap(3,true);
+		motor::wait();
 		switch(x){
-			case 0: //???u???b?N????
-				motor::wait();
+			case 0: //1block advance
 				m_send(2,2,m_speed,1);
 				m_send(1,2,m_speed,1);
-				motor::wait();
+				st_f=true;
 				//_delay_ms(300);
 			break;
-			case 1: //2?u???b?N????
-				motor::wait();
+			case 1: //2block advance
 				m_send(1,2,m_speed,2);
 				m_send(2,2,m_speed,2);
-				motor::wait();
+				st_f=true;
 				//_delay_ms(300);
 			break;
-			case 2:
-				motor::wait();
+			case 2: //Right turn with gyro
 				first = gyro_angle();
 				//serial.putint(first);
 				//serial.string("\n\r");
@@ -239,10 +238,8 @@ namespace motor{
 				else{
 					fix_angle_v(first-90);
 				}
-				motor::wait();
 			break;
-			case 3:
-				motor::wait();
+			case 3: //Left Turn with gyro
 				first = gyro_angle();
 				//serial.putint(first);
 				//serial.string("\n\r");
@@ -273,58 +270,45 @@ namespace motor{
 				else{
 					fix_angle_v(first+90);
 				}
-				motor::wait();
 				break;
-			case 4: //???u???b?N?O?i
-				motor::wait();
+			case 4: //1block back
 				m_send(1,1,m_speed,1);
 				m_send(2,1,m_speed,1);
-				motor::wait();
-			//_delay_ms(300);
+				st_f=true;
 			break;
-			case 5: //???u???b?N?O?
-				motor::wait();
+			case 5: //2block back
 				m_send(1,1,m_speed,2);
 				m_send(2,1,m_speed,2);
-				//_delay_ms(300);
-				motor::wait();
+				st_f=true;
 			break;
 
-			case 6:
-				motor::wait();
+			case 6: //half advance
 				m_send(1,2,m_speed,4);
 				m_send(2,2,m_speed,4);
-				motor::wait();
-				//_delay_ms(300);
+				st_f=true;
 			break;
-			case 7:
-				motor::wait();
+			case 7: //half back
 				m_send(1,1,m_speed,4);
 				m_send(2,1,m_speed,4);
-				motor::wait();
-				//_delay_ms(300);
+				st_f=true;
 			break;
-			case 8: //?E????V?n????
-				motor::wait();
+			case 8: //Left Turn without gyro (????)
 				m_send(1,2,m_turnspeed,3);
 				m_send(2,1,m_turnspeed,3);
-				motor::wait();
 				//_delay_ms(300);
 			break;
-			case 9: //??????V?n????
-				motor::wait();
+			case 9: //Right Turn without gyro (???)
 				m_send(1,1,m_turnspeed,3);
 				m_send(2,2,m_turnspeed,3);
-				motor::wait();
-				//_delay_ms(300);
 			break;
 			default:
-				motor::wait();
 				motor::brake(1);
 				motor::brake(2);
-				motor::wait();
-				//_delay_ms(300);
-			//break;
+			break;
+		}
+		motor::wait();
+		if(st_f==true){
+			fix_angle_v(b_angle);
 		}
 		mv_cap(1,true);
 		mv_cap(2,true);
@@ -476,7 +460,7 @@ namespace motor{
 		lcd_clear();
 		return;
 	}
-	const int32_t turnvalue = 3;
+	const int32_t turnvalue = 5;
 	void turn_fix(uint8_t force){
 		int val=0;
 		uint8_t chk[2]={0};
