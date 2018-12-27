@@ -73,7 +73,7 @@ void m_send(uint8_t rl,uint8_t x,uint8_t y,uint8_t z){//rl:Right or Left(1:L2:R)
 	else{
 		return;
 	}
-	_delay_ms(5);
+	_delay_us(10);
 	motor_spi.send(data);
 	PORTB.OUTSET=PIN2_bm|PIN3_bm;
 }
@@ -113,6 +113,12 @@ namespace motor{
 		return mspi(0,m);
 	}
 	void wait(bool check){
+		if(check==false){
+			check=false;
+		}
+		else{
+			check=true;
+		}
 		if((PORTJ.IN & PIN5_bm)==0 && check==true){
 			mv_cap(1,false);
 			mv_cap(2,false);
@@ -179,6 +185,27 @@ namespace motor{
 				check_mv(3);
 				check=false;
 			}
+		}
+		if((PORTJ.IN & PIN5_bm)==0 && check==true){
+			mv_cap(1,false);
+			mv_cap(2,false);
+			mv_cap(3,false);
+			check_mv(1);
+			check=false;
+		}
+		if((PORTJ.IN & PIN6_bm)==0 && check==true){
+			mv_cap(1,false);
+			mv_cap(2,false);
+			mv_cap(3,false);
+			check_mv(2);
+			check=false;
+		}
+		if((PORTJ.IN & PIN7_bm)==0 && check==true){
+			mv_cap(1,false);
+			mv_cap(2,false);
+			mv_cap(3,false);
+			check_mv(3);
+			check=false;
 		}
 		return;
 	}
