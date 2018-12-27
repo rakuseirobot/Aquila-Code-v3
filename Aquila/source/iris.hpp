@@ -122,6 +122,7 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 			motor::move(9);
 			motor::fix_position();
 			motor::move(0);
+			motor::fix_position();
 			ta.turn_r();
 			ta.turn_r();
 			ta.go_st();
