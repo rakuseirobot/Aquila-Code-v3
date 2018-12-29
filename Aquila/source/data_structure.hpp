@@ -5,6 +5,7 @@
  *  this is functions for mapping,algorithms,and so on. It's core of this robot.
  *  Author: Emile
  */ 
+ #include <stdint.h>
 #define np nullptr
 #define max_size 250
 #define rep(i,N) for(int i=0;i<N;i++)
@@ -41,7 +42,7 @@ struct node{
     uint8_t x=100,y=100,z=1;//coordinate
 	uint8_t flag,type;//for bfs,search
 	uint8_t color;//for real bfs
-    int depth=1000,dist=1000;//
+    uint8_t depth=1000,dist=1000;//
 	bl ac=false;//already checked?
     node* next[4]={np};
     node* back=np;
@@ -91,6 +92,8 @@ public:
     }
     bl full(){ if(now>=max_size-1){ return true; }else{ return false; } }
 };
+
+nodes mall;
 
 int max(int x,int y){if(x>y){return x;}else{return y;}}
 int min(int x,int y){if(x<y){return x;}else{return y;}}

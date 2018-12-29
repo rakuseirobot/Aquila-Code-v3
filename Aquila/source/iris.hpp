@@ -12,6 +12,7 @@
 #include "initializing.hpp"
 #include "color_control.hpp"
 #include "motor_control.hpp"
+
 /*
 #include "initializing.hpp"
 #include "ui_control.hpp"
@@ -106,48 +107,55 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 			motor::move(3);
 			motor::fix_position();
 			ta.turn_l();
+			ta.go_st();
+			hhh.type=ta.r_now()->type;
 			motor::move(0);
 			motor::fix_position();
-			ta.go_st();
 			break;
 		case 1:
+			ta.go_st();
+			hhh.type=ta.r_now()->type;
 			motor::move(0);
 			motor::fix_position();
-			ta.go_st();
 			break;
 		case 2:
 			motor::move(2);
 			motor::fix_position();
 			ta.turn_r();
+			ta.go_st();
+			hhh.type=ta.r_now()->type;
 			motor::move(0);
 			motor::fix_position();
-			ta.go_st();
 			break;
 		case 4:
 			motor::move(9);
 			motor::fix_position();
 			motor::move(9);
 			motor::fix_position();
+			ta.turn_r();
+			ta.turn_r();
+			ta.go_st();
+			hhh.type=ta.r_now()->type;
 			motor::move(0);
 			motor::fix_position();
-			ta.turn_r();
-			ta.turn_r();
-			ta.go_st();
 			break;
         case 3:
-			motor::move(4);
-			motor::fix_position();
 			ta.turn_l();
 			ta.turn_l();
 			ta.go_st();
 			ta.turn_l();
 			ta.turn_l();
+			hhh.type=ta.r_now()->type;
+			motor::move(4);
+			motor::fix_position();
 			break;
 		default:
 			break;
 	}
 	if(ta.r_now()->type==v::unknown){ta.r_now()->type = v::normal;}
 	if(ta.r_now()!=ta.r_start())ta.r_now()->color=color::black;
+	if(hhh.key==1){ta.r_now()->type=v::r_kit;}
+	hhh.key=0;
 	black_tile();
 	nachylenie();
 	make_nodes();

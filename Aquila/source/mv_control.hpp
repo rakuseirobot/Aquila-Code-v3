@@ -13,7 +13,13 @@
 #include "xmega_spi.hpp"
 #include "action.hpp"
 #include "lcd_control.hpp"
-#include "iris.hpp"
+//#include "core.hpp"
+//#include "iris.hpp"
+struct hako{
+	int key;
+	int type;
+};
+hako hhh;
 void mv_sig(uint8_t i,bool ud);
 void init_mv(void);
 bool kit_chk(void);

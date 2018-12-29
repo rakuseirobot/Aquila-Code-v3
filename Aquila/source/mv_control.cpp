@@ -22,6 +22,7 @@ MV
 
 #include "mv_control.hpp"
 spi mv(&SPID,&PORTD,SPI_PRESCALER_DIV4_gc);
+
 void mv_cap(uint8_t di,bool st){
 	switch(di){
 		case 1:
@@ -129,9 +130,9 @@ uint8_t mv_spi_send(uint8_t val, uint8_t i){
 }
 
 bool kit_chk(void){
-	if(ta.ac_next(v::front,1)==np)return false;
-	int key = ta.ac_next(v::front,1)->type;
-	return (key==v::normal || key==v::unknown);
+	//if(ta.ac_next(v::front,1)==np)return false;
+	//int key = ta.ac_next(v::front,1)->type;
+	return (hhh.key==0 || hhh.key==1 );//normal or unknown
 }
 
 void check_mv(uint8_t dir){
@@ -144,7 +145,8 @@ void check_mv(uint8_t dir){
 		PORTB.OUTCLR=PIN0_bm|PIN1_bm;
 		return;
 	}
-	ta.ac_next(v::front,1)->type=v::r_kit;
+	//	ta.ac_next(v::front,1)->type=v::r_kit;
+	hhh.key=1;
 	mv_cap(dir,false);
 	serial.string("ch");
 	serial.putdec(res);

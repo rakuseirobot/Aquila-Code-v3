@@ -8,8 +8,6 @@
  */ 
 #include "data_structure.hpp"
 
-nodes mall;
-
 class core{
     node* now;
     node* start;//it may be unnecessary.But now, it is used in dfs.
