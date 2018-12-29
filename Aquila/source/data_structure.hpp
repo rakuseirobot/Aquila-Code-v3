@@ -24,7 +24,7 @@ namespace v{
     ci r_kit=3;
     ci c_point=4;
     ci slope=5;
-    ci hisai=6;
+    //ci hisai=6;
     ci start = 7;
     ci kaidan = 8;
 	//type
