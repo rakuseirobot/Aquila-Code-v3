@@ -22,16 +22,6 @@ MV
 
 #include "mv_control.hpp"
 spi mv(&SPID,&PORTD,SPI_PRESCALER_DIV4_gc);
-kit_result bblk;
-int k_r_read(){ return bblk.read(); }
-void k_r_write(int x){ bblk.write(x); }
-void init_mv(void){
-	PORTD.DIRSET=PIN2_bm|PIN3_bm|PIN4_bm;
-	PORTJ.DIRCLR=PIN5_bm|PIN6_bm|PIN7_bm;
-	PORTJ.OUTSET=PIN5_bm|PIN6_bm|PIN7_bm;
-	PORTD.OUTCLR=PIN2_bm|PIN3_bm|PIN4_bm;
-	return;
-}
 void mv_cap(uint8_t di,bool st){
 	switch(di){
 		case 1:
@@ -138,16 +128,23 @@ uint8_t mv_spi_send(uint8_t val, uint8_t i){
 	return dat;
 }
 
+bool kit_chk(void){
+	if(ta.ac_next(v::front,1)==np)return false;
+	int key = ta.ac_next(v::front,1)->type;
+	return (key==v::normal || key==v::unknown);
+}
+
 void check_mv(uint8_t dir){
 	PORTB.OUTSET=PIN0_bm|PIN1_bm;
 	//mv_sig(dir,false);
 	_delay_ms(2);
 	led(Blueled,1);
 	uint8_t res = mv_spi_send(dir,1);
-	/*if(bblk.read()!=0){
+	if(kit_chk()==false){
 		PORTB.OUTCLR=PIN0_bm|PIN1_bm;
 		return;
-	}*/
+	}
+	ta.ac_next(v::front,1)->type=v::r_kit;
 	mv_cap(dir,false);
 	serial.string("ch");
 	serial.putdec(res);
@@ -156,7 +153,6 @@ void check_mv(uint8_t dir){
 	mv_cap(2,false);
 	mv_cap(3,false);
 	led(Blueled,0);
-	bblk.write(res);
 	switch(res){
 		case 3://H  2kits
 			lcd_clear();
