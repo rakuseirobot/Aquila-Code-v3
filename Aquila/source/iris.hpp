@@ -167,7 +167,7 @@ void move_toa(node* a){//move to (node*)a
 	ta.bfs(a,ta.r_now());
 	bl fg;
 	serial.string("m_a-a");
-	while(ta.r_now()!=a){
+	while(ta.r_now()!=a||a->type==v::black||a->type==v::slope){
 		fg = false;
 		rep(i,4){
 			serial.string("m_a-b");
