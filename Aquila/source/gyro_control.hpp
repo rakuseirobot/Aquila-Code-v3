@@ -8,13 +8,7 @@
 
 #ifndef GYRO_CONTROL_H_
 #define GYRO_CONTROL_H_
-
-#include <avr/io.h>
-#include <util/delay.h>
-#include "xmega_usart.hpp"
-#include "xmega_twi.hpp"
-#include "initializing.hpp"
-#include "ui_control.hpp"
+#include <stdint.h>
 float acc_x_mes(void);
 float acc_y_mes(void);
 void acc_mes(void);

@@ -5,6 +5,11 @@
  *  Author: shun2
  */ 
 #include "ping_control.hpp"
+#include "initializing.hpp"
+#include <avr/interrupt.h>
+#include <util/delay.h>
+
+
 /////////////////////////////繝ｻ・ｽs繝ｻ・ｽ繝ｻ・ｽ繝ｻ・ｽz繝ｻ・ｽu//////////////////////////
 /*
 ping1 PORTE0

@@ -21,7 +21,24 @@ MV
 */
 
 #include "mv_control.hpp"
+#include <avr/io.h>
+#include <util/delay.h>
+#include "xmega_spi.hpp"
+#include "action.hpp"
+#include "lcd_control.hpp"
+#include "ui_control.hpp"
+
 spi mv(&SPID,&PORTD,SPI_PRESCALER_DIV4_gc);
+hako hhh;
+
+void init_mv(void){
+	PORTD.DIRSET=PIN2_bm|PIN3_bm|PIN4_bm;
+	PORTJ.DIRCLR=PIN5_bm|PIN6_bm|PIN7_bm;
+	PORTJ.OUTSET=PIN5_bm|PIN6_bm|PIN7_bm;
+	PORTD.OUTCLR=PIN2_bm|PIN3_bm|PIN4_bm;
+	return;
+}
+
 
 void mv_cap(uint8_t di,bool st){
 	switch(di){

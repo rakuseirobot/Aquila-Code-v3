@@ -8,12 +8,9 @@
 
 #ifndef PING_CONTROL_H_
 #define PING_CONTROL_H_
-#include "initializing.hpp"
-#include <avr/interrupt.h>
-#include <util/delay.h>
-
-
 #define Sikiti 600
+#include <avr/io.h>
+#include <stdint.h>
 
 uint16_t ping(int no);
 uint16_t ping_check (PORT_t *p_port,uint8_t p_pin);

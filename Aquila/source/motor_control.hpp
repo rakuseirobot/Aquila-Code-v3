@@ -9,17 +9,7 @@
 #ifndef MOTOR_CONTROL_H_
 #define MOTOR_CONTROL_H_
 
-
-#include <avr/io.h>
-#include "lcd_control.hpp"
-#include "xmega_spi.hpp"
-#include "ping_control.hpp"
-#include "ui_control.hpp"
-#include "mv_control.hpp"
-//#include "initializing.hpp"
-#include "gyro_control.hpp"
-#include <stdlib.h>
-#include <util/delay.h>
+#include <stdint.h>
 
 #define Acc_thre 2
 #define Acc_slope_thre 0.1

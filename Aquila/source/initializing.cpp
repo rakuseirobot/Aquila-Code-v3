@@ -5,7 +5,17 @@
  *  Author: shun2
  */ 
 #include "initializing.hpp"
-
+#include "xmega_usart.hpp"
+#include "ping_control.hpp"
+#include "ui_control.hpp"
+#include "lcd_control.hpp"
+#include "gyro_control.hpp"
+#include "motor_control.hpp"
+#include "action.hpp"
+#include "color_control.hpp"
+#include "mv_control.hpp"
+#include <avr/io.h>
+#include <avr/interrupt.h>
 void init_all(void){
 	init_clock();
 	init_avr();

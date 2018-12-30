@@ -8,6 +8,7 @@
 #include "lcd_control.hpp"
 
 
+
 void init_lcd(void){
 	twi lcd_twi(&TWID,lcd_fre);
 	lcd_twi.Address(LCD1_SLvADD,0);

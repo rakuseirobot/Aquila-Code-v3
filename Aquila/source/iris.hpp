@@ -12,7 +12,9 @@
 #include "initializing.hpp"
 #include "color_control.hpp"
 #include "motor_control.hpp"
-
+#include "lcd_control.hpp"
+#include "ping_control.hpp"
+#include "mv_control.hpp"
 /*
 #include "initializing.hpp"
 #include "ui_control.hpp"

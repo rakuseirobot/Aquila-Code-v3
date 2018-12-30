@@ -6,6 +6,13 @@
  */ 
 
 #include "gyro_control.hpp"
+
+#include <avr/io.h>
+#include <util/delay.h>
+#include "xmega_usart.hpp"
+#include "xmega_twi.hpp"
+#include "initializing.hpp"
+#include "ui_control.hpp"
 twi gyro(&TWIC,250000);
 
 void gyro_send(uint8_t reg,uint8_t dh,uint8_t dl){

@@ -8,18 +8,14 @@
 
 #ifndef MV_CONTROL_HPP_
 #define MV_CONTROL_HPP_
-#include <avr/io.h>
-#include <util/delay.h>
-#include "xmega_spi.hpp"
-#include "action.hpp"
-#include "lcd_control.hpp"
 //#include "core.hpp"
 //#include "iris.hpp"
+#include <stdint.h>
 struct hako{
 	int key;
 	int type;
 };
-hako hhh;
+extern hako hhh;
 void mv_sig(uint8_t i,bool ud);
 void init_mv(void);
 bool kit_chk(void);

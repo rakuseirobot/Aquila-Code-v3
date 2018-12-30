@@ -8,15 +8,9 @@
 
 #ifndef VL53LOX_H_
 #define VL53LOX_H_
-
+#include <stdint.h>
 
 #define VL_TWI &TWID
-#include "xmega_twi.hpp"
-#include "xmega_usart.hpp"
-#include "ui_control.hpp"
-#include "initializing.hpp"
-#include <util/delay.h>
-
 #define ADDRESS_DEFAULT 0b0101001
 
 

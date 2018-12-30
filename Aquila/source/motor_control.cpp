@@ -9,6 +9,16 @@
 PB2,PB3 --SS
 */
 #include "motor_control.hpp"
+#include <avr/io.h>
+#include "lcd_control.hpp"
+#include "xmega_spi.hpp"
+#include "ping_control.hpp"
+#include "ui_control.hpp"
+#include "mv_control.hpp"
+//#include "initializing.hpp"
+#include "gyro_control.hpp"
+#include <stdlib.h>
+#include <util/delay.h>
 //#include "core.hpp"
 #define RightM PIN2_bm //1
 #define LeftM PIN3_bm  //2
