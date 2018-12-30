@@ -6,6 +6,12 @@
  */ 
 #include "sermo_control.hpp"
 
+#include <avr/io.h>
+#include <string.h>
+#include <util/delay.h>
+#include <stdlib.h>
+#include "xmega_twi.hpp"
+#include "initializing.hpp"
 
 /*
 PORTCとPORTD-プルアップ忘れてる

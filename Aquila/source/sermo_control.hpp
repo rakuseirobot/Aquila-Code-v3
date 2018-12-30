@@ -8,13 +8,8 @@
 
 #ifndef SERMO_CONTROL_H_
 #define SERMO_CONTROL_H_
-
-#include <avr/io.h>
-#include <string.h>
-#include <util/delay.h>
-#include <stdlib.h>
-#include "xmega_twi.hpp"
-#include "initializing.hpp"
+#include<avr/io.h>
+#include<stdint.h>
 
 #define sermo_fre 130000UL
 
