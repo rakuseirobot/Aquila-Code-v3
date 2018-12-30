@@ -9,9 +9,15 @@
 #ifndef INITIALIZING_H_
 #define INITIALIZING_H_
 
-#include <avr/io.h>
 #include "xmega_usart.hpp"
 #include "ping_control.hpp"
+#include "ui_control.hpp"
+#include "lcd_control.hpp"
+#include "gyro_control.hpp"
+#include "motor_control.hpp"
+#include "action.hpp"
+#include "color_control.hpp"
+#include <avr/io.h>
 #include <avr/interrupt.h>
 extern usart serial;
 extern uint8_t rtcov;

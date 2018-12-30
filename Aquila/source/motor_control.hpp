@@ -16,7 +16,7 @@
 #include "ping_control.hpp"
 #include "ui_control.hpp"
 #include "mv_control.hpp"
-#include "initializing.hpp"
+//#include "initializing.hpp"
 #include "gyro_control.hpp"
 #include <stdlib.h>
 #include <util/delay.h>

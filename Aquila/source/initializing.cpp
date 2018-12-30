@@ -5,11 +5,6 @@
  *  Author: shun2
  */ 
 #include "initializing.hpp"
-#include "ui_control.hpp"
-#include "lcd_control.hpp"
-#include "motor_control.hpp"
-#include "action.hpp"
-#include "color_control.hpp"
 
 void init_all(void){
 	init_clock();

@@ -6,18 +6,25 @@
  * Created: 2018/12/20 12:00:00
  *  Author: Emile
  */ 
-#include <avr/io.h>
+
+
 #include "core.hpp"
+#include "initializing.hpp"
+#include "color_control.hpp"
+#include "motor_control.hpp"
+/*
 #include "initializing.hpp"
 #include "ui_control.hpp"
 #include "lcd_control.hpp"
-#include "motor_control.hpp"
 #include "action.hpp"
 #include "color_control.hpp"
 #include "sermo_control.hpp"
 #include "serial.hpp" 
 #include "ping_control.hpp"
+#include "motor_control.hpp"
+#include <avr/io.h>
 #include <util/delay.h>
+*/
 //#include "core.hpp" // it's my code
 
 void make_nodes(){
@@ -80,13 +87,13 @@ void nachylenie(){
 			}
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"nac");
-			//ŠK’i‚ğã‚é“®ì‚ğ“ü‚ê‚é
+			//???????????
 	}else if(motor::notify_long_acc()==1){
 		node* u = ta.r_now();
 			u->type=v::kaidan;
 			node* t = mall.make(100,100,u->z-1,(ta.r_flg()+1)%2);
 			ta.cn_graph(u,t);
-			//ŠK’i‚ğ‰º‚é“®ì‚ğ“ü‚ê‚é
+			//???????????
 			ta.w_now(t);
 			ta.ap_node(ta.r_now(),v::front);
 	}else{ /*error*/ }
