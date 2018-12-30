@@ -93,8 +93,6 @@ public:
     bl full(){ if(now>=max_size-1){ return true; }else{ return false; } }
 };
 
-nodes mall;
-
 int max(int x,int y){if(x>y){return x;}else{return y;}}
 int min(int x,int y){if(x<y){return x;}else{return y;}}
 

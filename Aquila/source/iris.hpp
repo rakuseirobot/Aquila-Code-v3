@@ -73,7 +73,7 @@ void nachylenie(){
 	}else if(motor::notify_long_acc()==2){
 		node* u = ta.r_now();
 			u->type=v::kaidan;
-			node* t = mall.make(100,100,u->z+1,(ta.r_flg()+1)%2);
+			node* t = ta.mall.make(100,100,u->z+1,(ta.r_flg()+1)%2);
 			ta.cn_graph(u,t);
 			ta.w_now(t);
 			ta.ap_node(ta.r_now(),v::front);
@@ -94,7 +94,7 @@ void nachylenie(){
 	}else if(motor::notify_long_acc()==1){
 		node* u = ta.r_now();
 			u->type=v::kaidan;
-			node* t = mall.make(100,100,u->z-1,(ta.r_flg()+1)%2);
+			node* t = ta.mall.make(100,100,u->z-1,(ta.r_flg()+1)%2);
 			ta.cn_graph(u,t);
 			//???????????
 			ta.w_now(t);

@@ -18,10 +18,11 @@ class core{
     int flg;//0 or 1
     //for dfs
     queue q;//for bfs
-    /*
+	/*
      * use ans,flg (also in bfs)
      */
 public:
+	nodes mall;
 	stack stk;
     core(){
         now=mall.make(100,100,1,1);
