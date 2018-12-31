@@ -52,27 +52,24 @@ class queue{
     int siz;
     node* box[max_size];
 public:
-    void init(){siz=0;rep(i,max_size)box[i]=np;}
-    int size(){return siz;}
-    node* front(){ return box[0]; }
-    void pop(){
-        rep(i,siz){box[i]=box[i+1];}
-        siz--;
-    }
-    void push(node* x){ box[siz]=x; siz++; }
-    bl empty(){if(siz==0){return true;}else{return false;}}
+    void init();
+    int size();
+    node* front();
+    void pop();
+    void push(node* x);
+    bl empty();
 };
 
 class stack{
     int siz;
     node* box[max_size];
 public:
-    void init(){siz=0;rep(i,max_size)box[i]=np;}
-    int size(){return siz;}
-    node* top(){return box[siz-1];}
-    void pop(){box[siz-1]=np;siz--;}
-    void push(node* x){box[siz]=x;siz++;}
-    bl empty(){if(siz==0){return true;}else{return false;}}
+    void init();
+    int size();
+    node* top();
+    void pop();
+    void push(node* x);
+    bl empty();
 };
 
 class nodes{
@@ -80,20 +77,12 @@ class nodes{
     node mal[max_size];
     bl box[max_size]={0};
 public:
-    nodes(){size=0;now=0;};
-    node* make(int x,int y,int z,int flag){
-        if(now>=max_size-1){ return np; }else{
-            now++;mal[now].dist=1000;mal[now].depth=1000;//init
-            mal[now].x=x; mal[now].y=y; mal[now].z=z; mal[now].flag=flag;
-			mal[now].color=color::white;
-			mal[now].ac=false;
-            return &mal[now];
-        }
-    }
-    bl full(){ if(now>=max_size-1){ return true; }else{ return false; } }
+    nodes();
+    node* make(int x,int y,int z,int flag);
+    bl full();
 };
 
-int max(int x,int y){if(x>y){return x;}else{return y;}}
-int min(int x,int y){if(x<y){return x;}else{return y;}}
+int max(int x,int y);
+int min(int x,int y);
 
 #endif
