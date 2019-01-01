@@ -10,6 +10,7 @@
 
 core::core(){
     now=mall.make(100,100,1,1);
+	at.insert(now);
     flg=0;
     ans = np;
     start=now;
