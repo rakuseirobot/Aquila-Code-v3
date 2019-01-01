@@ -46,6 +46,24 @@ struct node{
 	bl ac=false;//already checked?
     node* next[4]={np};
     node* back=np;
+	node* child[2]={np,np};
+	uint8_t height=0;
+};
+
+class AVLtree{
+	node* root;
+	public:
+	AVLtree();
+	node* find(int x,int y,int z);
+	node* find(node* t,int x,int y,int z);
+	#define ht(t) (t ? t->height : 0)
+	node* rotate(node* t,int l,int r);
+	node* barance(node* t);
+	void insert(node* x);
+	node* insert(node* t,node* x);
+	void erase(int x,int y,int z);
+	node *erase(node *t,int x,int y,int z);
+	node *move_down(node *t, node *rhs);
 };
 
 class queue{

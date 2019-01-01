@@ -18,6 +18,7 @@ class core{
     int flg;//0 or 1
     //for dfs
     queue q;//for bfs
+    AVLtree at;
 	/*
      * use ans,flg (also in bfs)
      */

@@ -11,11 +11,11 @@
 //#include "core.hpp"
 //#include "iris.hpp"
 #include <stdint.h>
-struct hako{
-	int key;
-	int type;
-};
-extern hako hhh;
+// struct hako{
+// 	int key;
+// 	int type;
+// };
+// extern hako hhh;
 void mv_sig(uint8_t i,bool ud);
 void init_mv(void);
 bool kit_chk(void);

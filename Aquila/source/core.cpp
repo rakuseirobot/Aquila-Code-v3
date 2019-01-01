@@ -34,21 +34,26 @@ void core::dfs(node* t,int x,int y,int z,int depth){
         }
     }
 };
-
+/*
 node* core::find(int x,int y,int z){
     ans=np;
     dfs(start,x,y,z,start->depth);
     flg=(flg+1)%2;
     return ans;
-};
+};*/
+node* core::find(int x,int y,int z){
+    return at.find(x,y,z);
+}
 
 void core::cn_graph(node* v, node* u){//Connect Nodes on Graph ::vとuをgraph(next[])に関してつなげる
+    at.insert(u);
     if(v!=np && u!=np){
         rep(i,4)if(v->next[i]==np){ v->next[i]=u; break; }else if(v->next[i]==u){break;}
         rep(i,4)if(u->next[i]==np){ u->next[i]=v; break; }else if(u->next[i]==v){break;}
     }
 }
 void core::cn_tree(node* par,node* v){//connect nodes on Tree ::par(ent)とvをtree(back)に関してつなげる
+    at.insert(v);
     if(v!=np && par!=np)if(v->back==np)v->back=par;
 }
 void core::ap_node(node* t,int dire){//append node (cn_graph)
@@ -96,7 +101,7 @@ void core::clear_dist(){
 }
 
 
-void core::bfs(node* s,node* t){//sを始点にしてtを検索する�?
+void core::bfs(node* s,node* t){//sを始点にしてtを検索する�?
     q.push(s);
     s->dist=0;
     while(!q.empty()){
