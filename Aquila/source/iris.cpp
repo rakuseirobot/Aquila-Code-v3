@@ -91,11 +91,12 @@ void nachylenie(){
 void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:back(turn),3:back(usiro)
 	switch(num){
 		case 0:
-			motor::move(3);
+
 			motor::fix_position();
 			ta.turn_l();
 			ta.go_st();
 			//hhh.type=ta.r_now()->type;
+			motor::move(3);
 			motor::move(0);
 			motor::fix_position();
 			break;
@@ -106,23 +107,23 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 			motor::fix_position();
 			break;
 		case 2:
-			motor::move(2);
 			motor::fix_position();
 			ta.turn_r();
-			ta.go_st();
 			//hhh.type=ta.r_now()->type;
+			motor::move(2);
+			ta.go_st();
 			motor::move(0);
 			motor::fix_position();
 			break;
 		case 4:
-			motor::move(9);
-			motor::fix_position();
+			ta.turn_r();
 			motor::move(9);
 			motor::fix_position();
 			ta.turn_r();
-			ta.turn_r();
-			ta.go_st();
+			motor::move(9);
+			motor::fix_position();
 			//hhh.type=ta.r_now()->type;
+			ta.go_st();
 			motor::move(0);
 			motor::fix_position();
 			break;
