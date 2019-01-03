@@ -1,12 +1,9 @@
 /*
  * core.cpp
- *
  * Created: 2018/12/30 3:19:32
- *  Author: TOMOKI
+ *  Author: emile
  */ 
 #include "core.hpp"
-
-
 
 core::core(){
     now=mall.make(100,100,1,1);

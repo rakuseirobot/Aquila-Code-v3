@@ -1,11 +1,8 @@
 /*
  * iris.cpp
- *
  * Created: 2018/12/31 12:39:15
- *  Author: shun2
+ *  Author: emile
  */ 
-
-
 #include "iris.hpp"
 #include "initializing.hpp"
 #include "color_control.hpp"
@@ -13,7 +10,6 @@
 #include "lcd_control.hpp"
 #include "ping_control.hpp"
 #include "mv_control.hpp"
-
 
 void make_nodes(){
     if(!ta.r_now()->ac){
@@ -163,7 +159,6 @@ void move_n(node* n){//move to neighborhood((node*)n)
 		}
     }
 }
-
 
 void move_toa(node* a){//move to (node*)a
 	lcd_clear();

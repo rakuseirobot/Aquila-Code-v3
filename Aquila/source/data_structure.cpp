@@ -1,11 +1,8 @@
 /*
  * data_structure.cpp
- *
  * Created: 2018/12/31 12:34:55
- *  Author: shun2
- */ 
-
-
+ *  Author: emile
+ */
 #include "data_structure.hpp"
 #define ht(t) (t ? t->height : 0)
 uint8_t lorr(node* t,int x,int y,int z){

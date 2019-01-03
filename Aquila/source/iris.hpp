@@ -2,12 +2,9 @@
 #define IRIS_HPP_
 /*
  * iris.hpp
- *
  * Created: 2018/12/20 12:00:00
  *  Author: Emile
  */ 
-
-
 #include "core.hpp"
 /*
 #include "initializing.hpp"

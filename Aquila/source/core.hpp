@@ -2,7 +2,6 @@
 #define CORE_HPP_
 /*
  * core.hpp
- *
  * Created: 2018/12/20 12:00:00
  *  Author: Emile
  */ 
@@ -18,10 +17,7 @@ class core{
     int flg;//0 or 1
     //for dfs
     queue q;//for bfs
-    AVLtree at;
-	/*
-     * use ans,flg (also in bfs)
-     */
+    AVLtree at; //use ans,flg (also in bfs)
 public:
 	nodes mall;
 	stack stk;
@@ -33,9 +29,7 @@ public:
     node* r_now();
 	node* r_start();
     void dfs(node* t,int x,int y,int z,int depth);
-
     node* find(int x,int y,int z);
-
     void cn_graph(node* v, node* u);
     void cn_tree(node* par,node* v);
     void ap_node(node* t,int dire);
@@ -43,15 +37,9 @@ public:
     node* ac_next(int dire,int dist);
 	bl ck_conect(node* s,node* t);
     void go_st();
-
     void cl_dist(node* t,int d);
-
     void clear_dist();
-
     void bfs(node* s,node* t);
-
 };
-
 extern core ta;
-
 #endif
