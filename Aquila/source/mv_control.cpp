@@ -16,7 +16,7 @@ PJ7:MVS3  --SS
 
 MV
    2
-1  ï¿½ï¿½  3 
+1  ?¿½?¿½  3 
 
 */
 
@@ -165,7 +165,6 @@ void check_mv(uint8_t dir){
 		led(Blueled,0);
 		lcd_putstr(LCD1_TWI,"return");
 		buzzer(400);
-		_delay_ms(500);
 		return;
 	}
 	PORTB.OUTSET=PIN0_bm|PIN1_bm;
