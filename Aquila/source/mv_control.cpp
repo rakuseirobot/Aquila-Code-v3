@@ -148,7 +148,7 @@ uint8_t mv_spi_send(uint8_t val, uint8_t i){
 }
 
 bool kit_chk(void){
-	if(ta.ac_next(v::front,1)==np)return false;
+	//if(ta.ac_next(v::front,1)==np)return false;
 	int key = ta.r_now()->type;
 	return (key==v::normal||key==v::unknown);
 	//return (hhh.key==0 || hhh.key==1 );//normal or unknown
