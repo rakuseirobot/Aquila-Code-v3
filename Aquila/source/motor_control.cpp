@@ -432,6 +432,11 @@ namespace motor{
 		dis[0]=ping(3);//Forward
 		dis[1]=ping(6);//Back
 		if(Sikiti>=dis[0]){
+			_delay_ms(1);
+			dis[0]==ping(3);
+			if(!(Sikiti>=dis[0])){
+				return;
+			}
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"gb_fixF");
 			if((gbbest-dis[0])<fixno*-1){
@@ -468,6 +473,11 @@ namespace motor{
 			}
 		}
 		else if(Sikiti>=dis[1]){
+			_delay_ms(1);
+			dis[1]=ping(6);
+			if(!(Sikiti>=dis[1])){
+				return;
+			}
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"gb_fixB");
 			if((gbbest-dis[1])>fixno){
