@@ -58,7 +58,7 @@ void nachylenie(uint8_t x){
 		node* x = ta.mall.make(100,100,ta.r_now()->z+1,(ta.r_flg()+1)%2);x->dist=1000;ta.ins_node(x);
 		ta.r_now()->type=v::slope;ta.r_now()->color=color::black;
 		ta.cn_graph(ta.r_now(),x);
-		x->type=v::slope;x->color==color::black;
+		x->type=v::slope;x->color=color::black;
 		ta.w_now(x);
 		ta.ap_node(ta.r_now(),v::front);
 		ta.go_st();ta.r_now()->color=color::black;
@@ -68,7 +68,7 @@ void nachylenie(uint8_t x){
 		node* x = ta.mall.make(100,100,ta.r_now()->z-1,(ta.r_flg()+1)%2);x->dist=1000;ta.ins_node(x);
 		ta.r_now()->type=v::slope;ta.r_now()->color=color::black;
 		ta.cn_graph(ta.r_now(),x);
-		x->type=v::slope;x->color==color::black;
+		x->type=v::slope;x->color=color::black;
 		ta.w_now(x);
 		ta.ap_node(ta.r_now(),v::front);
 		ta.go_st();ta.r_now()->color=color::black;
