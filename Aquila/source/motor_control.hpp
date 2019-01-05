@@ -12,7 +12,8 @@
 #include "data_structure.hpp"
 #include <stdint.h>
 
-#define Acc_thre 1.5
+#define Acc_thre_u 2.9
+#define Acc_thre_d -4
 #define Acc_slope_thre 0.1
 void Save_angle(void);
 void init_motor(void);

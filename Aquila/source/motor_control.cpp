@@ -787,10 +787,10 @@ namespace motor{
 		uint8_t spos = 6;
 		float now=0;
 		if(x==v::front){//ëOêiíÜ
-			if(ac>=Acc_thre){//è„ÇË
+			if(ac>=Acc_thre_u){//è„ÇË
 				if(longway<=ping(3)){
 					ac=acc_x_mes();
-					if(ac>=Acc_thre){
+					if(ac>=Acc_thre_u){
 						if(buz==true){
 						buzzer(400);
 						buzzer(800);
@@ -808,9 +808,9 @@ namespace motor{
 				m_send(1,2,spos,3);
 				m_send(2,2,spos,3);
 				ac=acc_x_mes();
-				while(ac>=Acc_thre){
+				while(ac>=Acc_thre_u){
 					ac=acc_x_mes();
-					if(!(ac>=Acc_thre)){
+					if(!(ac>=Acc_thre_u)){
 						ac=acc_x_mes();
 					}
 					led(Redled,0);
@@ -867,7 +867,7 @@ namespace motor{
 						error_led(1,0);
 					}
 				
-					if(!(ac>=Acc_thre)){
+					if(!(ac>=Acc_thre_u)){
 						ac=acc_x_mes();
 					}
 				}
@@ -875,23 +875,23 @@ namespace motor{
 				error_led(2,0);
 				error_led(1,0);
 				ac=acc_x_mes();
-				if(ac>=Acc_thre){
-					notify_long_acc(false);
+				if(ac>=Acc_thre_u){
+					notify_long_acc(x,false);
 				}
 				motor::move(10);
 				ac=acc_x_mes();
-				if(ac>=Acc_thre){
-					notify_long_acc(false);
+				if(ac>=Acc_thre_u){
+					notify_long_acc(x,false);
 				}
 				_delay_ms(1);
 				lcd_clear();
 				motor::move(7);
 				return 2;
 			}
-			else if(ac<=Acc_thre*-1){//â∫ÇË
+			else if(ac<=Acc_thre_d){//â∫ÇË
 				if(longway/2<=ping(6)){
 					ac=acc_x_mes();
-					if(ac<=Acc_thre*-1){
+					if(ac<=Acc_thre_d){
 						if(buz==true){
 						buzzer(800);
 						buzzer(400);
@@ -909,9 +909,9 @@ namespace motor{
 				m_send(1,2,spos,3);
 				m_send(2,2,spos,3);
 				ac=acc_x_mes();
-				while(ac<=Acc_thre*-1){
+				while(ac<=Acc_thre_d){
 					ac=acc_x_mes();
-					if(!(ac<=Acc_thre*-1)){
+					if(!(ac<=Acc_thre_d)){
 						ac=acc_x_mes();
 					}
 					led(Redled,0);
@@ -968,7 +968,7 @@ namespace motor{
 						error_led(1,0);
 					}
 				
-					if(!(ac<=Acc_thre*-1)){
+					if(!(ac<=Acc_thre_d)){
 						ac=acc_x_mes();
 					}
 				}
@@ -976,13 +976,13 @@ namespace motor{
 				error_led(2,0);
 				error_led(1,0);
 				ac=acc_x_mes();
-				if(ac<=Acc_thre*-1){
-					notify_long_acc(false);
+				if(ac<=Acc_thre_d){
+					notify_long_acc(x,false);
 				}
 				motor::move(10);
 				ac=acc_x_mes();
-				if(ac<=Acc_thre*-1){
-					notify_long_acc(false);
+				if(ac<=Acc_thre_d){
+					notify_long_acc(x,false);
 				}
 				_delay_ms(1);
 				lcd_clear();
@@ -990,10 +990,10 @@ namespace motor{
 				return 1;
 			}
 		}else if(x==v::back){//å„êiíÜ
-			if(ac>=Acc_thre){//â∫ÇË
+			if(ac>=Acc_thre_u){//â∫ÇË
 				if(longway/2<=ping(3)){
 					ac=acc_x_mes();
-					if(ac>=Acc_thre){
+					if(ac>=Acc_thre_u){
 						if(buz==true){
 						buzzer(400);
 						buzzer(800);
@@ -1011,9 +1011,9 @@ namespace motor{
 				m_send(1,1,spos,3);
 				m_send(2,1,spos,3);
 				ac=acc_x_mes();
-				while(ac>=Acc_thre){
+				while(ac>=Acc_thre_u){
 					ac=acc_x_mes();
-					if(!(ac>=Acc_thre)){
+					if(!(ac>=Acc_thre_u)){
 						ac=acc_x_mes();
 					}
 					led(Redled,0);
@@ -1066,7 +1066,7 @@ namespace motor{
 						error_led(1,0);
 					}
 				
-					if(!(ac>=Acc_thre)){
+					if(!(ac>=Acc_thre_u)){
 						ac=acc_x_mes();
 					}
 				}
@@ -1074,23 +1074,23 @@ namespace motor{
 				error_led(2,0);
 				error_led(1,0);
 				ac=acc_x_mes();
-				if(ac>=Acc_thre){
-					notify_long_acc(false);
+				if(ac>=Acc_thre_u){
+					notify_long_acc(x,false);
 				}
 				motor::move(10);
 				ac=acc_x_mes();
-				if(ac>=Acc_thre){
-					notify_long_acc(false);
+				if(ac>=Acc_thre_u){
+					notify_long_acc(x,false);
 				}
 				_delay_ms(1);
 				lcd_clear();
 				motor::move(7);
 				return 1;
 			}
-			else if(ac<=Acc_thre*-1){//è∏ÇË
+			else if(ac<=Acc_thre_d){//è∏ÇË
 				if(longway<=ping(6)){
 					ac=acc_x_mes();
-					if(ac<=Acc_thre*-1){
+					if(ac<=Acc_thre_d){
 						if(buz==true){
 						buzzer(800);
 						buzzer(400);
@@ -1108,9 +1108,9 @@ namespace motor{
 				m_send(1,1,spos,3);
 				m_send(2,1,spos,3);
 				ac=acc_x_mes();
-				while(ac<=Acc_thre*-1){
+				while(ac<=Acc_thre_d){
 					ac=acc_x_mes();
-					if(!(ac<=Acc_thre*-1)){
+					if(!(ac<=Acc_thre_d)){
 						ac=acc_x_mes();
 					}
 					led(Redled,0);
@@ -1163,7 +1163,7 @@ namespace motor{
 						error_led(1,0);
 					}
 				
-					if(!(ac<=Acc_thre*-1)){
+					if(!(ac<=Acc_thre_d)){
 						ac=acc_x_mes();
 					}
 				}
@@ -1171,13 +1171,13 @@ namespace motor{
 				error_led(2,0);
 				error_led(1,0);
 				ac=acc_x_mes();
-				if(ac<=Acc_thre*-1){
-					notify_long_acc(false);
+				if(ac<=Acc_thre_d){
+					notify_long_acc(x,false);
 				}
 				motor::move(10);
 				ac=acc_x_mes();
-				if(ac<=Acc_thre*-1){
-					notify_long_acc(false);
+				if(ac<=Acc_thre_d){
+					notify_long_acc(x,false);
 				}
 				_delay_ms(1);
 				lcd_clear();
