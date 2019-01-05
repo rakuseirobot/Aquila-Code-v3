@@ -164,7 +164,7 @@ void check_mv(uint8_t dir){
 		PORTB.OUTCLR=PIN0_bm|PIN1_bm;
 		lcd_clear();
 		lcd_putstr(LCD1_TWI,"return");
-		buzzer(1000);
+		buzzer(400);
 		_delay_ms(500);
 		return;
 	}
