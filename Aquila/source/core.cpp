@@ -42,7 +42,7 @@ node* core::find(int x,int y,int z){
 node* core::find(int x,int y,int z){
     return at.find(x,y,z);
 }
-
+void core::ins_node(node* x){at.insert(x);}
 void core::cn_graph(node* v, node* u){//Connect Nodes on Graph ::vとuをgraph(next[])に関してつなげる
     at.insert(u);
     if(v!=np && u!=np){
@@ -109,6 +109,7 @@ void core::bfs(node* s,node* t){//sを始点にしてtを検索する�?
             node* aa=a->next[i];
             if(aa!=np){
                 aa->dist=min(aa->dist,a->dist+1);
+				if(aa->type==v::black)aa->dist=1000;
                 if(aa->flag!=flg){ q.push(aa); aa->flag=flg; }
             }else{ break; }
         }

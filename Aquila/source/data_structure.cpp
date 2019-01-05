@@ -11,8 +11,8 @@ uint8_t lorr(node* t,int x,int y,int z){
 	d[1] = t->y-y;
 	d[2] = t->z-z;
 	rep(i,3){
-		if(d[i]>0)return 1;
-		if(d[i]<0)return 0;
+		if(d[i]<0)return 1;
+		if(d[i]>0)return 0;
 	}
 	return 0;
 }
@@ -31,7 +31,7 @@ node* AVLtree::rotate(node* t,int l,int r){
 	s->child[r]=barance(t);
 	return barance(s);
 }
-	
+
 node* AVLtree::barance(node* t){
 	rep(i,2){
 		if(ht(t->child[i])-ht(t->child[!i])>1){
@@ -42,11 +42,11 @@ node* AVLtree::barance(node* t){
 	if(t!=np)t->height=max(ht(t->child[0]),ht(t->child[1]))+1;
 	return t;
 }
-	
-void AVLtree::insert(node* x){ root = insert(root,x); }
+
+void AVLtree::insert(node* x){ x->height=1;root = insert(root,x); }
 node* AVLtree::insert(node* t,node* x){
 	if(t==np)return x;
-	if(t->x==x->x&&t->y==x->y&&t->z==x->z)return np;
+	if(t->x==x->x&&t->y==x->y&&t->z==x->z)return t;
 	t->child[lorr(t,x->x,x->y,x->z)] = insert(t->child[lorr(t,x->x,x->y,x->z)],x);
 	return barance(t);
 }
@@ -54,9 +54,9 @@ node* AVLtree::insert(node* t,node* x){
 void AVLtree::erase(int x,int y,int z){ root = erase(root,x,y,z); }
 node* AVLtree::erase(node *t,int x,int y,int z){
 	if(t==np)return np;
-	if(t->x==x&&t->y==y,t->z==z){
+	if(t->x==x&&t->y==y&&t->z==z){
 		return move_down(t->child[0], t->child[1]);
-	}else{
+		}else{
 		t->child[lorr(t,x,y,z)]=erase(t->child[lorr(t,x,y,z)],x,y,z);
 		return barance(t);
 	}
@@ -67,6 +67,7 @@ node* AVLtree::move_down(node *t, node *rhs) {
 	t->child[1] = move_down(t->child[1], rhs);
 	return barance(t);
 }
+
 
 /////////////////////////////////////////////////////////////////AVLtree///////////////////////
 

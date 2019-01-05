@@ -162,9 +162,12 @@ void check_mv(uint8_t dir){
 	uint8_t res = mv_spi_send(dir,1);
 	if(kit_chk()==false){
 		PORTB.OUTCLR=PIN0_bm|PIN1_bm;
+		lcd_clear();
+		lcd_putstr(LCD1_TWI,"return");
+		buzzer(1000);
+		_delay_ms(500);
 		return;
 	}
-	ta.r_now()->type=v::r_kit;
 	//hhh.key=1;
 	mv_cap(dir,false);
 	serial.string("ch");
@@ -179,33 +182,37 @@ void check_mv(uint8_t dir){
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"Find H!");
 			finded_victim(2);
+			ta.r_now()->type=v::r_kit;
 			break;
 		case 4://S  1kits
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"Find S!");
 			finded_victim(1);
+			ta.r_now()->type=v::r_kit;
 			break;
 		case 5://U 0kits
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"Find U!");
 			finded_victim(0);
+			ta.r_now()->type=v::r_kit;
 			break;
 		case 6:
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"Find Sermo");
 			finded_victim(1);
+			ta.r_now()->type=v::r_kit;
 			break;
 		case 7:
 		case 8:
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"Find Error");
 			finded_victim(1);
+			//ta.r_now()->type=v::r_kit;
 			break;
 		default:
 			break;
 	};
 	lcd_clear();
-	
 	mv_cap(1,true);
 	mv_cap(2,true);
 	mv_cap(3,true);

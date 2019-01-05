@@ -21,7 +21,7 @@ void init_all(void){
 	init_avr();
 	init_lcd();
 	init_motor();
-	rtc();
+	//rtc();
 	init_color();
 }
 

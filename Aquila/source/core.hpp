@@ -30,6 +30,7 @@ public:
 	node* r_start();
     void dfs(node* t,int x,int y,int z,int depth);
     node* find(int x,int y,int z);
+	void ins_node(node* x);
     void cn_graph(node* v, node* u);
     void cn_tree(node* par,node* v);
     void ap_node(node* t,int dire);

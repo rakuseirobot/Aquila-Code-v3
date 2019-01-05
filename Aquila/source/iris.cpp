@@ -10,6 +10,7 @@
 #include "lcd_control.hpp"
 #include "ping_control.hpp"
 #include "mv_control.hpp"
+#include "gyro_control.hpp"
 
 void make_nodes(){
     if(!ta.r_now()->ac){
@@ -31,7 +32,7 @@ void black_tile(){
 		ta.r_now()->type=v::black;
 		ta.r_now()->color=v::black;
 		motor::move(4);
-		motor::fix_position();
+		motor::fix_position(v::back);
 		ta.turn_l();
 		ta.turn_l();
 		ta.go_st();
@@ -40,59 +41,76 @@ void black_tile(){
 	}
 }
 
-void nachylenie(){
-	if(ta.r_now()->type==v::kaidan){
+void nachylenie(uint8_t x){
+	if(ta.r_now()->type==v::slope){
+		motor::notify_long_acc(x);
 		rep(i,4){
-			if(ta.r_now()->next[i]->type==v::kaidan){
-				ta.w_now(ta.r_now()->next[i]->next[0]);
-				motor::notify_long_acc();
-				lcd_clear();
-				lcd_putstr(LCD1_TWI,"saka!");
-				break;
-			}
-		}
-	}else if(motor::notify_long_acc()==2){
-		node* u = ta.r_now();
-			u->type=v::kaidan;
-			node* t = ta.mall.make(100,100,u->z+1,(ta.r_flg()+1)%2);
-			ta.cn_graph(u,t);
-			ta.w_now(t);
-			ta.ap_node(ta.r_now(),v::front);
-			ta.w_now(ta.ac_next(v::front,1));
-			ta.r_now()->color=color::gray;
-			ta.stk.push(ta.r_now());
-			for(int j=1;j>=0;j--){
-				rep(i,4){
-					if(check_ping(i)>j+1)if(ta.ac_next(i,1)!=np&&ta.ac_next(i,1)->color==color::white&&ta.ck_conect(ta.r_now(),ta.ac_next(i,1))){
-						ta.stk.push(ta.ac_next(i,1));
-						ta.ac_next(i,1)->color=color::gray;
+			if(ta.r_now()->next[i]->type==v::slope){
+				node* t=ta.r_now()->next[i];
+				rep(j,4){
+					if(t->next[j]->type==v::normal){
+						ta.w_now(t->next[j]);
 					}
 				}
 			}
-			lcd_clear();
-			lcd_putstr(LCD1_TWI,"nac");
-			//???????????
-	}else if(motor::notify_long_acc()==1){
-		node* u = ta.r_now();
-			u->type=v::kaidan;
-			node* t = ta.mall.make(100,100,u->z-1,(ta.r_flg()+1)%2);
-			ta.cn_graph(u,t);
-			//???????????
-			ta.w_now(t);
-			ta.ap_node(ta.r_now(),v::front);
-	}else{ /*error*/ }
-	make_nodes();
+		}
+	}else if(motor::notify_long_acc(x)==2){//¸‚è
+		node* x = ta.mall.make(100,100,ta.r_now()->z+1,(ta.r_flg()+1)%2);x->dist=1000;ta.ins_node(x);
+		ta.r_now()->type=v::slope;ta.r_now()->color=color::black;
+		ta.cn_graph(ta.r_now(),x);
+		x->type=v::slope;x->color==color::black;
+		ta.w_now(x);
+		ta.ap_node(ta.r_now(),v::front);
+		ta.go_st();ta.r_now()->color=color::black;
+		ta.stk.push(ta.r_now());
+		make_nodes();
+	}else if(motor::notify_long_acc(x)==1){//‰º‚è
+		node* x = ta.mall.make(100,100,ta.r_now()->z-1,(ta.r_flg()+1)%2);x->dist=1000;ta.ins_node(x);
+		ta.r_now()->type=v::slope;ta.r_now()->color=color::black;
+		ta.cn_graph(ta.r_now(),x);
+		x->type=v::slope;x->color==color::black;
+		ta.w_now(x);
+		ta.ap_node(ta.r_now(),v::front);
+		ta.go_st();ta.r_now()->color=color::black;
+		ta.stk.push(ta.r_now());
+		make_nodes();
+	}else{
+		
+	}
 }
+
+void nachylenie2(){
+	if(acc_x_mes()>2.9){
+		if(ta.ac_next(v::front,1)==np){
+			uint8_t key=10;
+			if(ta.ac_next(v::left,1)!=np){
+				key=v::left;
+			}else if(ta.ac_next(v::right,1)!=np){
+				key=v::right;
+			}
+			if(key!=10)while(check_ping(key)<=1){
+				motor::move(0);
+				motor::fix_position();
+			}
+		}
+	}else if(acc_x_mes()<-4){
+		ta.ap_node(ta.r_now(),v::front);
+		ta.ap_node(ta.ac_next(v::front,1),v::front);
+		ta.ac_next(v::front,1)->ac=true;
+		//ta.ac_next(v::front,2)->ac=true;
+		ta.stk.push(ta.ac_next(v::front,2));
+
+	}
+};
 
 void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:back(turn),3:back(usiro)
 	switch(num){
 		case 0:
-
-			motor::fix_position();
 			ta.turn_l();
-			ta.go_st();
 			//hhh.type=ta.r_now()->type;
 			motor::move(3);
+			motor::fix_position();
+			ta.go_st();
 			motor::move(0);
 			motor::fix_position();
 			break;
@@ -103,10 +121,10 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 			motor::fix_position();
 			break;
 		case 2:
-			motor::fix_position();
 			ta.turn_r();
 			//hhh.type=ta.r_now()->type;
 			motor::move(2);
+			motor::fix_position();
 			ta.go_st();
 			motor::move(0);
 			motor::fix_position();
@@ -131,32 +149,43 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 			ta.turn_l();
 			//hhh.type=ta.r_now()->type;
 			motor::move(4);
-			motor::fix_position();
+			motor::fix_position(v::back);
 			break;
 		default:
 			break;
 	}
+	serial.string("now:: ");
+	serial.putint((int)ta.r_now());
+	serial.string(" -> ");
+	serial.putint(ta.r_now()->x);
+	serial.string(" , ");
+	serial.putint(ta.r_now()->y);
+	serial.string(" , ");
+	serial.putint(ta.r_now()->z);
+	serial.string(" : ");
+	serial.putint(ta.r_now()->type);
+	serial.string(" : ");
+	serial.putint(ta.r_now()->color);
+	serial.string("\n");
 	if(ta.r_now()->type==v::unknown){ta.r_now()->type = v::normal;}
 	if(ta.r_now()!=ta.r_start())ta.r_now()->color=color::black;
 	//if(hhh.key==1){ta.r_now()->type=v::r_kit;}
 	//hhh.key=0;
 	black_tile();
-	nachylenie();
+	nachylenie2();
 	make_nodes();
 }
 void move_n(node* n){//move to neighborhood((node*)n)
-    //lcd_clear();
-	//lcd_putstr(LCD1_TWI,"m");
 	if(n!=np){
-		//lcd_putstr(LCD1_TWI,"n");
-		serial.string("m_n-a");
+		serial.string("m_n");
         rep(i,4)if(ta.ac_next(i,1)==n && ta.ck_conect(ta.r_now(),ta.ac_next(i,1)) && ta.ac_next(i,1)->type!=v::black){
 	        move(i);
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"m_n");
-			serial.string("m_n-b");
+			serial.string("-a");
 			break;
 		}
+		serial.string("mn-end\n");
     }
 }
 
@@ -165,21 +194,41 @@ void move_toa(node* a){//move to (node*)a
 	ta.clear_dist();
 	ta.bfs(a,ta.r_now());
 	bl fg;
-	serial.string("m_a-a");
-	while(ta.r_now()!=a||a->type==v::black||a->type==v::slope){
+	serial.string("m_a:a=");
+	serial.putint((int)a);	
+	serial.string("\n");
+	serial.putint(a->x);
+	serial.string("\n");
+	serial.putint(a->y);
+	serial.string("\n");
+	serial.putint(a->z);
+	serial.string("\n");
+	serial.string("\n");
+	while(ta.r_now()!=a && a->type!=v::black && a->type!=v::slope){
 		fg = false;
 		rep(i,4){
-			serial.string("m_a-b");
+			serial.string("-a");
 			if(!fg && ta.ac_next(i,1)!=np && ta.ck_conect(ta.r_now(),ta.ac_next(i,1)) && ta.ac_next(i,1)->dist<ta.r_now()->dist && ta.ac_next(i,1)->type!=v::black){ move_n(ta.ac_next(i,1)); fg=true; }
 		}
 	}
-	serial.string("m_a-c");
+	serial.string("-b");
 	ta.clear_dist();
 	lcd_clear();
-	lcd_putstr(LCD1_TWI,"m_a");
+	serial.string("ma-end\n");
+	lcd_putstr(LCD1_TWI,"end");
 }
 
-void stack_dfs(){
+void stack_dfs(){	
+	serial.string("start: ");
+	serial.putint((int)ta.r_now());
+	serial.string("\n");
+	serial.putint(ta.r_now()->x);
+	serial.string("\n");
+	serial.putint(ta.r_now()->y);
+	serial.string("\n");
+	serial.putint(ta.r_now()->z);
+	serial.string("\n");
+	serial.string("-------------\n");
 	ta.stk.push(ta.r_start());
 	ta.r_start()->color=color::gray;
 	make_nodes();
@@ -188,27 +237,23 @@ void stack_dfs(){
 		if(ta.r_now()!=ta.r_start())ta.r_now()->color=color::black;
 		for(int j=1;j>=0;j--){
 			for(int i=3;i>=0;i--){
-				serial.string("k");
 				if(check_ping(i)>j+1)if(ta.ac_next(i,1)!=np&&ta.ac_next(i,1)->color==color::white&&ta.ck_conect(ta.r_now(),ta.ac_next(i,1))){
-					serial.string("a");
+					serial.string("m");
 					ta.stk.push(ta.ac_next(i,1));
 					ta.ac_next(i,1)->color=color::gray;
 				}
 			}
 		}
-		serial.string("b");
+		serial.string("n");
 		lcd_clear();
 		lcd_putstr(LCD1_TWI,"dfs");
 		fg=false;
 		while(!fg){
-			serial.string("c");
 			if(ta.stk.top()->color!=color::black && !ta.stk.empty() && ta.stk.top()!=np){
-				serial.string("d");
 				move_toa(ta.stk.top());
 				lcd_clear();
 				lcd_putstr(LCD1_TWI,"dfs2");
 				fg=true;
-				serial.string("e");
 			}else{ ta.stk.pop(); }	
 		}
 		serial.string("end");

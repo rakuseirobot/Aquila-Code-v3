@@ -15,6 +15,7 @@ PB2,PB3 --SS
 #include "ping_control.hpp"
 #include "ui_control.hpp"
 #include "mv_control.hpp"
+#include "data_structure.hpp"
 //#include "initializing.hpp"
 #include "gyro_control.hpp"
 #include <stdlib.h>
@@ -271,6 +272,7 @@ namespace motor{
 				}while((first<now?now-first:now-first+360)>270||(first<now?now-first:now-first+360)<90);
 				motor::brake(1);
 				motor::brake(2);
+				_delay_ms(100);
 				now=gyro_angle();
 				if((first<now?now-first:now-first+360)>270||(first<now?now-first:now-first+360)<90){
 					goto turn_retry2;
@@ -303,7 +305,9 @@ namespace motor{
 					}
 				}while((first<now?now-first:now-first+360)<90||(first<now?now-first:now-first+360)>270);
 				motor::brake(1);
-				motor::brake(2);now=gyro_angle();
+				motor::brake(2);
+				now=gyro_angle();
+				_delay_ms(100);
 				if((first<now?now-first:now-first+360)<90||(first<now?now-first:now-first+360)>270){
 					goto turn_retry3;
 				}
@@ -503,7 +507,7 @@ namespace motor{
 		lcd_clear();
 		return;
 	}
-	const int32_t turnvalue = 3;
+	const int32_t turnvalue = 1;
 	void turn_fix(uint8_t force){
 		int val=0;
 		uint8_t chk[2]={0};
@@ -618,7 +622,7 @@ namespace motor{
 	}
 	
 	
-	uint8_t notify_half(void){
+	uint8_t notify_half(uint8_t x){
 		uint8_t dis[10];
 		uint8_t i = 0;
 		dis[0] = c_p(1);
@@ -657,7 +661,12 @@ namespace motor{
 			lcd_putstr(LCD1_TWI,"NotifyHA");
 			serial.string("NotifyHalf");
 			serial.string("\n\r");
-			motor::move(6);
+			if (x == v::front){
+				motor::move(6);
+			}
+			else if(x == v::back){
+				motor::move(7);
+			}
 			lcd_clear();
 		}
 		return i;
@@ -762,211 +771,409 @@ namespace motor{
 			return 0;
 		}
 	}
-	uint8_t notify_long_acc(bool buz){//0:Ç»Çµ,1:â∫ÇË,2:è„ÇË
+	
+	uint8_t notify_long_acc(uint8_t x,bool buz){//0:Ç»Çµ,1:â∫ÇË,2:è„ÇË
 		float ac=acc_x_mes();
 		uint8_t spos = 6;
 		float now=0;
-		if(ac>=Acc_thre){//è„ÇË
-			if(longway<=ping(3)){
+		if(x==v::front){//ëOêiíÜ
+			if(ac>=Acc_thre){//è„ÇË
+				if(longway<=ping(3)){
+					ac=acc_x_mes();
+					if(ac>=Acc_thre){
+						if(buz==true){
+						buzzer(400);
+						buzzer(800);
+						}
+					}
+					else{
+						return 0;
+					}
+				}
+				else{
+					return 0;
+				}
+				lcd_clear();
+				lcd_putstr(LCD1_TWI,"NotiL!U");
+				m_send(1,2,spos,3);
+				m_send(2,2,spos,3);
+				ac=acc_x_mes();
+				while(ac>=Acc_thre){
+					ac=acc_x_mes();
+					if(!(ac>=Acc_thre)){
+						ac=acc_x_mes();
+					}
+					led(Redled,0);
+					now=acc_y_mes();
+					/*serial.putfloat(ac);
+					serial.string(",");
+					serial.putfloat(now);
+					serial.string("\n\r");*/
+					if(/*Acc_slope_thre*5>abs(now)&&*/abs(now)>Acc_slope_thre){//ÇªÇ±Ç‹Ç≈åXÇ¢ÇƒÇ¢Ç»Ç¢
+						if(now>Acc_slope_thre){//âEå¸Ç¢ÇƒÇÈ
+							error_led(2,1);
+							error_led(1,0);
+							do 
+							{
+								now=acc_y_mes();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(1,2,spos-2,3);
+									m_send(2,2,spos,3);
+								}
+							} while (now>Acc_slope_thre);
+						}
+						else if(now<Acc_slope_thre*-1){//ç∂Çå¸Ç¢ÇƒÇÈ
+							error_led(2,0);
+							error_led(1,1);
+							do
+							{
+								now=acc_y_mes();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(1,2,spos,3);
+									m_send(2,2,spos-2,3);
+								}
+							} while (now<Acc_slope_thre*-1);
+						}
+					}
+					/*else if(abs(now)>Acc_slope_thre*5){//ëÂÇ´Ç≠åXÇ¢ÇƒÇ¢ÇÈ
+						led(Redled,1);
+						if(now>Acc_slope_thre){//âEå¸Ç¢ÇƒÇÈ
+							error_led(2,1);
+							error_led(1,0);
+						}
+						else if(now<Acc_slope_thre*-1){//ç∂Çå¸Ç¢ÇƒÇÈ
+							error_led(2,0);
+							error_led(1,1);
+						}
+					}*/
+					else{
+						error_led(2,0);
+						error_led(1,0);
+					}
+					if(motor::status(1)==1||motor::status(2)==1){
+						m_send(1,2,spos,3);
+						m_send(2,2,spos,3);
+						error_led(2,0);
+						error_led(1,0);
+					}
+				
+					if(!(ac>=Acc_thre)){
+						ac=acc_x_mes();
+					}
+				}
+				led(Redled,0);
+				error_led(2,0);
+				error_led(1,0);
 				ac=acc_x_mes();
 				if(ac>=Acc_thre){
-					if(buz==true){
-					buzzer(400);
-					buzzer(800);
+					notify_long_acc(false);
+				}
+				motor::move(10);
+				ac=acc_x_mes();
+				if(ac>=Acc_thre){
+					notify_long_acc(false);
+				}
+				_delay_ms(1);
+				lcd_clear();
+				motor::move(7);
+				return 2;
+			}
+			else if(ac<=Acc_thre*-1){//â∫ÇË
+				if(longway/2<=ping(6)){
+					ac=acc_x_mes();
+					if(ac<=Acc_thre*-1){
+						if(buz==true){
+						buzzer(800);
+						buzzer(400);
+						}
+					}
+					else{
+						return 0;
 					}
 				}
 				else{
 					return 0;
 				}
-			}
-			else{
-				return 0;
-			}
-			lcd_clear();
-			lcd_putstr(LCD1_TWI,"NotiL!U");
-			m_send(1,2,spos,3);
-			m_send(2,2,spos,3);
-			ac=acc_x_mes();
-			while(ac>=Acc_thre){
+				lcd_clear();
+				lcd_putstr(LCD1_TWI,"NotiL!D");
+				m_send(1,2,spos,3);
+				m_send(2,2,spos,3);
 				ac=acc_x_mes();
-				if(!(ac>=Acc_thre)){
+				while(ac<=Acc_thre*-1){
 					ac=acc_x_mes();
+					if(!(ac<=Acc_thre*-1)){
+						ac=acc_x_mes();
+					}
+					led(Redled,0);
+					now=acc_y_mes();
+					/*serial.putfloat(ac);
+					serial.string(",");
+					serial.putfloat(now);
+					serial.string("\n\r");*/
+					if(/*Acc_slope_thre*5>abs(now)&&*/abs(now)>Acc_slope_thre){//ÇªÇ±Ç‹Ç≈åXÇ¢ÇƒÇ¢Ç»Ç¢
+						if(now>Acc_slope_thre){//âEå¸Ç¢ÇƒÇÈ
+							error_led(2,1);
+							error_led(1,0);
+							do 
+							{
+								now=acc_y_mes();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(1,2,spos,3);
+									m_send(2,2,spos-3,3);
+								}
+							} while (now>Acc_slope_thre);
+						}
+						else if(now<Acc_slope_thre*-1){//ç∂Çå¸Ç¢ÇƒÇÈ
+							error_led(2,0);
+							error_led(1,1);
+							do
+							{
+								now=acc_y_mes();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(1,2,spos-3,3);
+									m_send(2,2,spos,3);
+								}
+							} while (now<Acc_slope_thre*-1);
+						}
+					}
+					/*else if(abs(now)>Acc_slope_thre*5){//ëÂÇ´Ç≠åXÇ¢ÇƒÇ¢ÇÈ
+						led(Redled,1);
+						if(now>Acc_slope_thre){//âEå¸Ç¢ÇƒÇÈ
+							error_led(2,1);
+							error_led(1,0);
+						}
+						else if(now<Acc_slope_thre*-1){//ç∂Çå¸Ç¢ÇƒÇÈ
+							error_led(2,0);
+							error_led(1,1);
+						}
+					}*/
+					else{
+						error_led(2,0);
+						error_led(1,0);
+					}
+					if(motor::status(1)==1||motor::status(2)==1){
+						m_send(1,2,spos,3);
+						m_send(2,2,spos,3);
+						error_led(2,0);
+						error_led(1,0);
+					}
+				
+					if(!(ac<=Acc_thre*-1)){
+						ac=acc_x_mes();
+					}
 				}
 				led(Redled,0);
-				now=acc_y_mes();
-				/*serial.putfloat(ac);
-				serial.string(",");
-				serial.putfloat(now);
-				serial.string("\n\r");*/
-				if(/*Acc_slope_thre*5>abs(now)&&*/abs(now)>Acc_slope_thre){//ÇªÇ±Ç‹Ç≈åXÇ¢ÇƒÇ¢Ç»Ç¢
-					if(now>Acc_slope_thre){//âEå¸Ç¢ÇƒÇÈ
-						error_led(2,1);
-						error_led(1,0);
-						do 
-						{
-							now=acc_y_mes();
-							if(motor::status(1)==1||motor::status(2)==1){
-								m_send(1,2,spos-2,3);
-								m_send(2,2,spos,3);
-							}
-						} while (now>Acc_slope_thre);
-					}
-					else if(now<Acc_slope_thre*-1){//ç∂Çå¸Ç¢ÇƒÇÈ
-						error_led(2,0);
-						error_led(1,1);
-						do
-						{
-							now=acc_y_mes();
-							if(motor::status(1)==1||motor::status(2)==1){
-								m_send(1,2,spos,3);
-								m_send(2,2,spos-2,3);
-							}
-						} while (now<Acc_slope_thre*-1);
-					}
-				}
-				/*else if(abs(now)>Acc_slope_thre*5){//ëÂÇ´Ç≠åXÇ¢ÇƒÇ¢ÇÈ
-					led(Redled,1);
-					if(now>Acc_slope_thre){//âEå¸Ç¢ÇƒÇÈ
-						error_led(2,1);
-						error_led(1,0);
-					}
-					else if(now<Acc_slope_thre*-1){//ç∂Çå¸Ç¢ÇƒÇÈ
-						error_led(2,0);
-						error_led(1,1);
-					}
-				}*/
-				else{
-					error_led(2,0);
-					error_led(1,0);
-				}
-				if(motor::status(1)==1||motor::status(2)==1){
-					m_send(1,2,spos,3);
-					m_send(2,2,spos,3);
-					error_led(2,0);
-					error_led(1,0);
-				}
-				
-				if(!(ac>=Acc_thre)){
-					ac=acc_x_mes();
-				}
-			}
-			led(Redled,0);
-			error_led(2,0);
-			error_led(1,0);
-			ac=acc_x_mes();
-			if(ac>=Acc_thre){
-				notify_long_acc(false);
-			}
-			motor::move(10);
-			ac=acc_x_mes();
-			if(ac>=Acc_thre){
-				notify_long_acc(false);
-			}
-			_delay_ms(1);
-			lcd_clear();
-			motor::move(6);
-			return 2;
-		}
-		else if(ac<=Acc_thre*-1){//â∫ÇË
-			if(longway<=ping(6)){
+				error_led(2,0);
+				error_led(1,0);
 				ac=acc_x_mes();
 				if(ac<=Acc_thre*-1){
-					if(buz==true){
-					buzzer(800);
-					buzzer(400);
+					notify_long_acc(false);
+				}
+				motor::move(10);
+				ac=acc_x_mes();
+				if(ac<=Acc_thre*-1){
+					notify_long_acc(false);
+				}
+				_delay_ms(1);
+				lcd_clear();
+				motor::move(7);
+				return 1;
+			}
+		}else if(x==v::back){//å„êiíÜ
+			if(ac>=Acc_thre){//â∫ÇË
+				if(longway/2<=ping(3)){
+					ac=acc_x_mes();
+					if(ac>=Acc_thre){
+						if(buz==true){
+						buzzer(400);
+						buzzer(800);
+						}
+					}
+					else{
+						return 0;
 					}
 				}
 				else{
 					return 0;
 				}
-			}
-			else{
-				return 0;
-			}
-			lcd_clear();
-			lcd_putstr(LCD1_TWI,"NotiL!D");
-			m_send(1,2,spos,3);
-			m_send(2,2,spos,3);
-			ac=acc_x_mes();
-			while(ac<=Acc_thre*-1){
+				lcd_clear();
+				lcd_putstr(LCD1_TWI,"NotiL!D");
+				m_send(1,1,spos,3);
+				m_send(2,1,spos,3);
 				ac=acc_x_mes();
-				if(!(ac<=Acc_thre*-1)){
+				while(ac>=Acc_thre){
 					ac=acc_x_mes();
+					if(!(ac>=Acc_thre)){
+						ac=acc_x_mes();
+					}
+					led(Redled,0);
+					now=acc_y_mes();
+					if(/*Acc_slope_thre*5>abs(now)&&*/abs(now)>Acc_slope_thre){//ÇªÇ±Ç‹Ç≈åXÇ¢ÇƒÇ¢Ç»Ç¢
+						if(now>Acc_slope_thre){//âEå¸Ç¢ÇƒÇÈ
+							error_led(2,1);
+							error_led(1,0);
+							do 
+							{
+								now=acc_y_mes();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(2,1,spos-2,3);
+									m_send(1,1,spos,3);
+								}
+							} while (now>Acc_slope_thre);
+						}
+						else if(now<Acc_slope_thre*-1){//ç∂Çå¸Ç¢ÇƒÇÈ
+							error_led(2,0);
+							error_led(1,1);
+							do
+							{
+								now=acc_y_mes();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(2,1,spos,3);
+									m_send(1,1,spos-2,3);
+								}
+							} while (now<Acc_slope_thre*-1);
+						}
+					}
+					/*else if(abs(now)>Acc_slope_thre*5){//ëÂÇ´Ç≠åXÇ¢ÇƒÇ¢ÇÈ
+						led(Redled,1);
+						if(now>Acc_slope_thre){//âEå¸Ç¢ÇƒÇÈ
+							error_led(2,1);
+							error_led(1,0);
+						}
+						else if(now<Acc_slope_thre*-1){//ç∂Çå¸Ç¢ÇƒÇÈ
+							error_led(2,0);
+							error_led(1,1);
+						}
+					}*/
+					else{
+						error_led(2,0);
+						error_led(1,0);
+					}
+					if(motor::status(1)==1||motor::status(2)==1){
+						m_send(1,1,spos,3);
+						m_send(2,1,spos,3);
+						error_led(2,0);
+						error_led(1,0);
+					}
+				
+					if(!(ac>=Acc_thre)){
+						ac=acc_x_mes();
+					}
 				}
 				led(Redled,0);
-				now=acc_y_mes();
-				/*serial.putfloat(ac);
-				serial.string(",");
-				serial.putfloat(now);
-				serial.string("\n\r");*/
-				if(/*Acc_slope_thre*5>abs(now)&&*/abs(now)>Acc_slope_thre){//ÇªÇ±Ç‹Ç≈åXÇ¢ÇƒÇ¢Ç»Ç¢
-					if(now>Acc_slope_thre){//âEå¸Ç¢ÇƒÇÈ
-						error_led(2,1);
-						error_led(1,0);
-						do 
-						{
-							now=acc_y_mes();
-							if(motor::status(1)==1||motor::status(2)==1){
-								m_send(1,2,spos,3);
-								m_send(2,2,spos-3,3);
-							}
-						} while (now>Acc_slope_thre);
-					}
-					else if(now<Acc_slope_thre*-1){//ç∂Çå¸Ç¢ÇƒÇÈ
-						error_led(2,0);
-						error_led(1,1);
-						do
-						{
-							now=acc_y_mes();
-							if(motor::status(1)==1||motor::status(2)==1){
-								m_send(1,2,spos-3,3);
-								m_send(2,2,spos,3);
-							}
-						} while (now<Acc_slope_thre*-1);
-					}
+				error_led(2,0);
+				error_led(1,0);
+				ac=acc_x_mes();
+				if(ac>=Acc_thre){
+					notify_long_acc(false);
 				}
-				/*else if(abs(now)>Acc_slope_thre*5){//ëÂÇ´Ç≠åXÇ¢ÇƒÇ¢ÇÈ
-					led(Redled,1);
-					if(now>Acc_slope_thre){//âEå¸Ç¢ÇƒÇÈ
-						error_led(2,1);
-						error_led(1,0);
-					}
-					else if(now<Acc_slope_thre*-1){//ç∂Çå¸Ç¢ÇƒÇÈ
-						error_led(2,0);
-						error_led(1,1);
-					}
-				}*/
-				else{
-					error_led(2,0);
-					error_led(1,0);
+				motor::move(10);
+				ac=acc_x_mes();
+				if(ac>=Acc_thre){
+					notify_long_acc(false);
 				}
-				if(motor::status(1)==1||motor::status(2)==1){
-					m_send(1,2,spos,3);
-					m_send(2,2,spos,3);
-					error_led(2,0);
-					error_led(1,0);
-				}
-				
-				if(!(ac<=Acc_thre*-1)){
+				_delay_ms(1);
+				lcd_clear();
+				motor::move(7);
+				return 1;
+			}
+			else if(ac<=Acc_thre*-1){//è∏ÇË
+				if(longway<=ping(6)){
 					ac=acc_x_mes();
+					if(ac<=Acc_thre*-1){
+						if(buz==true){
+						buzzer(800);
+						buzzer(400);
+						}
+					}
+					else{
+						return 0;
+					}
 				}
+				else{
+					return 0;
+				}
+				lcd_clear();
+				lcd_putstr(LCD1_TWI,"NotiL!D");
+				m_send(1,1,spos,3);
+				m_send(2,1,spos,3);
+				ac=acc_x_mes();
+				while(ac<=Acc_thre*-1){
+					ac=acc_x_mes();
+					if(!(ac<=Acc_thre*-1)){
+						ac=acc_x_mes();
+					}
+					led(Redled,0);
+					now=acc_y_mes();
+					if(/*Acc_slope_thre*5>abs(now)&&*/abs(now)>Acc_slope_thre){//ÇªÇ±Ç‹Ç≈åXÇ¢ÇƒÇ¢Ç»Ç¢
+						if(now>Acc_slope_thre){//âEå¸Ç¢ÇƒÇÈ
+							error_led(2,1);
+							error_led(1,0);
+							do 
+							{
+								now=acc_y_mes();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(2,1,spos,3);
+									m_send(1,1,spos-3,3);
+								}
+							} while (now>Acc_slope_thre);
+						}
+						else if(now<Acc_slope_thre*-1){//ç∂Çå¸Ç¢ÇƒÇÈ
+							error_led(2,0);
+							error_led(1,1);
+							do
+							{
+								now=acc_y_mes();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(2,1,spos-3,3);
+									m_send(1,1,spos,3);
+								}
+							} while (now<Acc_slope_thre*-1);
+						}
+					}
+					/*else if(abs(now)>Acc_slope_thre*5){//ëÂÇ´Ç≠åXÇ¢ÇƒÇ¢ÇÈ
+						led(Redled,1);
+						if(now>Acc_slope_thre){//âEå¸Ç¢ÇƒÇÈ
+							error_led(2,1);
+							error_led(1,0);
+						}
+						else if(now<Acc_slope_thre*-1){//ç∂Çå¸Ç¢ÇƒÇÈ
+							error_led(2,0);
+							error_led(1,1);
+						}
+					}*/
+					else{
+						error_led(2,0);
+						error_led(1,0);
+					}
+					if(motor::status(1)==1||motor::status(2)==1){
+						m_send(1,1,spos,3);
+						m_send(2,1,spos,3);
+						error_led(2,0);
+						error_led(1,0);
+					}
+				
+					if(!(ac<=Acc_thre*-1)){
+						ac=acc_x_mes();
+					}
+				}
+				led(Redled,0);
+				error_led(2,0);
+				error_led(1,0);
+				ac=acc_x_mes();
+				if(ac<=Acc_thre*-1){
+					notify_long_acc(false);
+				}
+				motor::move(10);
+				ac=acc_x_mes();
+				if(ac<=Acc_thre*-1){
+					notify_long_acc(false);
+				}
+				_delay_ms(1);
+				lcd_clear();
+				motor::move(7);
+				return 2;
 			}
-			led(Redled,0);
-			error_led(2,0);
-			error_led(1,0);
-			ac=acc_x_mes();
-			if(ac<=Acc_thre*-1){
-				notify_long_acc(false);
-			}
-			motor::move(10);
-			ac=acc_x_mes();
-			if(ac<=Acc_thre*-1){
-				notify_long_acc(false);
-			}
-			_delay_ms(1);
-			lcd_clear();
-			motor::move(6);
-			return 1;
 		}
 		else{
 			lcd_clear();
@@ -985,9 +1192,9 @@ namespace motor{
 	// 	motor::turn_fix();
 	// 	return e;
 	// }
-	void fix_position(void){
+	void fix_position(uint8_t x){
 		turn_fix();
-		notify_half();
+		notify_half(x);
 		gb_fix();
 		turn_fix();
 		//return;
