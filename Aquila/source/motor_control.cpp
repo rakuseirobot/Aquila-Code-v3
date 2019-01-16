@@ -125,6 +125,99 @@ namespace motor{
 		return mspi(0,m);
 	}
 	void wait(bool check){
+		if((PORTJ.IN & PIN5_bm)==0 && check==true){
+			mv_cap(1,false);
+			mv_cap(2,false);
+			mv_cap(3,false);
+			check_mv(1);
+			check=false;
+		}
+		if((PORTJ.IN & PIN6_bm)==0 && check==true){
+			mv_cap(1,false);
+			mv_cap(2,false);
+			mv_cap(3,false);
+			check_mv(2);
+			check=false;
+		}
+		if((PORTJ.IN & PIN7_bm)==0 && check==true){
+			mv_cap(1,false);
+			mv_cap(2,false);
+			mv_cap(3,false);
+			check_mv(3);
+			check=false;
+		}
+		while(mspi(0,1)!=1){
+			if((PORTJ.IN & PIN5_bm)==0 && check==true){
+				mv_cap(1,false);
+				mv_cap(2,false);
+				mv_cap(3,false);
+				check_mv(1);
+				check=false;
+			}
+			if((PORTJ.IN & PIN6_bm)==0 && check==true){
+				mv_cap(1,false);
+				mv_cap(2,false);
+				mv_cap(3,false);
+				check_mv(2);
+				check=false;
+			}
+			if((PORTJ.IN & PIN7_bm)==0 && check==true){
+				mv_cap(1,false);
+				mv_cap(2,false);
+				mv_cap(3,false);
+				check_mv(3);
+				check=false;
+			}
+		}
+		while(mspi(0,2)!=1){
+			if((PORTJ.IN & PIN5_bm)==0 && check==true){
+				mv_cap(1,false);
+				mv_cap(2,false);
+				mv_cap(3,false);
+				check_mv(1);
+				check=false;
+			}
+			if((PORTJ.IN & PIN6_bm)==0 && check==true){
+				mv_cap(1,false);
+				mv_cap(2,false);
+				mv_cap(3,false);
+				check_mv(2);
+				check=false;
+			}
+			if((PORTJ.IN & PIN7_bm)==0 && check==true){
+				mv_cap(1,false);
+				mv_cap(2,false);
+				mv_cap(3,false);
+				check_mv(3);
+				check=false;
+			}
+		}
+		if((PORTJ.IN & PIN5_bm)==0 && check==true){
+			mv_cap(1,false);
+			mv_cap(2,false);
+			mv_cap(3,false);
+			check_mv(1);
+			check=false;
+		}
+		if((PORTJ.IN & PIN6_bm)==0 && check==true){
+			mv_cap(1,false);
+			mv_cap(2,false);
+			mv_cap(3,false);
+			check_mv(2);
+			check=false;
+		}
+		if((PORTJ.IN & PIN7_bm)==0 && check==true){
+			mv_cap(1,false);
+			mv_cap(2,false);
+			mv_cap(3,false);
+			check_mv(3);
+			check=false;
+		}
+		return;
+	}
+
+	/*
+	void wait(bool check){
 		bool chk[3]={true,true,true};
 		if(check==false){
 			chk[0]=false;
@@ -225,8 +318,7 @@ namespace motor{
 			chk[2]=false;
 		}
 		return;
-	}
-
+	}*/
 	void move(uint8_t x=6){// x = 0:1 block Advance 1:2 blocks Advance 2:Right Turn with Gyro 3:Left Turn with Gyro 4:1 block Back 5:2 block Back 6:Half block Advance 7:Half block Back 8:right Turn without Compass 9:left Turn without Compass 
 		_delay_ms(5);
 		float first = 0;
