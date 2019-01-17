@@ -103,6 +103,15 @@ void nachylenie2(){
 	}
 };
 
+bool blind_alley(){
+	node* t = ta.r_now();
+	if(t->type==v::black||t->type==v::normal)return false;
+	uint8_t ct = 0;
+	rep(i,4){ if(t->next[i]!=np)ct++; }
+	if(ct==1)return true;
+	else return false;
+}
+
 void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:back(turn),3:back(usiro)
 	switch(num){
 		case 0:
@@ -167,13 +176,25 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 	serial.string(" : ");
 	serial.putint(ta.r_now()->color);
 	serial.string("\n");
-	if(ta.r_now()->type==v::unknown){ta.r_now()->type = v::normal;}
+	//if(ta.r_now()->type==v::unknown){ta.r_now()->type = v::normal;}
 	if(ta.r_now()!=ta.r_start())ta.r_now()->color=color::black;
 	//if(hhh.key==1){ta.r_now()->type=v::r_kit;}
 	//hhh.key=0;
 	black_tile();
 	nachylenie2();
 	make_nodes();
+	if(blind_alley()){
+		ta.turn_r();
+		//hhh.type=ta.r_now()->type;
+		motor::move(2);
+		motor::fix_position();
+		///
+		ta.turn_l();
+		//hhh.type=ta.r_now()->type;
+		motor::move(3);
+		motor::fix_position();
+	}
+	if(ta.r_now()->type==v::unknown){ta.r_now()->type = v::normal;}
 }
 void move_n(node* n){//move to neighborhood((node*)n)
 	if(n!=np){

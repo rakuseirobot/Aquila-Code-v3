@@ -22,14 +22,19 @@ namespace v{
     ci unknown = 0;
     ci normal = 1;
     ci black=2;
-    ci r_kit=3;
+    //ci r_kit=3;
     ci c_point=4;
     ci slope=5;
     //ci hisai=6;
     ci start = 7;
     ci kaidan = 8;
+	ci H =20;
+	ci S =21;
+	ci U =22;
+	ci sermo=23;
 	//type
     ci vv[4][2]={{-1,0},{0,1},{1,0},{0,-1}};//vv[dir][0]:=x,[1]:=y
+	
 }
 
 namespace color{
