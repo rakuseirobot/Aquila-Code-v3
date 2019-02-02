@@ -13,20 +13,20 @@ extern twi gyro;
 twi eeprom = gyro;
 #define EEPROM_ADDR 0x50
 
-void erom::WriteSingle(unsigned int eeaddress,uint8_t data ) 
+void erom::WriteSingle(uint16_t eeaddress,uint8_t data ) 
 {
     eeprom.Address(EEPROM_ADDR<<1,0);
-    eeprom.WriteSingle((int)(eeaddress >> 8));   // MSB
-    eeprom.WriteSingle((int)(eeaddress & 0xFF)); // LSB
+    eeprom.WriteSingle(eeaddress >> 8);   // MSB
+    eeprom.WriteSingle(eeaddress & 0xFF); // LSB
     eeprom.WriteSingle(data);
     eeprom.Stop();
     _delay_ms(5);
 }
-void erom::WritePage(unsigned int eeaddress,uint8_t *data ) 
+void erom::WritePage(uint16_t eeaddress,uint8_t *data ) 
 {
     eeprom.Address(EEPROM_ADDR<<1,0);
-    eeprom.WriteSingle((int)(eeaddress >> 8));   // MSB
-    eeprom.WriteSingle((int)(eeaddress & 0xFF)); // LSB
+    eeprom.WriteSingle(eeaddress >> 8);   // MSB
+    eeprom.WriteSingle(eeaddress & 0xFF); // LSB
     for (uint8_t i=0;i<64;i++){
         eeprom.WriteSingle(*data);
         data++;
@@ -40,20 +40,19 @@ uint8_t erom::ReadSingle(uint16_t eeaddress)
 {
     uint8_t rdata = 0xFF;
     eeprom.Address(EEPROM_ADDR<<1,0);
-    eeprom.WriteSingle((int)(eeaddress >> 8));   // MSB
-    eeprom.WriteSingle((int)(eeaddress & 0xFF)); // LSB
+    eeprom.WriteSingle(eeaddress >> 8);   // MSB
+    eeprom.WriteSingle(eeaddress & 0xFF); // LSB
     eeprom.Address(0x50<<1,1); 
 	rdata = eeprom.ReadSingle(0); //1byte–ÚŽóM
 	eeprom.Stop();
     return rdata;
 }
 
-void erom::ReadMulti(uint16_t eeaddress,uint8_t *d,uin16_t val)
+void erom::ReadMulti(uint16_t eeaddress,uint8_t *d,uint16_t val)
 {
-	uint8_t rdata = 0xFF;
 	eeprom.Address(EEPROM_ADDR<<1,0);
-	eeprom.WriteSingle((int)(eeaddress >> 8));   // MSB
-	eeprom.WriteSingle((int)(eeaddress & 0xFF)); // LSB
+	eeprom.WriteSingle(eeaddress >> 8);   // MSB
+	eeprom.WriteSingle(eeaddress & 0xFF); // LSB
 	eeprom.Address(0x50<<1,1);
     for (uint16_t i=0;i<val;i++){       
         *d = gyro.ReadSingle(1); //1byte–ÚŽóM

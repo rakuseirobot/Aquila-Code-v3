@@ -12,10 +12,10 @@
 #include <stdint.h>
 
 namespace erom{
-    void erom::WritePage(unsigned int eeaddress,uint8_t *data ) ;
-    void WriteSingle(unsigned int eeaddress,uint8_t data );
+    void WritePage(uint16_t eeaddress,uint8_t *data);
+    void WriteSingle(uint16_t eeaddress,uint8_t data );
     uint8_t ReadSingle(uint16_t eeaddress);
-    void erom::ReadMulti(uint16_t eeaddress,uint8_t *d,uin16_t val);
+    void ReadMulti(uint16_t eeaddress,uint8_t *d,uint16_t val);
 }
 
 
