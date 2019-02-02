@@ -58,6 +58,6 @@ void erom::ReadMulti(uint16_t eeaddress,uint8_t *d,uint16_t val)
         *d = gyro.ReadSingle(1); //1byte目受信
         d++;
     }
-	rdata = eeprom.ReadSingle(0); //最終byte目受信
+	*d = eeprom.ReadSingle(0); //最終byte目受信
 	eeprom.Stop();
 }
