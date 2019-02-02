@@ -22,6 +22,19 @@ void erom::WriteSingle(unsigned int eeaddress,uint8_t data )
     eeprom.Stop();
     _delay_ms(5);
 }
+void erom::WritePage(unsigned int eeaddress,uint8_t *data ) 
+{
+    eeprom.Address(EEPROM_ADDR<<1,0);
+    eeprom.WriteSingle((int)(eeaddress >> 8));   // MSB
+    eeprom.WriteSingle((int)(eeaddress & 0xFF)); // LSB
+    for (uint8_t i=0;i<64;i++){
+        eeprom.WriteSingle(*data);
+        data++;
+    }
+    eeprom.WriteSingle(*data);
+    eeprom.Stop();
+    _delay_ms(5);
+}
 
 uint8_t erom::ReadSingle(uint16_t eeaddress) 
 {
@@ -29,9 +42,23 @@ uint8_t erom::ReadSingle(uint16_t eeaddress)
     eeprom.Address(EEPROM_ADDR<<1,0);
     eeprom.WriteSingle((int)(eeaddress >> 8));   // MSB
     eeprom.WriteSingle((int)(eeaddress & 0xFF)); // LSB
-    eeprom.Stop();
-    eeprom.Address(0x50<<1,1); //J901との通信開始
+    eeprom.Address(0x50<<1,1); 
 	rdata = eeprom.ReadSingle(0); //1byte目受信
 	eeprom.Stop();
     return rdata;
+}
+
+void erom::ReadMulti(uint16_t eeaddress,uint8_t *d,uin16_t val)
+{
+	uint8_t rdata = 0xFF;
+	eeprom.Address(EEPROM_ADDR<<1,0);
+	eeprom.WriteSingle((int)(eeaddress >> 8));   // MSB
+	eeprom.WriteSingle((int)(eeaddress & 0xFF)); // LSB
+	eeprom.Address(0x50<<1,1);
+    for (uint16_t i=0;i<val;i++){       
+        *d = gyro.ReadSingle(1); //1byte目受信
+        d++;
+    }
+	rdata = eeprom.ReadSingle(0); //最終byte目受信
+	eeprom.Stop();
 }
