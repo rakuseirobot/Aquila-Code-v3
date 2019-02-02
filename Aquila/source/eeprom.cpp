@@ -8,6 +8,7 @@
 #include "eeprom.hpp"
 #include "xmega_twi.hpp"
 #include "gyro_control.hpp"
+#include <util/delay.h>
 extern twi gyro;
 twi eeprom = gyro;
 #define EEPROM_ADDR 0x50
@@ -22,7 +23,7 @@ void erom::WriteSingle(unsigned int eeaddress,uint8_t data )
     _delay_ms(5);
 }
 
-uint8_t wrom::ReadSingle(uint16_t eeaddress) 
+uint8_t erom::ReadSingle(uint16_t eeaddress) 
 {
     uint8_t rdata = 0xFF;
     eeprom.Address(EEPROM_ADDR<<1,0);
