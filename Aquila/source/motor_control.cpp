@@ -525,7 +525,7 @@ namespace motor{
 		dis[1]=ping(6);//Back
 		if(Sikiti>=dis[0]){
 			_delay_ms(1);
-			dis[0]==ping(3);
+			dis[0]=ping(3);
 			if(!(Sikiti>=dis[0])){
 				return;
 			}
