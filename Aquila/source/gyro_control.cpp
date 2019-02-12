@@ -16,11 +16,11 @@
 twi gyro(&TWIC,250000);
 
 void gyro_send(uint8_t reg,uint8_t dh,uint8_t dl){
-	gyro.Address(0x50<<1,0); //J901との通信開始
+	gyro.Address(0x50<<1,0); //J901との通扨開始
 	gyro.WriteSingle(reg);
 	gyro.WriteSingle(dh);
 	gyro.WriteSingle(dl);
-	gyro.Stop(); //通信終了
+	gyro.Stop(); //通扨扞了
 }
 
 float gyro_angle(void){
@@ -117,27 +117,27 @@ void gyro_Save(void){
 
 
 void gyro_cali(void){
-	//Z軸調整モード
+	//Z軸調攬モ拏ド
 	buzzer(600);
-	gyro_send(0x01,0x01,0);//キャリブレーションモード選択
-	_delay_ms(1000); //待機時間）（任意）
-	//磁気センサキャリブレーションモード
-	gyro_send(0x01,0x02,0);//キャリブレーションモード選択
+	gyro_send(0x01,0x01,0);//キャリブレ拏ションモ拏ド選択
+	_delay_ms(1000); //待機時間挧拱任意挧
+	//磁気センサキャリブレ拏ションモ拏ド
+	gyro_send(0x01,0x02,0);//キャリブレ拏ションモ拏ド選択
 	buzzer(600);
-	_delay_ms(5000); //キャリブレーション時間（任意）
-	gyro_send(0x01,0,0);//キャリブレーションモード終了
-	_delay_ms(1000); //待機時間）（任意）
-	gyro_send(0,0,0);//キャリブレーションモード終了
-	_delay_ms(1000); //待機時間）（任意）
+	_delay_ms(5000); //キャリブレ拏ション時間拱任意挧
+	gyro_send(0x01,0,0);//キャリブレ拏ションモ拏ド扞了
+	_delay_ms(1000); //待機時間挧拱任意挧
+	gyro_send(0,0,0);//キャリブレ拏ションモ拏ド扞了
+	_delay_ms(1000); //待機時間挧拱任意挧
 	buzzer(400);
 }
 void jy_recv_wd(uint8_t sd,int16_t *d){
-	gyro.Address(0x50<<1,0); //J901との通信開始
-	gyro.WriteSingle(sd); //z軸の角度を読み取るアドレスを送信
-	gyro.Address(0x50<<1,1); //J901との通信開始
-	*d = gyro.ReadSingle(1); //1byte目受信
+	gyro.Address(0x50<<1,0); //J901との通扨開始
+	gyro.WriteSingle(sd); //z軸の角度を読み取るアドレスを送扨
+	gyro.Address(0x50<<1,1); //J901との通扨開始
+	*d = gyro.ReadSingle(1); //1byte目受扨
 	d++;
-	*d = gyro.ReadSingle(0); //2byte目受信
+	*d = gyro.ReadSingle(0); //2byte目受扨
 	gyro.Stop();
 	return;
 }
