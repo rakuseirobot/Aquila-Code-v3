@@ -11,9 +11,9 @@
 #include <util/delay.h>
 extern twi gyro;
 twi eeprom = gyro;
-#define EEPROM_ADDR 0xA0
+#define EEPROM_ADDR 0xAE
 
-void erom::WriteSingle(uint16_t eeaddress,uint8_t data ) //０~32767
+void erom::WriteSingle(uint16_t eeaddress,uint8_t data ) //０~31999
 {
     eeprom.Address(EEPROM_ADDR,0);
     eeprom.WriteSingle(eeaddress >> 8);   // MSB
@@ -22,12 +22,13 @@ void erom::WriteSingle(uint16_t eeaddress,uint8_t data ) //０~32767
     eeprom.Stop();
     _delay_ms(20);
 }
-void erom::WritePage(uint16_t eeaddress,uint8_t *data ) 
-{
+void erom::WritePage(uint16_t pages,uint8_t *data )  //ページ単位での代入!アドレスじゃないよ!  0-500!!
+{   
+    uint16_t eeaddress=pages*64;
     eeprom.Address(EEPROM_ADDR,0);
     eeprom.WriteSingle(eeaddress >> 8);   // MSB
     eeprom.WriteSingle(eeaddress & 0xFF); // LSB
-    for (uint8_t i=0;i<64;i++){
+    for (uint8_t i=0;i<63;i++){
         eeprom.WriteSingle(*data);
         data++;
     }
@@ -48,14 +49,14 @@ uint8_t erom::ReadSingle(uint16_t eeaddress)
     return rdata;
 }
 
-void erom::ReadMulti(uint16_t eeaddress,uint8_t *d,uint16_t val)
+void erom::ReadMulti(uint16_t eeaddress,uint8_t *d,uint16_t val) //どこ指定してもいい!
 {
 	eeprom.Address(EEPROM_ADDR,0);
 	eeprom.WriteSingle(eeaddress >> 8);   // MSB
 	eeprom.WriteSingle(eeaddress & 0xFF); // LSB
 	eeprom.Address(EEPROM_ADDR,1);
-    for (uint16_t i=0;i<val;i++){       
-        *d = gyro.ReadSingle(1); //1byte目受信
+    for (uint16_t i=0;i<val-1;i++){       
+        *d = eeprom.ReadSingle(1); //1byte目受信
         d++;
     }
 	*d = eeprom.ReadSingle(0); //最終byte目受信
