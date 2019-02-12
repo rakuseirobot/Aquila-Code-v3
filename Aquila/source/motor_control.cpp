@@ -1196,7 +1196,7 @@ namespace motor{
 					return 0;
 				}
 				lcd_clear();
-				lcd_putstr(LCD1_TWI,"NotiL!D");
+				lcd_putstr(LCD1_TWI,"NotiL!U");
 				m_send(1,1,spos,3);
 				m_send(2,1,spos,3);
 				ac=acc_x_mes();
@@ -1292,16 +1292,35 @@ namespace motor{
 			if(ang<=Ang_slope_Norm-Ang_slope_thre){//ã‚è
 				lcd_clear();
 				lcd_putstr(LCD1_TWI,"NotiL!U");
+				m_send(1,2,spos,3);
+				m_send(2,2,spos,3);
 				while(ang<=Ang_slope_Norm-Ang_slope_thre){
 					ang=gyro_angle_y();
+					anx=gyro_angle_x();
+					if(motor::status(1)==1||motor::status(2)==1){
+						m_send(1,2,spos,3);
+						m_send(2,2,spos,3);
+						error_led(2,0);
+						error_led(1,0);
+					}
 				}
 				return 2;
 			}
 			else if(ang>=Ang_slope_Norm+Ang_slope_thre){//‰º‚è
 				lcd_clear();
 				lcd_putstr(LCD1_TWI,"NotiL!D");
+				
+				m_send(1,2,spos,3);
+				m_send(2,2,spos,3);
 				while(ang>=Ang_slope_Norm+Ang_slope_thre){
 					ang=gyro_angle_y();
+					anx=gyro_angle_x();
+					if(motor::status(1)==1||motor::status(2)==1){
+						m_send(1,2,spos,3);
+						m_send(2,2,spos,3);
+						error_led(2,0);
+						error_led(1,0);
+					}
 				}
 				return 1;
 			}
@@ -1309,16 +1328,34 @@ namespace motor{
 			if(ang>=Ang_slope_Norm+Ang_slope_thre){//‰º‚è
 				lcd_clear();
 				lcd_putstr(LCD1_TWI,"NotiL!D");
+				m_send(1,1,spos,3);
+				m_send(2,1,spos,3);
 				while(ang>=Ang_slope_Norm+Ang_slope_thre){
 					ang=gyro_angle_y();
+					anx=gyro_angle_x();
+					if(motor::status(1)==1||motor::status(2)==1){
+						m_send(1,1,spos,3);
+						m_send(2,1,spos,3);
+						error_led(2,0);
+						error_led(1,0);
+					}
 				}
 				return 1;
 			}
 			else if(ang<=Ang_slope_Norm-Ang_slope_thre){//¸‚è
 				lcd_clear();
 				lcd_putstr(LCD1_TWI,"NotiL!U");
+				m_send(1,1,spos,3);
+				m_send(2,1,spos,3);
 				while(ang<=Ang_slope_Norm-Ang_slope_thre){
 					ang=gyro_angle_y();
+					anx=gyro_angle_x();
+					if(motor::status(1)==1||motor::status(2)==1){
+						m_send(1,1,spos,3);
+						m_send(2,1,spos,3);
+						error_led(2,0);
+						error_led(1,0);
+					}
 				}
 				return 2;
 			}
