@@ -1283,6 +1283,52 @@ namespace motor{
 		}
 		return 0;
 	}
+	
+	uint8_t notify_long_ang(uint8_t x,bool buz){//0:Ç»Çµ,1:â∫ÇË,2:è„ÇË
+		float ang=gyro_angle_y();
+		float anx=gyro_angle_x();
+		uint8_t spos = 6;
+		if(x==v::front){//ëOêiíÜ
+			if(ang<=Ang_slope_Norm-Ang_slope_thre){//è„ÇË
+				lcd_clear();
+				lcd_putstr(LCD1_TWI,"NotiL!U");
+				while(ang<=Ang_slope_Norm-Ang_slope_thre){
+					ang=gyro_angle_y();
+				}
+				return 2;
+			}
+			else if(ang>=Ang_slope_Norm+Ang_slope_thre){//â∫ÇË
+				lcd_clear();
+				lcd_putstr(LCD1_TWI,"NotiL!D");
+				while(ang>=Ang_slope_Norm+Ang_slope_thre){
+					ang=gyro_angle_y();
+				}
+				return 1;
+			}
+		}else if(x==v::back){//å„êiíÜ
+			if(ang>=Ang_slope_Norm+Ang_slope_thre){//â∫ÇË
+				lcd_clear();
+				lcd_putstr(LCD1_TWI,"NotiL!D");
+				while(ang>=Ang_slope_Norm+Ang_slope_thre){
+					ang=gyro_angle_y();
+				}
+				return 1;
+			}
+			else if(ang<=Ang_slope_Norm-Ang_slope_thre){//è∏ÇË
+				lcd_clear();
+				lcd_putstr(LCD1_TWI,"NotiL!U");
+				while(ang<=Ang_slope_Norm-Ang_slope_thre){
+					ang=gyro_angle_y();
+				}
+				return 2;
+			}
+		}
+		else{
+			lcd_clear();
+			return 0;
+		}
+		return 0;
+	}
 	// uint8_t fix_position(void){
 	// 	uint8_t i=0;
 	// 	uint8_t e=0;

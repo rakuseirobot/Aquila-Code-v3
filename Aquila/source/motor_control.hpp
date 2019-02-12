@@ -15,6 +15,9 @@
 #define Acc_thre_u 2.9
 #define Acc_thre_d -4
 #define Acc_slope_thre 0.1
+#define Ang_slope_Norm 178
+#define Ang_slope_thre 20
+#define Ang_x_Norm 180
 void Save_angle(void);
 void init_motor(void);
 uint8_t mspi(uint8_t val,uint8_t i);
@@ -35,6 +38,7 @@ namespace motor{
 	void gb_fix(void);
 	void turn_fix(uint8_t x=0);
 	uint8_t notify_long_acc(uint8_t x,bool buz=true);
+	uint8_t notify_long_ang(uint8_t x,bool buz=true);
 	uint8_t notify_long_ex(void);
 	void fix_angle(void);
 	void fix_angle_v(float angl);
