@@ -1292,13 +1292,45 @@ namespace motor{
 			if(ang<=Ang_slope_Norm-Ang_slope_thre){//ã‚è
 				lcd_clear();
 				lcd_putstr(LCD1_TWI,"NotiL!U");
-				m_send(1,2,spos,3);
-				m_send(2,2,spos,3);
 				buzzer(400);
 				buzzer(800);
+				m_send(1,2,spos,3);
+				m_send(2,2,spos,3);
 				while(ang<=Ang_slope_Norm-Ang_slope_thre){
 					ang=gyro_angle_y();
 					anx=gyro_angle_x();
+					if(abs(anx-Ang_x_Norm)>Ang_x_thre){//‚»‚±‚Ü‚ÅŒX‚¢‚Ä‚¢‚È‚¢
+						if(anx>Ang_x_Norm){//‰EŒü‚¢‚Ä‚é
+							error_led(2,1);
+							error_led(1,0);
+							do 
+							{
+								anx=gyro_angle_x();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(1,2,spos-2,3);
+									m_send(2,2,spos,3);
+								}
+							} while (anx>Ang_x_Norm);
+						}
+						else if(anx<Ang_x_Norm){//¶‚ðŒü‚¢‚Ä‚é
+							error_led(2,0);
+							error_led(1,1);
+							do
+							{
+								anx=gyro_angle_x();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(1,2,spos,3);
+									m_send(2,2,spos-2,3);
+								}
+							} while (anx<Ang_x_Norm);
+						}
+						m_send(1,2,spos,3);
+						m_send(2,2,spos,3);
+					}
+					else{
+						error_led(2,0);
+						error_led(1,0);
+					}
 					if(motor::status(1)==1||motor::status(2)==1){
 						m_send(1,2,spos,3);
 						m_send(2,2,spos,3);
@@ -1318,6 +1350,38 @@ namespace motor{
 				while(ang>=Ang_slope_Norm+Ang_slope_thre){
 					ang=gyro_angle_y();
 					anx=gyro_angle_x();
+					if(abs(anx-Ang_x_Norm)>Ang_x_thre){//‚»‚±‚Ü‚ÅŒX‚¢‚Ä‚¢‚È‚¢
+						if(anx>Ang_x_Norm){//‰EŒü‚¢‚Ä‚é
+							error_led(2,1);
+							error_led(1,0);
+							do 
+							{
+								anx=gyro_angle_x();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(1,2,spos,3);
+									m_send(2,2,spos-2,3);
+								}
+							} while (anx>Ang_x_Norm);
+						}
+						else if(anx<Ang_x_Norm){//¶‚ðŒü‚¢‚Ä‚é
+							error_led(2,0);
+							error_led(1,1);
+							do
+							{
+								anx=gyro_angle_x();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(1,2,spos-2,3);
+									m_send(2,2,spos,3);
+								}
+							} while (anx<Ang_x_Norm);
+						}
+						m_send(1,2,spos,3);
+						m_send(2,2,spos,3);
+					}
+					else{
+						error_led(2,0);
+						error_led(1,0);
+					}
 					if(motor::status(1)==1||motor::status(2)==1){
 						m_send(1,2,spos,3);
 						m_send(2,2,spos,3);
@@ -1331,13 +1395,45 @@ namespace motor{
 			if(ang>=Ang_slope_Norm+Ang_slope_thre){//‰º‚è
 				lcd_clear();
 				lcd_putstr(LCD1_TWI,"NotiL!D");
-				buzzer(400);
-				buzzer(800);
 				m_send(1,1,spos,3);
 				m_send(2,1,spos,3);
+				buzzer(400);
+				buzzer(800);
 				while(ang>=Ang_slope_Norm+Ang_slope_thre){
 					ang=gyro_angle_y();
 					anx=gyro_angle_x();
+					if(abs(anx-Ang_x_Norm)>Ang_x_thre){//‚»‚±‚Ü‚ÅŒX‚¢‚Ä‚¢‚È‚¢
+						if(anx>Ang_x_Norm){//‰EŒü‚¢‚Ä‚é
+							error_led(2,1);
+							error_led(1,0);
+							do 
+							{
+								anx=gyro_angle_x();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(1,1,spos,3);
+									m_send(2,1,spos-2,3);
+								}
+							} while (anx>Ang_x_Norm);
+						}
+						else if(anx<Angx_Norm){//¶‚ðŒü‚¢‚Ä‚é
+							error_led(2,0);
+							error_led(1,1);
+							do
+							{
+								anx=gyro_angle_x();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(1,1,spos-2,3);
+									m_send(2,1,spos,3);
+								}
+							} while (anx<Ang_x_Norm);
+						}
+						m_send(1,1,spos,3);
+						m_send(2,1,spos,3);
+					}
+					else{
+						error_led(2,0);
+						error_led(1,0);
+					}
 					if(motor::status(1)==1||motor::status(2)==1){
 						m_send(1,1,spos,3);
 						m_send(2,1,spos,3);
@@ -1357,6 +1453,38 @@ namespace motor{
 				while(ang<=Ang_slope_Norm-Ang_slope_thre){
 					ang=gyro_angle_y();
 					anx=gyro_angle_x();
+					if(abs(anx-Ang_x_Norm)>Ang_x_thre){//‚»‚±‚Ü‚ÅŒX‚¢‚Ä‚¢‚È‚¢
+						if(anx>Ang_x_Norm){//‰EŒü‚¢‚Ä‚é
+							error_led(2,1);
+							error_led(1,0);
+							do 
+							{
+								anx=gyro_angle_x();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(1,1,spos-2,3);
+									m_send(2,1,spos,3);
+								}
+							} while (anx>Ang_x_Norm);
+						}
+						else if(anx<Ang_x_Norm){//¶‚ðŒü‚¢‚Ä‚é
+							error_led(2,0);
+							error_led(1,1);
+							do
+							{
+								anx=gyro_angle_x();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(1,1,spos,3);
+									m_send(2,1,spos-2,3);
+								}
+							} while (anx<Ang_x_Norm);
+						}
+						m_send(1,1,spos,3);
+						m_send(2,1,spos,3);
+					}
+					else{
+						error_led(2,0);
+						error_led(1,0);
+					}
 					if(motor::status(1)==1||motor::status(2)==1){
 						m_send(1,1,spos,3);
 						m_send(2,1,spos,3);
