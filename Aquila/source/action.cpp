@@ -12,6 +12,29 @@
 #include "initializing.hpp"
 #include "ui_control.hpp"
 
+uint16_t Servo_int_num=1;
+uint16_t Servo_count=110;
+void init_Servo(){
+	TCF1.CTRLA=TC_CLKSEL_DIV256_gc; //1count:0.000008s  //250count:2ms
+	TCF1.INTCTRLA=TC_OVFINTLVL_HI_gc;
+	PMIC.CTRL=PMIC_HILVLEN_bm;
+	TCF1.PER=1;
+}
+
+
+ISR(TCF1_OVF_vect){
+	if(Servo_int_num>=1000){
+		Servo_int_num=0;
+	}
+	if(Servo_int_num<=Servo_count){
+		PORTK.OUTCLR = PIN2_bm;
+	}
+	if(Servo_int_num>=Servo_count){
+		PORTK.OUTSET = PIN2_bm;
+	}
+	Servo_int_num+=1;
+	TCF1.CNT=0;
+}
 
 void throw_kit(void){
 	for(int i=0;i<=40;i++){

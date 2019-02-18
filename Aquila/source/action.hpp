@@ -9,6 +9,8 @@
 #ifndef ACTION_H_
 #define ACTION_H_
 #include <stdint.h>
+
+void init_Servo();
 void throw_kit(void);
 //void finded_victim(void);
 void finded_victim(uint8_t co);

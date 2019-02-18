@@ -155,7 +155,7 @@ bool kit_chk(void){
 	//return (hhh.key==0 || hhh.key==1 );//normal or unknown
 }
 
-void check_mv(uint8_t dir){
+uint8_t check_mv(uint8_t dir){ //0:return???,1:????,2:??????
 	//mv_sig(dir,false);
 	_delay_ms(2);
 	led(Blueled,1);
@@ -174,7 +174,7 @@ void check_mv(uint8_t dir){
 		led(Blueled,0);
 		lcd_putstr(LCD1_TWI,"return");
 		buzzer(400);
-		return;
+		return 0;
 	}
 	PORTB.OUTSET=PIN0_bm|PIN1_bm;
 	//hhh.key=1;
@@ -182,6 +182,9 @@ void check_mv(uint8_t dir){
 	serial.string("ch");
 	serial.putdec(res);
 	serial.string("\n\r");
+	if (dir==3&&res!=0){
+		return 2;
+	}
 	mv_cap(1,false);
 	mv_cap(2,false);
 	mv_cap(3,false);
@@ -229,6 +232,6 @@ void check_mv(uint8_t dir){
 	led(Blueled,0);
 	_delay_ms(2);
 	PORTB.OUTCLR=PIN0_bm|PIN1_bm;
-	return;
+	return 1;
 }
 
