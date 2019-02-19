@@ -31,7 +31,6 @@ void nachylenie2();
 void move(int num);
 void move_n(node* n);
 
-
 void move_toa(node* a);
 void stack_dfs();
 #endif
