@@ -96,7 +96,8 @@ void nachylenie2(){/*make_nodes‚æ‚è‚à‘O‚ÉŽg‚¤*/
 				break;
 			}
 		}
-		ta.go_st();
+		ta.r_now(t);t->type=v::slope;
+		ta.go_st();/*node_b*/
 	}
 }
 /*
