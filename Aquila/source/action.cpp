@@ -51,23 +51,18 @@ void throw_kit(void){
 	}
 }
 
-void finded_victim(uint8_t co){//How many kits does victim need?
+void finded_victim(uint8_t co,uint8_t lr){//How many kits does victim need? and Left or Right?
 	led(Redled,1);
 	led(Blueled,1);
-	led(Greenled,1);	
-	for(int i=0;i<=40*co;i++){
-		PORTK.OUTSET = PIN0_bm;
-		PORTK.OUTCLR = PIN1_bm|PIN2_bm|PIN3_bm;
-		_delay_ms(2);
-		PORTK.OUTSET = PIN1_bm;
-		PORTK.OUTCLR = PIN0_bm|PIN2_bm|PIN3_bm;
-		_delay_ms(2);
-		PORTK.OUTSET = PIN2_bm;
-		PORTK.OUTCLR = PIN0_bm|PIN1_bm|PIN3_bm;
-		_delay_ms(2);
-		PORTK.OUTSET = PIN3_bm;
-		PORTK.OUTCLR = PIN0_bm|PIN1_bm|PIN2_bm;
-		_delay_ms(2);
+	led(Greenled,1);
+	if(lr==1){
+		//Trhow Left
+	}
+	else if(lr==0){
+		//Trhow Right
+	}
+	else if(lr==3){
+		//Do nothing
 	}
 	PORTK.OUTCLR = PIN0_bm|PIN1_bm|PIN2_bm|PIN3_bm;
 	led(Redled,0);
