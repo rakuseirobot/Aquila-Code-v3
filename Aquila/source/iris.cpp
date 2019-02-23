@@ -79,29 +79,40 @@ void nachylenie(uint8_t x){
 	}
 }
 
-void nachylenie2(){
-	if(acc_x_mes()>2.9){
-		if(ta.ac_next(v::front,1)==np){
-			uint8_t key=10;
-			if(ta.ac_next(v::left,1)!=np){
-				key=v::left;
-			}else if(ta.ac_next(v::right,1)!=np){
-				key=v::right;
-			}
-			if(key!=10)while(check_ping(key)<=1){
-				motor::move(0);
-				motor::fix_position();
+void nachylenie2(){/*make_nodesよりも前に使う*/
+	if(ta.r_now()->type==v::slope){
+		node* t = ta.r_now();/*空間計算量を抑える為に使いまわす*/
+		rep(i,4){ if(t->next[i]->type==v::slope){t=t->next[i];break;} }/*node_aの探索*/
+		rep(i,4){ if(t->next[i]->type!=v::slope){t=t->next[i];break;} }/*node_bの探索*/
+		ta.w_now(t);
+	}else{/*make_nodesよりも後だと、こちらが面倒*/
+		node* t = ta.ac_next(v::back,1);/*t=nowの一つ前のnode*/
+		uint8_t zz = ta.r_now()->z;
+		if(/*上向き*/){zz++;}else{zz--;}
+		rep(i,4){ 
+			if(ta.r_now()->next[i]==np){
+				ta.r_now()->next[i]=ta.mall.make(t->x,t->y,zz,(ta.r_flg()+1)%2); 
+				t=ta.r_now()->next[i];/*t=node_a*/
+				t->next[0]=ta.r_now();
+				break;
 			}
 		}
-	}else if(acc_x_mes()<-4){
-		ta.ap_node(ta.r_now(),v::front);
-		ta.ap_node(ta.ac_next(v::front,1),v::front);
-		ta.ac_next(v::front,1)->ac=true;
-		//ta.ac_next(v::front,2)->ac=true;
-		ta.stk.push(ta.ac_next(v::front,2));
-
+		ta.w_now(t);t->type=v::slope;
+		ta.go_st();/*node_b*/
 	}
-};
+}
+/*
+ * 上向きなら、
+ * (そこに頂点が存在しない時)
+ * ・上る
+ * ・現在のノード(now)のstatusを坂に、
+ * ・now(x,y,z)(階段中)->node_a(node_bからバックするイメージの場所,2階)->node_b(x,y,z+1)のように接続。
+ * ・現在の位置(上った先)をnode_bにする。
+ * (存在する時)
+ * ・上る
+ * ・now(階段中)->node_a(2階の階段中)->node_bの順に進む。(自明に定数時間なのでダブリングは必要ない)
+ * ・現在地をnode_bに変更
+ */
 
 bool blind_alley(){
 	node* t = ta.r_now();

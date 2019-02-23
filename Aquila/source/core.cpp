@@ -119,6 +119,4 @@ void core::bfs(node* s,node* t){//sを始点にしてtを検索する�?
     flg=(flg+1)%2;
 }
 
-
-
 core ta;
