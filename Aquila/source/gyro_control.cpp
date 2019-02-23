@@ -28,6 +28,16 @@ float gyro_angle(void){
 	jy_recv_wd(0x3f,d);
 	return ((float)((d[1] << 8) | d[0])  / 32768 * 180) + 180;
 }
+float gyro_angle_x(void){
+	int16_t d[2];
+	jy_recv_wd(0x3d,d);
+	return ((float)((d[1] << 8) | d[0])  / 32768 * 180) + 180;
+}
+float gyro_angle_y(void){
+	int16_t d[2];
+	jy_recv_wd(0x3e,d);
+	return ((float)((d[1] << 8) | d[0])  / 32768 * 180) + 180;
+}
 
 float acc_x_mes(void){
 	int16_t d[2];
@@ -84,6 +94,13 @@ void gyro_time_mes(void){
 
 void gyro_mes(void){
 	int16_t data[2];
+	serial.string("x:");
+	jy_recv_wd(0x3d,data);
+	serial.putfloat(((float)((data[1] << 8) | data[0])  / 32768 * 180) + 180);
+	serial.string(",y:");
+	jy_recv_wd(0x3e,data);
+	serial.putfloat(((float)((data[1] << 8) | data[0])  / 32768 * 180) + 180);
+	serial.string(",z:");
 	jy_recv_wd(0x3f,data);
 	serial.putfloat(((float)((data[1] << 8) | data[0])  / 32768 * 180) + 180);
 	//serial.string("\n\r");
