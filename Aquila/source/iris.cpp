@@ -198,6 +198,16 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 		motor::move(3);/*左にまがる*/
 		motor::fix_position();
 		/*キットを落とす*/
+		if(Victim_front_kit==1){
+			Drop_kit(1);
+			Drop_kit(0);
+		}
+		else if(Victim_front_kit==2){
+			Drop_kit(1);
+			Drop_kit(0);
+			Drop_kit(1);
+			Drop_kit(0);
+		}
 		ta.turn_r();
 		motor::move(9);/*右にまがる*/
 		motor::fix_position();	
