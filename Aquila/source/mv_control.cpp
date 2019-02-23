@@ -165,7 +165,7 @@ bool kit_chk(uint8_t num=0){//num = type of victim. //unknown(1/17)
 	//return (hhh.key==0 || hhh.key==1 );//normal or unknown
 }
 
-void check_mv(uint8_t dir){
+uint8_t check_mv(uint8_t dir){ //0:return???,1:????,2:??????
 	//mv_sig(dir,false);
 	_delay_ms(2);
 	led(Blueled,1);
@@ -184,7 +184,7 @@ void check_mv(uint8_t dir){
 		led(Blueled,0);
 		lcd_putstr(LCD1_TWI,"return");
 		buzzer(400);
-		return;
+		return 0;
 	}
 	PORTB.OUTSET=PIN0_bm|PIN1_bm;
 	//hhh.key=1;
@@ -192,6 +192,9 @@ void check_mv(uint8_t dir){
 	serial.string("ch");
 	serial.putdec(res);
 	serial.string("\n\r");
+	if (dir==3&&res!=0){
+		return 2;
+	}
 	mv_cap(1,false);
 	mv_cap(2,false);
 	mv_cap(3,false);
@@ -200,32 +203,32 @@ void check_mv(uint8_t dir){
 		case 3://H  2kits
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"Find H!");
-			if(kit_chk(v::H))finded_victim(2);
+			if(kit_chk(v::H))finded_victim(2,dir);
 			ta.r_now()->type=v::H;
 			break;
 		case 4://S  1kits
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"Find S!");
-			if(kit_chk(v::S))finded_victim(1);
+			if(kit_chk(v::S))finded_victim(1,dir);
 			ta.r_now()->type=v::S;
 			break;
 		case 5://U 0kits
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"Find U!");
-			if(kit_chk(v::U))finded_victim(0);
+			if(kit_chk(v::U))finded_victim(0,dir);
 			ta.r_now()->type=v::U;
 			break;
 		case 6:
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"Find Sermo");
-			if(kit_chk(v::sermo))finded_victim(1);
+			if(kit_chk(v::sermo))finded_victim(1,dir);
 			ta.r_now()->type=v::sermo;
 			break;
 		case 7:
 		case 8:
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"Find Error");
-			finded_victim(1);
+			finded_victim(1,dir);
 			//ta.r_now()->type=v::r_kit;
 			break;
 		default:
@@ -239,6 +242,6 @@ void check_mv(uint8_t dir){
 	led(Blueled,0);
 	_delay_ms(2);
 	PORTB.OUTCLR=PIN0_bm|PIN1_bm;
-	return;
+	return 1;
 }
 

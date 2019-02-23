@@ -49,6 +49,7 @@ void init_avr(void){
 	PORTQ.OUTSET = PIN0_bm|PIN1_bm|PIN2_bm;
 	PORTK.DIRSET = PIN0_bm|PIN1_bm|PIN2_bm|PIN3_bm;//ステッピングinit
 	PORTB.DIRSET = PIN0_bm|PIN1_bm;//モーター用SIG
+	PORTJ.DIRSET=PIN0_bm;
 }
 
 void init_int(void){

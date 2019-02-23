@@ -9,9 +9,12 @@
 #ifndef ACTION_H_
 #define ACTION_H_
 #include <stdint.h>
+
+void init_Servo();
+void Drop_kit(uint8_t lr,uint16_t num=120);
 void throw_kit(void);
 //void finded_victim(void);
-void finded_victim(uint8_t co);
+void finded_victim(uint8_t co,uint8_t lr);
 bool record_time(uint16_t time);
 uint16_t read_time(void);
 #endif /* ACTION_H_ */
