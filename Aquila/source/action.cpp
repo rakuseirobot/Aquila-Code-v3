@@ -12,10 +12,10 @@
 #include "initializing.hpp"
 #include "ui_control.hpp"
 
-uint32_t Servo_count = 6000; //1.5ms  2ms:8000 1ms:4000
+uint32_t Servo_count = 750; //1.5ms  2ms:1000 1ms:500
 
 void init_Servo(){
-	TCF1.CTRLA=TC_CLKSEL_DIV8_gc; //1count:0.00000025s  //0xFFFF count 0.01638375s
+	TCF1.CTRLA=TC_CLKSEL_DIV64_gc; //1count:0.000002s  //0xFFFF count 0.01638375s
 	TCF1.INTCTRLA=TC_OVFINTLVL_HI_gc;
 	PMIC.CTRL=PMIC_HILVLEN_bm;
 	TCF1.PER=Servo_count;
@@ -23,11 +23,11 @@ void init_Servo(){
 
 
 ISR(TCF1_OVF_vect){
-	if(TCF1.PER <= 10000){
-		TCF1.PER=0xFFFF - Servo_count;
+	if(TCF1.PER <= 2000){
+		TCF1.PER=10500 - Servo_count;
 		PORTK.OUTSET = PIN2_bm;
 	}
-	else if(TCF1.PER >= 50000){
+	else if(TCF1.PER >= 5000){
 		TCF1.PER=Servo_count;
 		PORTK.OUTCLR = PIN2_bm;
 	}
