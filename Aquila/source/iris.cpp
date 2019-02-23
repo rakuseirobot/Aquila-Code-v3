@@ -93,10 +93,11 @@ void nachylenie2(){/*make_nodes‚æ‚è‚à‘O‚ÉŽg‚¤*/
 			if(ta.r_now()->next[i]==np){
 				ta.r_now()->next[i]=ta.mall.make(t->x,t->y,zz,(ta.r_flg()+1)%2); 
 				t=ta.r_now()->next[i];/*t=node_a*/
+				t->next[0]=ta.r_now();
 				break;
 			}
 		}
-		ta.r_now(t);t->type=v::slope;
+		ta.w_now(t);t->type=v::slope;
 		ta.go_st();/*node_b*/
 	}
 }
