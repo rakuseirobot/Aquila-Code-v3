@@ -203,32 +203,32 @@ uint8_t check_mv(uint8_t dir){ //0:return???,1:????,2:??????
 		case 3://H  2kits
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"Find H!");
-			if(kit_chk(v::H))finded_victim(2);
+			if(kit_chk(v::H))finded_victim(2,dir);
 			ta.r_now()->type=v::H;
 			break;
 		case 4://S  1kits
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"Find S!");
-			if(kit_chk(v::S))finded_victim(1);
+			if(kit_chk(v::S))finded_victim(1,dir);
 			ta.r_now()->type=v::S;
 			break;
 		case 5://U 0kits
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"Find U!");
-			if(kit_chk(v::U))finded_victim(0);
+			if(kit_chk(v::U))finded_victim(0,dir);
 			ta.r_now()->type=v::U;
 			break;
 		case 6:
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"Find Sermo");
-			if(kit_chk(v::sermo))finded_victim(1);
+			if(kit_chk(v::sermo))finded_victim(1,dir);
 			ta.r_now()->type=v::sermo;
 			break;
 		case 7:
 		case 8:
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"Find Error");
-			finded_victim(1);
+			finded_victim(1,dir);
 			//ta.r_now()->type=v::r_kit;
 			break;
 		default:
