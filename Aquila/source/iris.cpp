@@ -16,11 +16,7 @@ void make_nodes(){
     if(!ta.r_now()->ac){
 		rep(i,4){
 			if(check_ping(i)>1){
-				if(ta.ac_next(i,1)==np){
-					ta.ap_node(ta.r_now(),i);
-				}else{
-					ta.cn_graph(ta.r_now(),ta.ac_next(i,1));
-				}
+				if(ta.ac_next(i,1)==np){ta.ap_node(ta.r_now(),i); }else{ ta.cn_graph(ta.r_now(),ta.ac_next(i,1)); }
 			}
 		}
 		ta.r_now()->ac=true;
@@ -130,7 +126,6 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 	switch(num){
 		case 0:
 			ta.turn_l();
-			//hhh.type=ta.r_now()->type;
 			motor::move(3);
 			motor::fix_position();
 			ta.go_st();
@@ -139,13 +134,11 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 			break;
 		case 1:
 			ta.go_st();
-			//hhh.type=ta.r_now()->type;
 			motor::move(0);
 			motor::fix_position();
 			break;
 		case 2:
 			ta.turn_r();
-			//hhh.type=ta.r_now()->type;
 			motor::move(2);
 			motor::fix_position();
 			ta.go_st();
@@ -159,7 +152,6 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 			ta.turn_r();
 			motor::move(9);
 			motor::fix_position();
-			//hhh.type=ta.r_now()->type;
 			ta.go_st();
 			motor::move(0);
 			motor::fix_position();
@@ -170,7 +162,6 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 			ta.go_st();
 			ta.turn_l();
 			ta.turn_l();
-			//hhh.type=ta.r_now()->type;
 			motor::move(4);
 			motor::fix_position(v::back);
 			break;
@@ -190,23 +181,27 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 	serial.string(" : ");
 	serial.putint(ta.r_now()->color);
 	serial.string("\n");
-	//if(ta.r_now()->type==v::unknown){ta.r_now()->type = v::normal;}
 	if(ta.r_now()!=ta.r_start())ta.r_now()->color=color::black;
-	//if(hhh.key==1){ta.r_now()->type=v::r_kit;}
-	//hhh.key=0;
 	black_tile();
 	if(num==v::back){ nachylenie2(v::back); }else{ nachylenie2(v::front); }
 	make_nodes();
 	if(blind_alley()){
 		ta.turn_r();
-		//hhh.type=ta.r_now()->type;
 		motor::move(2);
 		motor::fix_position();
-		///
 		ta.turn_l();
-		//hhh.type=ta.r_now()->type;
 		motor::move(3);
 		motor::fix_position();
+	}
+	if(Victim_front){
+		ta.turn_l();
+		motor::move(3);/*左にまがる*/
+		motor::fix_position();
+		/*キットを落とす*/
+		ta.turn_r();
+		motor::move(9);/*右にまがる*/
+		motor::fix_position();	
+		Victim_front = false;
 	}
 	if(ta.r_now()->type==v::unknown){ta.r_now()->type = v::normal;}
 }
