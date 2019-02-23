@@ -147,11 +147,21 @@ uint8_t mv_spi_send(uint8_t val, uint8_t i){
 	return dat;
 }
 
-bool kit_chk(void){
+bool kit_chk(uint8_t num=0){//num = type of victim. //unknown(1/17)
 	//if(ta.ac_next(v::front,1)==np)return false;
-	int key = 10;
-	key = ta.r_now()->type;
-	return (key==v::normal||key==v::unknown);
+// 	int key = 10;
+// 	key = ta.r_now()->type;
+	node* t=ta.r_now();
+	if(t)if(t->type==num||t->type==v::black)return false;
+	if(!num)return true;
+	bool ans  = true;
+	for(uint8_t i = 0;i<4;i++){
+		if(t->next[i])if(t->next[i]->type==num){
+			ans = false;
+		}
+	}
+	//return (key==v::normal||key==v::unknown);
+	return ans;
 	//return (hhh.key==0 || hhh.key==1 );//normal or unknown
 }
 
@@ -193,26 +203,26 @@ uint8_t check_mv(uint8_t dir){ //0:return???,1:????,2:??????
 		case 3://H  2kits
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"Find H!");
-			finded_victim(2);
-			ta.r_now()->type=v::r_kit;
+			if(kit_chk(v::H))finded_victim(2);
+			ta.r_now()->type=v::H;
 			break;
 		case 4://S  1kits
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"Find S!");
-			finded_victim(1);
-			ta.r_now()->type=v::r_kit;
+			if(kit_chk(v::S))finded_victim(1);
+			ta.r_now()->type=v::S;
 			break;
 		case 5://U 0kits
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"Find U!");
-			finded_victim(0);
-			ta.r_now()->type=v::r_kit;
+			if(kit_chk(v::U))finded_victim(0);
+			ta.r_now()->type=v::U;
 			break;
 		case 6:
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"Find Sermo");
-			finded_victim(1);
-			ta.r_now()->type=v::r_kit;
+			if(kit_chk(v::sermo))finded_victim(1);
+			ta.r_now()->type=v::sermo;
 			break;
 		case 7:
 		case 8:

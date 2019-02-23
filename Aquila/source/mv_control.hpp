@@ -18,7 +18,8 @@
 // extern hako hhh;
 void mv_sig(uint8_t i,bool ud);
 void init_mv(void);
-bool kit_chk(void);
+bool kit_chk(uint8_t num);
+
 void mv_cap(uint8_t di,bool st);
 uint8_t mv_spi_send(uint8_t val, uint8_t i);
 uint8_t check_mv(uint8_t dir);

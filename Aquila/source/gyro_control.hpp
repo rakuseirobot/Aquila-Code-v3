@@ -15,6 +15,8 @@ void acc_mes(void);
 void gyro_send(uint8_t reg,uint8_t dh,uint8_t dl);
 float gyro_angle(void);
 void gyro_mes(void);
+float gyro_angle_x(void);
+float gyro_angle_y(void);
 void gyro_time_mes(void);
 void gyro_cali(void);
 void gyro_set200hz(void);

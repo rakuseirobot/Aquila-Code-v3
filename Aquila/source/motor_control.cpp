@@ -525,7 +525,7 @@ namespace motor{
 		dis[1]=ping(6);//Back
 		if(Sikiti>=dis[0]){
 			_delay_ms(1);
-			dis[0]==ping(3);
+			dis[0]=ping(3);
 			if(!(Sikiti>=dis[0])){
 				return;
 			}
@@ -1196,7 +1196,7 @@ namespace motor{
 					return 0;
 				}
 				lcd_clear();
-				lcd_putstr(LCD1_TWI,"NotiL!D");
+				lcd_putstr(LCD1_TWI,"NotiL!U");
 				m_send(1,1,spos,3);
 				m_send(2,1,spos,3);
 				ac=acc_x_mes();
@@ -1274,6 +1274,224 @@ namespace motor{
 				_delay_ms(1);
 				lcd_clear();
 				motor::move(7);
+				return 2;
+			}
+		}
+		else{
+			lcd_clear();
+			return 0;
+		}
+		return 0;
+	}
+	
+	uint8_t notify_long_ang(uint8_t x,bool buz){//0:Ç»Çµ,1:â∫ÇË,2:è„ÇË
+		float ang=gyro_angle_y();
+		float anx=gyro_angle_x();
+		uint8_t spos = 6;
+		if(x==v::front){//ëOêiíÜ
+			if(ang<=Ang_slope_Norm-Ang_slope_thre){//è„ÇË
+				lcd_clear();
+				lcd_putstr(LCD1_TWI,"NotiL!U");
+				buzzer(400);
+				buzzer(800);
+				m_send(1,2,spos,3);
+				m_send(2,2,spos,3);
+				while(ang<=Ang_slope_Norm-Ang_slope_thre){
+					ang=gyro_angle_y();
+					anx=gyro_angle_x();
+					if(abs(anx-Ang_x_Norm)>Ang_x_thre){//ÇªÇ±Ç‹Ç≈åXÇ¢ÇƒÇ¢Ç»Ç¢
+						if(anx>Ang_x_Norm){//âEå¸Ç¢ÇƒÇÈ
+							error_led(2,1);
+							error_led(1,0);
+							do 
+							{
+								anx=gyro_angle_x();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(1,2,spos-2,3);
+									m_send(2,2,spos,3);
+								}
+							} while (anx>Ang_x_Norm);
+						}
+						else if(anx<Ang_x_Norm){//ç∂Çå¸Ç¢ÇƒÇÈ
+							error_led(2,0);
+							error_led(1,1);
+							do
+							{
+								anx=gyro_angle_x();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(1,2,spos,3);
+									m_send(2,2,spos-2,3);
+								}
+							} while (anx<Ang_x_Norm);
+						}
+						m_send(1,2,spos,3);
+						m_send(2,2,spos,3);
+					}
+					else{
+						error_led(2,0);
+						error_led(1,0);
+					}
+					if(motor::status(1)==1||motor::status(2)==1){
+						m_send(1,2,spos,3);
+						m_send(2,2,spos,3);
+						error_led(2,0);
+						error_led(1,0);
+					}
+				}
+				return 2;
+			}
+			else if(ang>=Ang_slope_Norm+Ang_slope_thre){//â∫ÇË
+				lcd_clear();
+				lcd_putstr(LCD1_TWI,"NotiL!D");
+				buzzer(800);
+				buzzer(400);
+				m_send(1,2,spos,3);
+				m_send(2,2,spos,3);
+				while(ang>=Ang_slope_Norm+Ang_slope_thre){
+					ang=gyro_angle_y();
+					anx=gyro_angle_x();
+					if(abs(anx-Ang_x_Norm)>Ang_x_thre){//ÇªÇ±Ç‹Ç≈åXÇ¢ÇƒÇ¢Ç»Ç¢
+						if(anx>Ang_x_Norm){//âEå¸Ç¢ÇƒÇÈ
+							error_led(2,1);
+							error_led(1,0);
+							do 
+							{
+								anx=gyro_angle_x();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(1,2,spos,3);
+									m_send(2,2,spos-2,3);
+								}
+							} while (anx>Ang_x_Norm);
+						}
+						else if(anx<Ang_x_Norm){//ç∂Çå¸Ç¢ÇƒÇÈ
+							error_led(2,0);
+							error_led(1,1);
+							do
+							{
+								anx=gyro_angle_x();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(1,2,spos-2,3);
+									m_send(2,2,spos,3);
+								}
+							} while (anx<Ang_x_Norm);
+						}
+						m_send(1,2,spos,3);
+						m_send(2,2,spos,3);
+					}
+					else{
+						error_led(2,0);
+						error_led(1,0);
+					}
+					if(motor::status(1)==1||motor::status(2)==1){
+						m_send(1,2,spos,3);
+						m_send(2,2,spos,3);
+						error_led(2,0);
+						error_led(1,0);
+					}
+				}
+				return 1;
+			}
+		}else if(x==v::back){//å„êiíÜ
+			if(ang>=Ang_slope_Norm+Ang_slope_thre){//â∫ÇË
+				lcd_clear();
+				lcd_putstr(LCD1_TWI,"NotiL!U");
+				m_send(1,1,spos,3);
+				m_send(2,1,spos,3);
+				buzzer(400);
+				buzzer(800);
+				while(ang>=Ang_slope_Norm+Ang_slope_thre){
+					ang=gyro_angle_y();
+					anx=gyro_angle_x();
+					if(abs(anx-Ang_x_Norm)>Ang_x_thre){//ÇªÇ±Ç‹Ç≈åXÇ¢ÇƒÇ¢Ç»Ç¢
+						if(anx>Ang_x_Norm){//âEå¸Ç¢ÇƒÇÈ
+							error_led(2,1);
+							error_led(1,0);
+							do 
+							{
+								anx=gyro_angle_x();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(2,1,spos,3);
+									m_send(1,1,spos-2,3);
+								}
+							} while (anx>Ang_x_Norm);
+						}
+						else if(anx<Ang_x_Norm){//ç∂Çå¸Ç¢ÇƒÇÈ
+							error_led(2,0);
+							error_led(1,1);
+							do
+							{
+								anx=gyro_angle_x();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(2,1,spos-2,3);
+									m_send(1,1,spos,3);
+								}
+							} while (anx<Ang_x_Norm);
+						}
+						m_send(1,1,spos,3);
+						m_send(2,1,spos,3);
+					}
+					else{
+						error_led(2,0);
+						error_led(1,0);
+					}
+					if(motor::status(1)==1||motor::status(2)==1){
+						m_send(1,1,spos,3);
+						m_send(2,1,spos,3);
+						error_led(2,0);
+						error_led(1,0);
+					}
+				}
+				return 1;
+			}
+			else if(ang<=Ang_slope_Norm-Ang_slope_thre){//è∏ÇË
+				lcd_clear();
+				lcd_putstr(LCD1_TWI,"NotiL!U");
+				m_send(1,1,spos,3);
+				m_send(2,1,spos,3);
+				buzzer(800);
+				buzzer(400);
+				while(ang<=Ang_slope_Norm-Ang_slope_thre){
+					ang=gyro_angle_y();
+					anx=gyro_angle_x();
+					if(abs(anx-Ang_x_Norm)>Ang_x_thre){//ÇªÇ±Ç‹Ç≈åXÇ¢ÇƒÇ¢Ç»Ç¢
+						if(anx>Ang_x_Norm){//âEå¸Ç¢ÇƒÇÈ
+							error_led(2,1);
+							error_led(1,0);
+							do 
+							{
+								anx=gyro_angle_x();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(2,1,spos-2,3);
+									m_send(1,1,spos,3);
+								}
+							} while (anx>Ang_x_Norm);
+						}
+						else if(anx<Ang_x_Norm){//ç∂Çå¸Ç¢ÇƒÇÈ
+							error_led(2,0);
+							error_led(1,1);
+							do
+							{
+								anx=gyro_angle_x();
+								if(motor::status(1)==1||motor::status(2)==1){
+									m_send(2,1,spos,3);
+									m_send(1,1,spos-2,3);
+								}
+							} while (anx<Ang_x_Norm);
+						}
+						m_send(1,1,spos,3);
+						m_send(2,1,spos,3);
+					}
+					else{
+						error_led(2,0);
+						error_led(1,0);
+					}
+					if(motor::status(1)==1||motor::status(2)==1){
+						m_send(1,1,spos,3);
+						m_send(2,1,spos,3);
+						error_led(2,0);
+						error_led(1,0);
+					}
+				}
 				return 2;
 			}
 		}
