@@ -79,7 +79,9 @@ void nachylenie(uint8_t x){
 	}
 }
 
-void nachylenie2(){/*make_nodesよりも前に使う*/
+bool nachylenie2(uint8_t x){/*make_nodesよりも前に使う*/
+	uint8_t flag = motor::notify_long_ang(x);/*flag=1:下り、=2:上り、=0:無し*/
+	if(flag==0)return false;
 	if(ta.r_now()->type==v::slope){
 		node* t = ta.r_now();/*空間計算量を抑える為に使いまわす*/
 		rep(i,4){ if(t->next[i]->type==v::slope){t=t->next[i];break;} }/*node_aの探索*/
@@ -88,7 +90,7 @@ void nachylenie2(){/*make_nodesよりも前に使う*/
 	}else{/*make_nodesよりも後だと、こちらが面倒*/
 		node* t = ta.ac_next(v::back,1);/*t=nowの一つ前のnode*/
 		uint8_t zz = ta.r_now()->z;
-		if(/*上向き*/){zz++;}else{zz--;}
+		if(flag == 2){zz++;}else{zz--;}
 		rep(i,4){ 
 			if(ta.r_now()->next[i]==np){
 				ta.r_now()->next[i]=ta.mall.make(t->x,t->y,zz,(ta.r_flg()+1)%2); 
@@ -100,6 +102,7 @@ void nachylenie2(){/*make_nodesよりも前に使う*/
 		ta.w_now(t);t->type=v::slope;
 		ta.go_st();/*node_b*/
 	}
+	return true;
 }
 /*
  * 上向きなら、
@@ -192,7 +195,7 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 	//if(hhh.key==1){ta.r_now()->type=v::r_kit;}
 	//hhh.key=0;
 	black_tile();
-	nachylenie2();
+	if(num==v::back){ nachylenie2(v::back); }else{ nachylenie2(v::front); }
 	make_nodes();
 	if(blind_alley()){
 		ta.turn_r();
@@ -269,7 +272,8 @@ void stack_dfs(){
 		if(ta.r_now()!=ta.r_start())ta.r_now()->color=color::black;
 		for(int j=1;j>=0;j--){
 			for(int i=3;i>=0;i--){
-				if(check_ping(i)>j+1)if(ta.ac_next(i,1)!=np&&ta.ac_next(i,1)->color==color::white&&ta.ck_conect(ta.r_now(),ta.ac_next(i,1))){
+				if(check_ping(i)>j+1)if(ta.ac_next(i,1)!=np && ta.ac_next(i,1)->color==color::white 
+																	&& ta.ck_conect(ta.r_now(),ta.ac_next(i,1))){
 					serial.string("m");
 					ta.stk.push(ta.ac_next(i,1));
 					ta.ac_next(i,1)->color=color::gray;

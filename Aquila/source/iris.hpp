@@ -26,7 +26,7 @@ void make_nodes();
 void black_tile();
 
 void nachylenie();
-void nachylenie2();
+bool nachylenie2();
 
 void move(int num);
 void move_n(node* n);
