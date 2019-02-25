@@ -44,7 +44,7 @@ namespace color{
 }
 
 struct node{
-    uint8_t x=100,y=100,z=1;//coordinate
+    uint8_t x=100,y=100,z=10;//coordinate
 	uint8_t flag,type;//for bfs,search
 	uint8_t color;//for real bfs
     uint8_t depth=1000,dist=1000;//
