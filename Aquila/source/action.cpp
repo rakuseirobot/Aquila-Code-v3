@@ -69,7 +69,8 @@ void Drop_kit(uint8_t lr,uint16_t num){ //lr:1:?E 0:??
 			_delay_ms(4);
 		}
 	}
-	PORTK.OUTCLR = PIN3_bm|PIN1_bm|PIN2_bm|PIN3_bm;
+	PORTK.OUTCLR = PIN0_bm|PIN1_bm|PIN2_bm|PIN3_bm;
+	return;
 }
 
 void throw_kit(void){

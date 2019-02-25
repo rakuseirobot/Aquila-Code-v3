@@ -11,8 +11,10 @@
 #include "ping_control.hpp"
 #include "mv_control.hpp"
 #include "gyro_control.hpp"
+#include "action.hpp"
 
 void make_nodes(){
+	serial.string("make_nodes\n");
     if(!ta.r_now()->ac){
 		rep(i,4){
 			if(check_ping(i)>1){
@@ -76,14 +78,30 @@ void nachylenie(uint8_t x){
 }
 
 bool nachylenie2(uint8_t x){/*make_nodesよりも前に使う*/
+	if(x!=v::back){x=v::front;};
 	uint8_t flag = motor::notify_long_ang(x);/*flag=1:下り、=2:上り、=0:無し*/
 	if(flag==0)return false;
+	motor::brake(1);
+	motor::brake(2);
+	serial.putint(x);
+	if(x==v::front){
+		motor::move(6);
+	}
+	else{
+		motor::move(7);
+	}
+	motor::gb_fix();
+	motor::turn_fix();
+	serial.string("nac2");
 	if(ta.r_now()->type==v::slope){
+		serial.string("a");
 		node* t = ta.r_now();/*空間計算量を抑える為に使いまわす*/
 		rep(i,4){ if(t->next[i]->type==v::slope){t=t->next[i];break;} }/*node_aの探索*/
 		rep(i,4){ if(t->next[i]->type!=v::slope){t=t->next[i];break;} }/*node_bの探索*/
 		ta.w_now(t);
 	}else{/*make_nodesよりも後だと、こちらが面倒*/
+		serial.string("b");
+		ta.r_now()->type=v::slope;
 		node* t = ta.ac_next(v::back,1);/*t=nowの一つ前のnode*/
 		uint8_t zz = ta.r_now()->z;
 		if(flag == 2){zz++;}else{zz--;}
@@ -92,11 +110,27 @@ bool nachylenie2(uint8_t x){/*make_nodesよりも前に使う*/
 				ta.r_now()->next[i]=ta.mall.make(t->x,t->y,zz,(ta.r_flg()+1)%2); 
 				t=ta.r_now()->next[i];/*t=node_a*/
 				t->next[0]=ta.r_now();
+				serial.string("c");
 				break;
 			}
 		}
 		ta.w_now(t);t->type=v::slope;
 		ta.go_st();/*node_b*/
+		serial.string("nac2:end:");
+		serial.putint((int)ta.r_now());
+		serial.string(",");
+		serial.putint((int)ta.r_now()->x);
+		serial.string(",");
+		serial.putint((int)ta.r_now()->y);
+		serial.string(",");
+		serial.putint((int)ta.r_now()->z);
+		serial.string(",");
+		serial.putint((int)ta.r_now()->type);
+		serial.string("\n");
+		serial.string("find :");
+		serial.putint((int)ta.find(ta.r_now()->x,ta.r_now()->y,ta.r_now()->z));
+		serial.string("\n");
+		//ta.stk.pop();//????its test.
 	}
 	return true;
 }
@@ -113,7 +147,8 @@ bool nachylenie2(uint8_t x){/*make_nodesよりも前に使う*/
  * ・現在地をnode_bに変更
  */
 
-bool blind_alley(){
+bool blind_alley(int x){
+	if(x!=v::back)return false;
 	node* t = ta.r_now();
 	if(t->type==v::black||t->type==v::normal)return false;
 	uint8_t ct = 0;
@@ -123,6 +158,7 @@ bool blind_alley(){
 }
 
 void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:back(turn),3:back(usiro)
+	motor::wait();
 	switch(num){
 		case 0:
 			ta.turn_l();
@@ -185,7 +221,7 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 	black_tile();
 	if(num==v::back){ nachylenie2(v::back); }else{ nachylenie2(v::front); }
 	make_nodes();
-	if(blind_alley()){
+	if(blind_alley(num)){
 		ta.turn_r();
 		motor::move(2);
 		motor::fix_position();
@@ -193,11 +229,11 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 		motor::move(3);
 		motor::fix_position();
 	}
-	if(Victim_front){
+	if(Victim_front&&ta.r_now()->type==v::unknown){
 		ta.turn_l();
-		motor::move(3);/*左にまがる*/
+		motor::move(3);//左にまがる
 		motor::fix_position();
-		/*キットを落とす*/
+		//キットを落とす
 		if(Victim_front_kit==1){
 			Drop_kit(1);
 			Drop_kit(0);
@@ -209,11 +245,12 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 			Drop_kit(0);
 		}
 		ta.turn_r();
-		motor::move(9);/*右にまがる*/
+		motor::move(2);//右にまがる
 		motor::fix_position();	
 		Victim_front = false;
 	}
 	if(ta.r_now()->type==v::unknown){ta.r_now()->type = v::normal;}
+	motor::wait();
 }
 void move_n(node* n){//move to neighborhood((node*)n)
 	if(n!=np){
@@ -247,8 +284,9 @@ void move_toa(node* a){//move to (node*)a
 	while(ta.r_now()!=a && a->type!=v::black && a->type!=v::slope){
 		fg = false;
 		rep(i,4){
-			serial.string("-a");
+			serial.string("-aa");
 			if(!fg && ta.ac_next(i,1)!=np && ta.ck_conect(ta.r_now(),ta.ac_next(i,1)) && ta.ac_next(i,1)->dist<ta.r_now()->dist && ta.ac_next(i,1)->type!=v::black){ move_n(ta.ac_next(i,1)); fg=true; }
+			if(ta.find(a->x,a->y,a->z)->type==v::slope)fg=true;
 		}
 	}
 	serial.string("-b");
@@ -291,11 +329,15 @@ void stack_dfs(){
 		fg=false;
 		while(!fg){
 			if(ta.stk.top()->color!=color::black && !ta.stk.empty() && ta.stk.top()!=np){
+				serial.string("dfs2 : ");
+				serial.putint((int)ta.stk.top());
+				serial.string("\n");
 				move_toa(ta.stk.top());
 				lcd_clear();
 				lcd_putstr(LCD1_TWI,"dfs2");
+				serial.string("s_dfs\n");
 				fg=true;
-			}else{ ta.stk.pop(); }	
+			}else{ ta.stk.pop(); }
 		}
 		serial.string("end");
 	}

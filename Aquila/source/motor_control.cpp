@@ -449,6 +449,7 @@ namespace motor{
 		if(st_f==true){
 			fix_angle_v(b_angle);
 		}
+		motor::wait();
 		mv_cap(1,true);
 		mv_cap(2,true);
 		mv_cap(3,true);
@@ -517,10 +518,20 @@ namespace motor{
 		return;
 	}
 	#define fixno 5 //gb_fix Sikiiti
-	const int gbbest=185;
+	const int gbbest=175;//185
 	uint32_t tbest = 600;
 	void gb_fix(void){
 		int16_t dis[3];
+		dis[0]=ping(3);//Forward
+		dis[1]=ping(6);//Back
+		float ang=gyro_angle_y();
+		if(ang<=Ang_slope_Norm-Ang_slope_thre*1.5){
+			motor::move(7);
+		}
+		else if(ang>=Ang_slope_Norm+Ang_slope_thre*1.5){
+			motor::move(6);
+		}
+		
 		dis[0]=ping(3);//Forward
 		dis[1]=ping(6);//Back
 		if(Sikiti>=dis[0]){
@@ -1600,6 +1611,10 @@ namespace motor{
 					do 
 					{
 						now=gyro_angle();
+						if(motor::status(1)==1||motor::status(2)==1){
+							m_send(1,2,spos,3);
+							m_send(2,1,spos,3);
+						}
 					} while (abs(now-angl)>siki);
 				}
 				else if(abs(now-angl)>180){
@@ -1608,6 +1623,10 @@ namespace motor{
 					do
 					{
 						now=gyro_angle();
+						if(motor::status(1)==1||motor::status(2)==1){
+							m_send(1,1,spos,3);
+							m_send(2,2,spos,3);
+						}
 					} while (abs(now-angl)>siki);
 				}
 			}
@@ -1618,6 +1637,10 @@ namespace motor{
 					do
 					{
 						now=gyro_angle();
+						if(motor::status(1)==1||motor::status(2)==1){
+							m_send(1,1,spos,3);
+							m_send(2,2,spos,3);
+						}
 					} while (abs(now-angl)>siki);
 				}
 				else if(abs(now-angl)>180){
@@ -1626,6 +1649,10 @@ namespace motor{
 					do
 					{
 						now=gyro_angle();
+						if(motor::status(1)==1||motor::status(2)==1){
+							m_send(1,2,spos,3);
+							m_send(2,1,spos,3);
+						}
 					} while (abs(now-angl)>siki);
 				}
 			}

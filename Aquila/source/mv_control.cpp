@@ -192,9 +192,9 @@ uint8_t check_mv(uint8_t dir){ //0:return???,1:????,2:??????
 	serial.string("ch");
 	serial.putdec(res);
 	serial.string("\n\r");
-	if (dir==3&&res!=0){
-		return 2;
-	}
+	//if (dir==3&&res!=0){
+	//	return 2;
+	//}
 	mv_cap(1,false);
 	mv_cap(2,false);
 	mv_cap(3,false);

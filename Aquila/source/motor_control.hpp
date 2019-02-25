@@ -16,9 +16,9 @@
 #define Acc_thre_d -4
 #define Acc_slope_thre 0.1
 #define Ang_slope_Norm 178
-#define Ang_slope_thre 20
+#define Ang_slope_thre 15
 #define Ang_x_Norm 180
-#define Ang_x_thre 10
+#define Ang_x_thre 3
 void Save_angle(void);
 void init_motor(void);
 uint8_t mspi(uint8_t val,uint8_t i);

@@ -100,7 +100,8 @@ node* nodes::make(int x,int y,int z,int flag){
         mal[now].x=x; mal[now].y=y; mal[now].z=z; mal[now].flag=flag;
         mal[now].color=color::white;
         mal[now].ac=false;
-        return &mal[now];
+        mal[now].type=v::unknown;//add on kansai open
+		return &mal[now];
     }
 }
 bl nodes::full(){ if(now>=max_size-1){ return true; }else{ return false; } }

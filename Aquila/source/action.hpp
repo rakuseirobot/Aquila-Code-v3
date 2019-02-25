@@ -17,4 +17,6 @@ void throw_kit(void);
 void finded_victim(uint8_t co,uint8_t lr);
 bool record_time(uint16_t time);
 uint16_t read_time(void);
+extern bool Victim_front;
+extern uint8_t Victim_front_kit;
 #endif /* ACTION_H_ */
