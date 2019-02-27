@@ -28,6 +28,6 @@ typedef enum{
     MV_LEFT,
     MV_FRONT,
     MV_RIGHT
-}mv_ch_t
+}mv_ch_t;
 
 #endif /* MV_CONTROL_H_ */

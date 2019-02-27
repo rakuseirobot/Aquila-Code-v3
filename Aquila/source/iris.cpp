@@ -12,6 +12,7 @@
 #include "mv_control.hpp"
 #include "gyro_control.hpp"
 #include "action.hpp"
+using namespace motor;
 
 void make_nodes(){
 	serial.string("make_nodes\n");
@@ -29,7 +30,7 @@ void black_tile(){
 	if(color_check()==1 || ta.r_now()->type==v::black){
 		ta.r_now()->type=v::black;
 		ta.r_now()->color=v::black;
-		motor::move(4);
+		motor::move(ONE_ADVANCE);
 		motor::fix_position(v::back);
 		ta.turn_l();
 		ta.turn_l();
@@ -81,14 +82,13 @@ bool nachylenie2(uint8_t x){/*make_nodesよりも前に使う*/
 	if(x!=v::back){x=v::front;};
 	uint8_t flag = motor::notify_long_ang(x);/*flag=1:下り、=2:上り、=0:無し*/
 	if(flag==0)return false;
-	motor::brake(1);
-	motor::brake(2);
+	motor::move(BRAKE);
 	serial.putint(x);
 	if(x==v::front){
-		motor::move(6);
+		motor::move(HALF_ADVANCE);
 	}
 	else{
-		motor::move(7);
+		motor::move(HALF_BACK);
 	}
 	motor::gb_fix();
 	motor::turn_fix();
@@ -162,34 +162,34 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 	switch(num){
 		case 0:
 			ta.turn_l();
-			motor::move(3);
+			motor::move(LEFT_TURN);
 			motor::fix_position();
 			ta.go_st();
-			motor::move(0);
+			motor::move(ONE_ADVANCE);
 			motor::fix_position();
 			break;
 		case 1:
 			ta.go_st();
-			motor::move(0);
+			motor::move(ONE_ADVANCE);
 			motor::fix_position();
 			break;
 		case 2:
 			ta.turn_r();
-			motor::move(2);
+			motor::move(RIGHT_TURN);
 			motor::fix_position();
 			ta.go_st();
-			motor::move(0);
+			motor::move(ONE_ADVANCE);
 			motor::fix_position();
 			break;
 		case 4:
 			ta.turn_r();
-			motor::move(9);
+			motor::move(LEFT_TURN);
 			motor::fix_position();
 			ta.turn_r();
-			motor::move(9);
+			motor::move(LEFT_TURN);
 			motor::fix_position();
 			ta.go_st();
-			motor::move(0);
+			motor::move(ONE_ADVANCE);
 			motor::fix_position();
 			break;
         case 3:
@@ -198,7 +198,7 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 			ta.go_st();
 			ta.turn_l();
 			ta.turn_l();
-			motor::move(4);
+			motor::move(ONE_BACK);
 			motor::fix_position(v::back);
 			break;
 		default:
@@ -223,15 +223,15 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 	make_nodes();
 	if(blind_alley(num)){
 		ta.turn_r();
-		motor::move(2);
+		motor::move(RIGHT_TURN);
 		motor::fix_position();
 		ta.turn_l();
-		motor::move(3);
+		motor::move(LEFT_TURN);
 		motor::fix_position();
 	}
 	if(Victim_front&&ta.r_now()->type==v::unknown){
 		ta.turn_l();
-		motor::move(3);//左にまがる
+		motor::move(LEFT_TURN);//左にまがる
 		motor::fix_position();
 		//キットを落とす
 		if(Victim_front_kit==1){
@@ -245,7 +245,7 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 			Drop_kit(0);
 		}
 		ta.turn_r();
-		motor::move(2);//右にまがる
+		motor::move(RIGHT_TURN);//右にまがる
 		motor::fix_position();	
 		Victim_front = false;
 	}
