@@ -40,7 +40,34 @@ void init_mv(void){
 	return;
 }
 
-
+void mv_cap(mv_ch_t di,bool st){
+	switch(di){
+		case MV_LEFT:
+			if(st==true){
+				PORTD.OUTCLR=PIN2_bm;
+			}else{
+				PORTD.OUTSET=PIN2_bm;
+			}
+			break;
+		case MV_FRONT:
+			if(st==true){
+				PORTD.OUTCLR=PIN3_bm;
+			}else{
+				PORTD.OUTSET=PIN3_bm;
+			}
+			break;
+		case MV_RIGHT:
+			if(st==true){
+				PORTD.OUTCLR=PIN4_bm;
+			}else{
+				PORTD.OUTSET=PIN4_bm;
+			}
+			break;
+		default:
+			break;
+	}
+	return;
+}/*
 void mv_cap(uint8_t di,bool st){
 	switch(di){
 		case 1:
@@ -68,7 +95,7 @@ void mv_cap(uint8_t di,bool st){
 			break;
 	}
 	return;
-}
+}*/
 void mv_sig(uint8_t i,bool ud){
 	if (ud){
 		if (i==1){
@@ -165,7 +192,7 @@ bool kit_chk(uint8_t num=0){//num = type of victim. //unknown(1/17)
 	//return (hhh.key==0 || hhh.key==1 );//normal or unknown
 }
 
-uint8_t check_mv(uint8_t dir){ //0:return???,1:????,2:??????
+uint8_t check_mv(mv_ch_t dir){ //0:return???,1:????,2:??????
 	//mv_sig(dir,false);
 	_delay_ms(2);
 	led(Blueled,1);
@@ -195,9 +222,9 @@ uint8_t check_mv(uint8_t dir){ //0:return???,1:????,2:??????
 	//if (dir==3&&res!=0){
 	//	return 2;
 	//}
-	mv_cap(1,false);
-	mv_cap(2,false);
-	mv_cap(3,false);
+	mv_cap(MV_LEFT,false);
+	mv_cap(MV_FRONT,false);
+	mv_cap(MV_RIGHT,false);
 	led(Blueled,0);
 	switch(res){
 		case 3://H  2kits
@@ -235,9 +262,9 @@ uint8_t check_mv(uint8_t dir){ //0:return???,1:????,2:??????
 			break;
 	};
 	lcd_clear();
-	mv_cap(1,true);
-	mv_cap(2,true);
-	mv_cap(3,true);
+	mv_cap(MV_LEFT,true);
+	mv_cap(MV_FRONT,true);
+	mv_cap(MV_RIGHT,true);
 	mv_cap(dir,false);
 	led(Blueled,0);
 	_delay_ms(2);

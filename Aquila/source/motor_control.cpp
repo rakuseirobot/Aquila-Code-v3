@@ -149,91 +149,91 @@ namespace motor{
 	}
 	void wait(bool check){
 		if((PORTJ.IN & PIN5_bm)==0 && check==true){
-			mv_cap(1,false);
-			mv_cap(2,false);
-			mv_cap(3,false);
-			check_mv(1);
+			mv_cap(MV_LEFT,false);
+			mv_cap(MV_FRONT,false);
+			mv_cap(MV_RIGHT,false);
+			check_mv(MV_LEFT);
 			check=false;
 		}
 		if((PORTJ.IN & PIN6_bm)==0 && check==true){
-			mv_cap(1,false);
-			mv_cap(2,false);
-			mv_cap(3,false);
-			check_mv(2);
+			mv_cap(MV_LEFT,false);
+			mv_cap(MV_FRONT,false);
+			mv_cap(MV_RIGHT,false);
+			check_mv(MV_FRONT);
 			check=false;
 		}
 		if((PORTJ.IN & PIN7_bm)==0 && check==true){
-			mv_cap(1,false);
-			mv_cap(2,false);
-			mv_cap(3,false);
-			check_mv(3);
+			mv_cap(MV_LEFT,false);
+			mv_cap(MV_FRONT,false);
+			mv_cap(MV_RIGHT,false);
+			check_mv(MV_RIGHT);
 			check=false;
 		}
 		while(mspi(0,MOTOR_LEFT)!=1){
 			if((PORTJ.IN & PIN5_bm)==0 && check==true){
-				mv_cap(1,false);
-				mv_cap(2,false);
-				mv_cap(3,false);
-				check_mv(1);
+				mv_cap(MV_LEFT,false);
+				mv_cap(MV_FRONT,false);
+				mv_cap(MV_RIGHT,false);
+				check_mv(MV_LEFT);
 				check=false;
 			}
 			if((PORTJ.IN & PIN6_bm)==0 && check==true){
-				mv_cap(1,false);
-				mv_cap(2,false);
-				mv_cap(3,false);
-				check_mv(2);
+				mv_cap(MV_LEFT,false);
+				mv_cap(MV_FRONT,false);
+				mv_cap(MV_RIGHT,false);
+				check_mv(MV_FRONT);
 				check=false;
 			}
 			if((PORTJ.IN & PIN7_bm)==0 && check==true){
-				mv_cap(1,false);
-				mv_cap(2,false);
-				mv_cap(3,false);
-				check_mv(3);
+				mv_cap(MV_LEFT,false);
+				mv_cap(MV_FRONT,false);
+				mv_cap(MV_RIGHT,false);
+				check_mv(MV_RIGHT);
 				check=false;
 			}
 		}
 		while(mspi(0,MOTOR_RIGHT)!=1){
 			if((PORTJ.IN & PIN5_bm)==0 && check==true){
-				mv_cap(1,false);
-				mv_cap(2,false);
-				mv_cap(3,false);
-				check_mv(1);
+				mv_cap(MV_LEFT,false);
+				mv_cap(MV_FRONT,false);
+				mv_cap(MV_RIGHT,false);
+				check_mv(MV_LEFT);
 				check=false;
 			}
 			if((PORTJ.IN & PIN6_bm)==0 && check==true){
-				mv_cap(1,false);
-				mv_cap(2,false);
-				mv_cap(3,false);
-				check_mv(2);
+				mv_cap(MV_LEFT,false);
+				mv_cap(MV_FRONT,false);
+				mv_cap(MV_RIGHT,false);
+				check_mv(MV_FRONT);
 				check=false;
 			}
 			if((PORTJ.IN & PIN7_bm)==0 && check==true){
-				mv_cap(1,false);
-				mv_cap(2,false);
-				mv_cap(3,false);
-				check_mv(3);
+				mv_cap(MV_LEFT,false);
+				mv_cap(MV_FRONT,false);
+				mv_cap(MV_RIGHT,false);
+				check_mv(MV_RIGHT);
 				check=false;
 			}
 		}
 		if((PORTJ.IN & PIN5_bm)==0 && check==true){
-			mv_cap(1,false);
-			mv_cap(2,false);
-			mv_cap(3,false);
-			check_mv(1);
+			mv_cap(MV_LEFT,false);
+			mv_cap(MV_FRONT,false);
+			mv_cap(MV_RIGHT,false);
+			check_mv(MV_LEFT);
 			check=false;
 		}
 		if((PORTJ.IN & PIN6_bm)==0 && check==true){
-			mv_cap(1,false);
-			mv_cap(2,false);
-			mv_cap(3,false);
-			check_mv(2);
+			mv_cap(MV_LEFT,false);
+			mv_cap(MV_FRONT,false);
+			mv_cap(MV_RIGHT,false);
+			check_mv(MV_FRONT);
 			check=false;
 		}
 		if((PORTJ.IN & PIN7_bm)==0 && check==true){
-			mv_cap(1,false);
-			mv_cap(2,false);
-			mv_cap(3,false);
-			check_mv(3);
+			mv_cap(MV_LEFT,false);
+			mv_cap(MV_FRONT,false);
+			mv_cap(MV_RIGHT,false);
+			check_mv(MV_RIGHT);
 			check=false;
 		}
 		return;
@@ -253,91 +253,91 @@ namespace motor{
 			chk[2]=true;
 		}
 		if((PORTJ.IN & PIN5_bm)==0 && chk[0]==true){
-			mv_cap(1,false);
-			mv_cap(2,false);
-			mv_cap(3,false);
-			check_mv(1);
+			mv_cap(MV_LEFT,false);
+			mv_cap(MV_FRONT,false);
+			mv_cap(MV_RIGHT,false);
+			check_mv(MV_LEFT);
 			chk[0]=false;
 		}
 		if((PORTJ.IN & PIN6_bm)==0 && chk[1]==true){
-			mv_cap(1,false);
-			mv_cap(2,false);
-			mv_cap(3,false);
-			check_mv(2);
+			mv_cap(MV_LEFT,false);
+			mv_cap(MV_FRONT,false);
+			mv_cap(MV_RIGHT,false);
+			check_mv(MV_FRONT);
 			chk[1]=false;
 		}
 		if((PORTJ.IN & PIN7_bm)==0 && chk[2]==true){
-			mv_cap(1,false);
-			mv_cap(2,false);
-			mv_cap(3,false);
-			check_mv(3);
+			mv_cap(MV_LEFT,false);
+			mv_cap(MV_FRONT,false);
+			mv_cap(MV_RIGHT,false);
+			check_mv(MV_RIGHT);
 			chk[2]=false;
 		}
 		while(mspi(0,1)!=1){
 			if((PORTJ.IN & PIN5_bm)==0 && chk[0]==true){
-				mv_cap(1,false);
-				mv_cap(2,false);
-				mv_cap(3,false);
-				check_mv(1);
+				mv_cap(MV_LEFT,false);
+				mv_cap(MV_FRONT,false);
+				mv_cap(MV_RIGHT,false);
+				check_mv(MV_LEFT);
 				chk[0]=false;
 			}
 			if((PORTJ.IN & PIN6_bm)==0 && chk[1]==true){
-				mv_cap(1,false);
-				mv_cap(2,false);
-				mv_cap(3,false);
-				check_mv(2);
+				mv_cap(MV_LEFT,false);
+				mv_cap(MV_FRONT,false);
+				mv_cap(MV_RIGHT,false);
+				check_mv(MV_FRONT);
 				chk[1]=false;
 			}
 			if((PORTJ.IN & PIN7_bm)==0 && chk[2]==true){
-				mv_cap(1,false);
-				mv_cap(2,false);
-				mv_cap(3,false);
-				check_mv(3);
+				mv_cap(MV_LEFT,false);
+				mv_cap(MV_FRONT,false);
+				mv_cap(MV_RIGHT,false);
+				check_mv(MV_RIGHT);
 				chk[2]=false;
 			}
 		}
 		while(mspi(0,2)!=1){
 			if((PORTJ.IN & PIN5_bm)==0 && chk[0]==true){
-				mv_cap(1,false);
-				mv_cap(2,false);
-				mv_cap(3,false);
-				check_mv(1);
+				mv_cap(MV_LEFT,false);
+				mv_cap(MV_FRONT,false);
+				mv_cap(MV_RIGHT,false);
+				check_mv(MV_LEFT);
 				chk[0]=false;
 			}
 			if((PORTJ.IN & PIN6_bm)==0 && chk[1]==true){
-				mv_cap(1,false);
-				mv_cap(2,false);
-				mv_cap(3,false);
-				check_mv(2);
+				mv_cap(MV_LEFT,false);
+				mv_cap(MV_FRONT,false);
+				mv_cap(MV_RIGHT,false);
+				check_mv(MV_FRONT);
 				chk[1]=false;
 			}
 			if((PORTJ.IN & PIN7_bm)==0 && chk[2]==true){
-				mv_cap(1,false);
-				mv_cap(2,false);
-				mv_cap(3,false);
-				check_mv(3);
+				mv_cap(MV_LEFT,false);
+				mv_cap(MV_FRONT,false);
+				mv_cap(MV_RIGHT,false);
+				check_mv(MV_RIGHT);
 				chk[2]=false;
 			}
 		}
 		if((PORTJ.IN & PIN5_bm)==0 && chk[0]==true){
-			mv_cap(1,false);
-			mv_cap(2,false);
-			mv_cap(3,false);
-			check_mv(1);
+			mv_cap(MV_LEFT,false);
+			mv_cap(MV_FRONT,false);
+			mv_cap(MV_RIGHT,false);
+			check_mv(MV_LEFT);
 			chk[0]=false;
 		}
 		if((PORTJ.IN & PIN6_bm)==0 && chk[1]==true){
-			mv_cap(1,false);
-			mv_cap(2,false);
-			mv_cap(3,false);
-			check_mv(2);
+			mv_cap(MV_LEFT,false);
+			mv_cap(MV_FRONT,false);
+			mv_cap(MV_RIGHT,false);
+			check_mv(MV_FRONT);
 			chk[1]=false;
 		}
 		if((PORTJ.IN & PIN7_bm)==0 && chk[2]==true){
-			mv_cap(1,false);
-			mv_cap(2,false);
-			mv_cap(3,false);
-			check_mv(3);
+			mv_cap(MV_LEFT,false);
+			mv_cap(MV_FRONT,false);
+			mv_cap(MV_RIGHT,false);
+			check_mv(MV_RIGHT);
 			chk[2]=false;
 		}
 		return;
@@ -348,9 +348,9 @@ namespace motor{
 		float now = 0;
 		bool st_f = false;
 		b_angle=gyro_angle();
-		mv_cap(1,true);
-		mv_cap(2,true);
-		mv_cap(3,true);
+		mv_cap(MV_LEFT,true);
+		mv_cap(MV_FRONT,true);
+		mv_cap(MV_RIGHT,true);
 		motor::wait();
 		switch(x){
 			case ONE_ADVANCE: //1block advance
@@ -471,9 +471,9 @@ namespace motor{
 			fix_angle_v(b_angle);
 		}
 		motor::wait();
-		mv_cap(1,true);
-		mv_cap(2,true);
-		mv_cap(3,true);
+		mv_cap(MV_LEFT,true);
+		mv_cap(MV_FRONT,true);
+		mv_cap(MV_RIGHT,true);
 		_delay_ms(200);
 	}
 	void forever(void){
