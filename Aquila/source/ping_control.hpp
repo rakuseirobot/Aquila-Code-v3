@@ -21,6 +21,15 @@ uint16_t smaller(uint16_t x,uint16_t y);
 uint8_t check_ping(int x);
 void ping_debug(void);
 
+typedef enum{
+    LEFT_BACK,
+    LEFT_FRONT,
+    FRONT,
+    RIGHT_FRONT,
+    RIGHT_BACK,
+    BACK
+}ping_ch_t;
+
 
 
 #endif /* PING_CONTROL_H_ */

@@ -19,15 +19,32 @@
 #define Ang_slope_thre 15
 #define Ang_x_Norm 180
 #define Ang_x_thre 3
-void Save_angle(void);
-void init_motor(void);
-uint8_t mspi(uint8_t val,uint8_t i);
-void m_send(uint8_t rl,uint8_t x,uint8_t y,uint8_t z);
-int16_t smaller_s(int16_t x,int16_t y);
 namespace motor{
-	void brake(uint8_t x);
+	typedef enum{
+		MOTOR_RIGHT,
+		MOTOR_LEFT
+	}ch_t;
+	typedef enum{
+		MOTOR_BACK,
+		MOTOR_ADVANCE,
+		MOTOR_BRAKE,
+	}move_sig_t;
+	typedef enum{
+		ONE_ADVANCE=0,
+		TWO_ADVANCE=1,
+		RIGHT_TURN=2,
+		LEFT_TURN=3,
+		ONE_BACK=4,
+		TWO_BACK=5,
+		HALF_ADVANCE=6,
+		HALF_BACK=7,
+		RIGHT_TURN_NO_GYRO=8,
+		LEFT_TURN_NO_GYRO=9,
+		BRAKE=10
+	}move_t;
+	void brake(ch_t x);
 	void wait(bool check=true);
-	void move(uint8_t x);/*
+	void move(move_t x=BRAKE);/*
 	void forever(void);
 	void back(int x);
 	void advance(int x);
@@ -47,5 +64,11 @@ namespace motor{
 	#define m_speed 7
 	#define m_turnspeed 6
 }
+
+void Save_angle(void);
+void init_motor(void);
+uint8_t mspi(uint8_t val,motor::ch_t i);
+void m_send(motor::ch_t rl,motor::move_sig_t sig,uint8_t y,uint8_t z);
+int16_t smaller_s(int16_t x,int16_t y);
 void enkaigei(void);
 #endif /* MOTOR_CONTROL_H_ */

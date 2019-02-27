@@ -48,11 +48,11 @@ void init_motor(void){
 void Save_angle(void){
 	Saved_angle=gyro_angle();
 }
-uint8_t mspi(uint8_t val,uint8_t i){
-	if(i==2){
+uint8_t mspi(uint8_t val,motor::ch_t i){
+	if(i==motor::MOTOR_LEFT){
 		PORTB.OUTCLR=LeftM;
 	}
-	else if(i==1){
+	else if(i==motor::MOTOR_RIGHT){
 		PORTB.OUTCLR=RightM;
 	}
 	else{
@@ -64,10 +64,14 @@ uint8_t mspi(uint8_t val,uint8_t i){
 	PORTB.OUTSET=PIN2_bm|PIN3_bm;
 	return dat;
 }
-void m_send(uint8_t rl,uint8_t x,uint8_t y,uint8_t z){//rl:Right or Left(1:L2:R)x:Go or Back(1:Back,2:Go)y:speed(max7(1 is for fixing movement))z:distance(1:1block,2:2blocks,3:turn,4:half))
+void m_send(motor::ch_t rl,motor::move_sig_t sig,uint8_t y,uint8_t z){//rl:Right or Left(1:L2:R)x:Go or Back(1:Back,2:Go)y:speed(max7(1 is for fixing movement))z:distance(1:1block,2:2blocks,3:turn,4:half))
 	//data = 100*x+10*y+z;
-	if(x>3){
-		x=3;
+	uint8_t x=3;
+	if(sig==motor::MOTOR_BACK){
+		x=1;
+	}
+	else if(sig==motor::MOTOR_ADVANCE){
+		x=2;
 	}
 	if(y>7){
 		y=7;
@@ -76,10 +80,10 @@ void m_send(uint8_t rl,uint8_t x,uint8_t y,uint8_t z){//rl:Right or Left(1:L2:R)
 		z=7;
 	}
 	data = (x<<6) | (y<<3) | z;
-	if(rl == 1){
+	if(rl == motor::MOTOR_RIGHT){
 		PORTB.OUTCLR = PIN2_bm;
 	}
-	else if(rl == 2){
+	else if(rl == motor::MOTOR_LEFT){
 		PORTB.OUTCLR = PIN3_bm;
 	}
 	else{
@@ -102,8 +106,8 @@ namespace motor{
 	//usart serial(&USARTC0,&PORTC);
 	float b_angle=0.0;
 	
-	void brake(uint8_t x){
-		m_send(x,3,0,0);
+	void brake(ch_t x){
+		m_send(x,MOTOR_BRAKE,0,0);
 		return;
 	}
 	//uint32_t mcount = 0;
@@ -121,7 +125,7 @@ namespace motor{
 		}
 		mcount = 0;
 	}*/
-	uint8_t status(uint8_t m){//1:free 2:busy
+	uint8_t status(motor::ch_t m){//1:free 2:busy
 		return mspi(0,m);
 	}
 	void wait(bool check){
@@ -146,7 +150,7 @@ namespace motor{
 			check_mv(3);
 			check=false;
 		}
-		while(mspi(0,1)!=1){
+		while(mspi(0,MOTOR_LEFT)!=1){
 			if((PORTJ.IN & PIN5_bm)==0 && check==true){
 				mv_cap(1,false);
 				mv_cap(2,false);
@@ -169,7 +173,7 @@ namespace motor{
 				check=false;
 			}
 		}
-		while(mspi(0,2)!=1){
+		while(mspi(0,MOTOR_RIGHT)!=1){
 			if((PORTJ.IN & PIN5_bm)==0 && check==true){
 				mv_cap(1,false);
 				mv_cap(2,false);
@@ -319,7 +323,7 @@ namespace motor{
 		}
 		return;
 	}*/
-	void move(uint8_t x=6){// x = 0:1 block Advance 1:2 blocks Advance 2:Right Turn with Gyro 3:Left Turn with Gyro 4:1 block Back 5:2 block Back 6:Half block Advance 7:Half block Back 8:right Turn without Compass 9:left Turn without Compass 
+	void move(move_t x){// x = 0:1 block Advance 1:2 blocks Advance 2:Right Turn with Gyro 3:Left Turn with Gyro 4:1 block Back 5:2 block Back 6:Half block Advance 7:Half block Back 8:right Turn without Compass 9:left Turn without Compass 
 		_delay_ms(5);
 		float first = 0;
 		float now = 0;
@@ -330,25 +334,25 @@ namespace motor{
 		mv_cap(3,true);
 		motor::wait();
 		switch(x){
-			case 0: //1block advance
-				m_send(2,2,m_speed,1);
-				m_send(1,2,m_speed,1);
+			case ONE_ADVANCE: //1block advance
+				m_send(MOTOR_LEFT,MOTOR_ADVANCE,m_speed,1);
+				m_send(MOTOR_RIGHT,MOTOR_ADVANCE,m_speed,1);
 				st_f=true;
 				//_delay_ms(300);
 			break;
-			case 1: //2block advance
-				m_send(1,2,m_speed,2);
-				m_send(2,2,m_speed,2);
+			case TWO_ADVANCE: //2block advance
+				m_send(MOTOR_RIGHT,MOTOR_ADVANCE,m_speed,2);
+				m_send(MOTOR_LEFT,MOTOR_ADVANCE,m_speed,2);
 				st_f=true;
 				//_delay_ms(300);
 			break;
-			case 2: //Right turn with gyro
+			case RIGHT_TURN: //Right turn with gyro
 				first = gyro_angle();
 				//serial.putint(first);
 				//serial.string("\n\r");
 				turn_retry2:
-				m_send(1,2,m_turnspeed,5);
-				m_send(2,1,m_turnspeed,5);
+				m_send(MOTOR_RIGHT,MOTOR_ADVANCE,m_turnspeed,5);
+				m_send(MOTOR_LEFT,MOTOR_BACK,m_turnspeed,5);
 				_delay_ms(2);
 				now = gyro_angle();
 				//serial.putint(now);
@@ -357,13 +361,12 @@ namespace motor{
 					now=gyro_angle();
 					//serial.putint(now);
 					//serial.string("\n\r");
-					if(motor::status(1)==1||motor::status(2)==1){	
-						m_send(1,2,m_turnspeed,5);
-						m_send(2,1,m_turnspeed,5);
+					if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){	
+						m_send(MOTOR_RIGHT,MOTOR_ADVANCE,m_turnspeed,5);
+						m_send(MOTOR_LEFT,MOTOR_BACK,m_turnspeed,5);
 					}
 				}while((first<now?now-first:now-first+360)>270||(first<now?now-first:now-first+360)<90);
-				motor::brake(1);
-				motor::brake(2);
+				motor::move(BRAKE);
 				_delay_ms(100);
 				now=gyro_angle();
 				if((first<now?now-first:now-first+360)>270||(first<now?now-first:now-first+360)<90){
@@ -376,13 +379,13 @@ namespace motor{
 					fix_angle_v(first-90);
 				}
 			break;
-			case 3: //Left Turn with gyro
+			case LEFT_TURN: //Left Turn with gyro
 				first = gyro_angle();
 				//serial.putint(first);
 				//serial.string("\n\r");
 				turn_retry3:
-				m_send(1,1,m_turnspeed,5);
-				m_send(2,2,m_turnspeed,5);
+				m_send(MOTOR_RIGHT,MOTOR_BACK,m_turnspeed,5);
+				m_send(MOTOR_LEFT,MOTOR_ADVANCE,m_turnspeed,5);
 				_delay_ms(2);
 				now=gyro_angle();
 				//serial.putint(now);
@@ -391,13 +394,12 @@ namespace motor{
 					now=gyro_angle();
 					//serial.putint(now);
 					//serial.string("\n\r");
-					if(motor::status(1)==1||motor::status(2)==1){	
-						m_send(1,1,m_turnspeed,5);
-						m_send(2,2,m_turnspeed,5);
+					if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){	
+						m_send(MOTOR_RIGHT,MOTOR_BACK,m_turnspeed,5);
+						m_send(MOTOR_LEFT,MOTOR_ADVANCE,m_turnspeed,5);
 					}
 				}while((first<now?now-first:now-first+360)<90||(first<now?now-first:now-first+360)>270);
-				motor::brake(1);
-				motor::brake(2);
+				motor::move(BRAKE);
 				now=gyro_angle();
 				_delay_ms(100);
 				if((first<now?now-first:now-first+360)<90||(first<now?now-first:now-first+360)>270){
@@ -410,39 +412,39 @@ namespace motor{
 					fix_angle_v(first+90);
 				}
 				break;
-			case 4: //1block back
-				m_send(1,1,m_speed,1);
-				m_send(2,1,m_speed,1);
+			case ONE_BACK: //1block back
+				m_send(MOTOR_RIGHT,MOTOR_BACK,m_speed,1);
+				m_send(MOTOR_LEFT,MOTOR_BACK,m_speed,1);
 				st_f=true;
 			break;
-			case 5: //2block back
-				m_send(1,1,m_speed,2);
-				m_send(2,1,m_speed,2);
+			case TWO_BACK: //2block back
+				m_send(MOTOR_RIGHT,MOTOR_BACK,m_speed,2);
+				m_send(MOTOR_LEFT,MOTOR_BACK,m_speed,2);
 				st_f=true;
 			break;
 
-			case 6: //half advance
-				m_send(1,2,m_speed,4);
-				m_send(2,2,m_speed,4);
+			case HALF_ADVANCE: //half advance
+				m_send(MOTOR_RIGHT,MOTOR_ADVANCE,m_speed,4);
+				m_send(MOTOR_LEFT,MOTOR_ADVANCE,m_speed,4);
 				st_f=true;
 			break;
-			case 7: //half back
-				m_send(1,1,m_speed,4);
-				m_send(2,1,m_speed,4);
+			case HALF_BACK: //half back
+				m_send(MOTOR_RIGHT,MOTOR_BACK,m_speed,4);
+				m_send(MOTOR_LEFT,MOTOR_BACK,m_speed,4);
 				st_f=true;
 			break;
-			case 8: //Left Turn without gyro (????)
-				m_send(1,2,m_turnspeed,3);
-				m_send(2,1,m_turnspeed,3);
+			case LEFT_TURN_NO_GYRO: //Left Turn without gyro (????)
+				m_send(MOTOR_RIGHT,MOTOR_ADVANCE,m_turnspeed,3);
+				m_send(MOTOR_LEFT,MOTOR_BACK,m_turnspeed,3);
 				//_delay_ms(300);
 			break;
-			case 9: //Right Turn without gyro (???)
-				m_send(1,1,m_turnspeed,3);
-				m_send(2,2,m_turnspeed,3);
+			case RIGHT_TURN_NO_GYRO: //Right Turn without gyro (???)
+				m_send(MOTOR_RIGHT,MOTOR_BACK,m_turnspeed,3);
+				m_send(MOTOR_LEFT,MOTOR_ADVANCE,m_turnspeed,3);
 			break;
 			default:
-				motor::brake(1);
-				motor::brake(2);
+				motor::brake(MOTOR_RIGHT);
+				motor::brake(MOTOR_LEFT);
 			break;
 		}
 		motor::wait();
@@ -456,8 +458,8 @@ namespace motor{
 		_delay_ms(200);
 	}
 	void forever(void){
-		m_send(1,1,5,0);
-		m_send(2,1,5,0);
+		m_send(MOTOR_RIGHT,MOTOR_ADVANCE,5,0);
+		m_send(MOTOR_LEFT,MOTOR_ADVANCE,5,0);
 		while(ping(3)>=3);
 		motor::move();
 		return;
@@ -501,12 +503,12 @@ namespace motor{
 	void fix(uint8_t x,uint8_t ping1,uint8_t ping2,int no){//x=right,left ping1,ping2:Compare ping number no:Sikiiti 
 		int val=0;
 		if(x==1){//left
-			m_send(1,1,2,1);
-			m_send(2,2,2,1);
+			m_send(MOTOR_RIGHT,MOTOR_BACK,2,1);
+			m_send(MOTOR_LEFT,MOTOR_ADVANCE,2,1);
 		}
 		else if(x==2){//right
-			m_send(1,2,2,1);
-			m_send(2,1,2,1);
+			m_send(MOTOR_RIGHT,MOTOR_ADVANCE,2,1);
+			m_send(MOTOR_LEFT,MOTOR_BACK,2,1);
 		}
 		while(1){
 			val=ping(ping1)-ping(ping2);
@@ -526,10 +528,10 @@ namespace motor{
 		dis[1]=ping(6);//Back
 		float ang=gyro_angle_y();
 		if(ang<=Ang_slope_Norm-Ang_slope_thre*1.5){
-			motor::move(7);
+			motor::move(HALF_BACK);
 		}
 		else if(ang>=Ang_slope_Norm+Ang_slope_thre*1.5){
-			motor::move(6);
+			motor::move(HALF_ADVANCE);
 		}
 		
 		dis[0]=ping(3);//Forward
@@ -541,38 +543,37 @@ namespace motor{
 				return;
 			}
 			lcd_clear();
-			lcd_putstr(LCD1_TWI,"gb_fixF");
 			if((gbbest-dis[0])<fixno*-1){
-				m_send(1,2,1,2);
-				m_send(2,2,1,2);
+				lcd_putstr(LCD1_TWI,"gb_fixF");
+				m_send(MOTOR_RIGHT,MOTOR_ADVANCE,1,2);
+				m_send(MOTOR_LEFT,MOTOR_ADVANCE,1,2);
 				while(dis[0]>gbbest){
 					if(dis[0]>=longway){
 						break;
 					}
-					if(motor::status(1)==1||motor::status(2)==1){
-						m_send(1,2,1,2);
-						m_send(2,2,1,2);
+					if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+						m_send(MOTOR_RIGHT,MOTOR_ADVANCE,1,2);
+						m_send(MOTOR_LEFT,MOTOR_ADVANCE,1,2);
 					}
 					dis[0]=ping(3);
 				}
-				motor::brake(1);
-				motor::brake(2);
+				motor::move(BRAKE);
 			}
 			else if((gbbest-dis[0])>fixno){
-				m_send(1,1,1,2);
-				m_send(2,1,1,2);
+				lcd_putstr(LCD1_TWI,"gb_fixB");
+				m_send(MOTOR_RIGHT,MOTOR_BACK,1,2);
+				m_send(MOTOR_LEFT,MOTOR_BACK,1,2);
 				while(dis[0]<gbbest){
 					if(dis[0]>=longway){
 						break;
 					}
-					if(motor::status(1)==1||motor::status(2)==1){
-						m_send(1,1,1,2);
-						m_send(2,1,1,2);
+					if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+						m_send(MOTOR_RIGHT,MOTOR_BACK,1,2);
+						m_send(MOTOR_LEFT,MOTOR_BACK,1,2);
 					}
 					dis[0]=ping(3);
 				}
-				motor::brake(1);
-				motor::brake(2);
+				motor::move(BRAKE);
 			}
 		}
 		else if(Sikiti>=dis[1]){
@@ -582,38 +583,37 @@ namespace motor{
 				return;
 			}
 			lcd_clear();
-			lcd_putstr(LCD1_TWI,"gb_fixB");
 			if((gbbest-dis[1])>fixno){
-				m_send(1,2,1,2);
-				m_send(2,2,1,2);
+				lcd_putstr(LCD1_TWI,"gb_fixF");
+				m_send(MOTOR_RIGHT,MOTOR_ADVANCE,1,2);
+				m_send(MOTOR_LEFT,MOTOR_ADVANCE,1,2);
 				while(dis[1]<gbbest){
 					if(dis[1]>=longway){
 						break;
 					}
-					if(motor::status(1)==1||motor::status(2)==1){
-						m_send(1,2,1,2);
-						m_send(2,2,1,2);
+					if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+						m_send(MOTOR_RIGHT,MOTOR_ADVANCE,1,2);
+						m_send(MOTOR_LEFT,MOTOR_ADVANCE,1,2);
 					}
 					dis[1]=ping(6);
 				}
-				motor::brake(1);
-				motor::brake(2);
+				motor::move(BRAKE);
 			}
 			else if((gbbest-dis[1])<fixno*-1){
-				m_send(1,1,1,2);
-				m_send(2,1,1,2);
+				lcd_putstr(LCD1_TWI,"gb_fixB");
+				m_send(MOTOR_RIGHT,MOTOR_BACK,1,2);
+				m_send(MOTOR_LEFT,MOTOR_BACK,1,2);
 				while(dis[1]>gbbest){
 					if(dis[1]>=longway){
 						break;
 					}
-					if(motor::status(1)==1||motor::status(2)==1){
-						m_send(1,1,1,2);
-						m_send(2,1,1,2);
+					if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+						m_send(MOTOR_RIGHT,MOTOR_BACK,1,2);
+						m_send(MOTOR_LEFT,MOTOR_BACK,1,2);
 					}
 					dis[1]=ping(6);
 				}
-				motor::brake(1);
-				motor::brake(2);
+				motor::move(BRAKE);
 			}
 		}
 		else{}
@@ -661,26 +661,26 @@ namespace motor{
 			if(val < turnvalue*-1){
 				lcd_clear();
 				lcd_putstr(LCD1_TWI,"FixingTurn");
-				m_send(1,1,1,2);
-				m_send(2,2,1,2);
+				m_send(MOTOR_RIGHT,MOTOR_BACK,1,2);
+				m_send(MOTOR_LEFT,MOTOR_ADVANCE,1,2);
 				do{
 					val=ping(chk[0])-ping(chk[1]);
-					if(motor::status(1)==1||motor::status(2)==1){
-						m_send(1,1,1,2);
-						m_send(2,2,1,2);
+					if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+						m_send(MOTOR_RIGHT,MOTOR_BACK,1,2);
+						m_send(MOTOR_LEFT,MOTOR_ADVANCE,1,2);
 					}
 				}while(val<turnvalue);
 			}
 			else if(val > turnvalue){
 				lcd_clear();
 				lcd_putstr(LCD1_TWI,"FixingTurn");
-				m_send(1,2,1,2);
-				m_send(2,1,1,2);
+				m_send(MOTOR_RIGHT,MOTOR_ADVANCE,1,2);
+				m_send(MOTOR_LEFT,MOTOR_BACK,1,2);
 				do{
 					val=ping(chk[0])-ping(chk[1]);
-					if(motor::status(1)==1||motor::status(2)==1){
-						m_send(1,2,1,2);
-						m_send(2,1,1,2);
+					if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+						m_send(MOTOR_RIGHT,MOTOR_ADVANCE,1,2);
+						m_send(MOTOR_LEFT,MOTOR_BACK,1,2);
 					}
 				}while(val>turnvalue);
 			}
@@ -690,8 +690,7 @@ namespace motor{
 			//	usart_string("Needless\n\r");
 				return;
 			}
-			motor::brake(1);
-			motor::brake(2);
+			motor::move(BRAKE);
 			//motor::wait();
 			lcd_clear();
 			//lcd_putstr(LCD1_TWI,"Succees");
@@ -712,20 +711,20 @@ namespace motor{
 		if(smaller_s(dis[2],dis[1])>=Sikiti&&rose>=smaller_s(dis[1],dis[2])){
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"NotifyP");
-			motor::move(2);
-			motor::move(0);
-			motor::move(3);
-			motor::move(4);
+			motor::move(RIGHT_TURN);
+			motor::move(ONE_ADVANCE);
+			motor::move(LEFT_TURN);
+			motor::move(ONE_BACK);
 			lcd_clear();
 			return 1;
 		}
 		else if(smaller_s(dis[5],dis[4])>=Sikiti&&rose>=smaller_s(dis[5],dis[4])){
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"NotifyP");
-			motor::move(3);
-			motor::move(0);
-			motor::move(2);
-			motor::move(4);
+			motor::move(LEFT_TURN);
+			motor::move(ONE_ADVANCE);
+			motor::move(RIGHT_TURN);
+			motor::move(ONE_BACK);
 			lcd_clear();
 			return 1;
 		}
@@ -775,10 +774,10 @@ namespace motor{
 			serial.string("NotifyHalf");
 			serial.string("\n\r");
 			if (x == v::front){
-				motor::move(6);
+				motor::move(HALF_ADVANCE);
 			}
 			else if(x == v::back){
-				motor::move(7);
+				motor::move(HALF_BACK);
 			}
 			lcd_clear();
 		}
@@ -795,15 +794,15 @@ namespace motor{
 			motor::turn_fix();
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"NotifyL");
-			motor::move(0);
+			motor::move(ONE_ADVANCE);
 			motor::turn_fix();
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"NotifyL");
-			motor::move(0);
+			motor::move(ONE_ADVANCE);
 			motor::turn_fix();
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"NotifyL");
-			motor::move(0);
+			motor::move(ONE_ADVANCE);
 			motor::turn_fix();
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"NotifyL");
@@ -811,8 +810,8 @@ namespace motor{
 			if(gbbest<=dis[0]){
 				led(Redled,1);
 				do{
-					m_send(1,2,7,1);
-					m_send(2,2,7,1);
+					m_send(MOTOR_RIGHT,MOTOR_ADVANCE,7,1);
+					m_send(MOTOR_LEFT,MOTOR_ADVANCE,7,1);
 					dis[0] = ping(3);
 					dis[1] = smaller_s(ping(2),ping(1));
 					dis[2] = smaller_s(ping(5),ping(4));/*
@@ -821,10 +820,9 @@ namespace motor{
 					usart_string("\n\r");*/
 
 				}while(/*PORTJ.IN&dev == 0 && */(dis[2]<=Sikiti)&&(dis[1]<=Sikiti)&&(dis[0] >= gbbest));
-				motor::brake(1);
-				motor::brake(2);
+				motor::move(BRAKE);
 			}
-			motor::move(6);
+			motor::move(HALF_ADVANCE);
 			led(Blueled,0);
 			led(Redled,0);
 			serial.string("saka!");
@@ -847,15 +845,15 @@ namespace motor{
 			motor::turn_fix();
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"NotifyL");
-			motor::move(0);
+			motor::move(ONE_ADVANCE);
 			motor::turn_fix();
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"NotifyL");
-			motor::move(0);
+			motor::move(ONE_ADVANCE);
 			motor::turn_fix();
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"NotifyL");
-			motor::move(0);
+			motor::move(ONE_ADVANCE);
 			motor::turn_fix();
 			lcd_clear();
 			lcd_putstr(LCD1_TWI,"NotifyL");
@@ -864,12 +862,11 @@ namespace motor{
 			if(dis >= gbbest){
 				led(Redled,1);
 				do{
-					m_send(1,2,m_speed,1);
-					m_send(2,2,m_speed,1);
+					m_send(MOTOR_RIGHT,MOTOR_ADVANCE,m_speed,1);
+					m_send(MOTOR_LEFT,MOTOR_ADVANCE,m_speed,1);
 					dis = ping(3);
 				}while(dis >= gbbest);
-				motor::brake(1);
-				motor::brake(2);
+				motor::move(BRAKE);
 				//motor::wait();
 				led(Redled,0);
 			}
@@ -908,8 +905,8 @@ namespace motor{
 				}
 				lcd_clear();
 				lcd_putstr(LCD1_TWI,"NotiL!U");
-				m_send(1,2,spos,3);
-				m_send(2,2,spos,3);
+				m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+				m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 				ac=acc_x_mes();
 				while(ac>=Acc_thre_u){
 					ac=acc_x_mes();
@@ -929,9 +926,9 @@ namespace motor{
 							do 
 							{
 								now=acc_y_mes();
-								if(motor::status(1)==1||motor::status(2)==1){
-									m_send(1,2,spos-2,3);
-									m_send(2,2,spos,3);
+								if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+									m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos-2,3);
+									m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 								}
 							} while (now>Acc_slope_thre);
 						}
@@ -941,9 +938,9 @@ namespace motor{
 							do
 							{
 								now=acc_y_mes();
-								if(motor::status(1)==1||motor::status(2)==1){
-									m_send(1,2,spos,3);
-									m_send(2,2,spos-2,3);
+								if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_LEFT)==1){
+									m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+									m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos-2,3);
 								}
 							} while (now<Acc_slope_thre*-1);
 						}
@@ -963,9 +960,9 @@ namespace motor{
 						error_led(2,0);
 						error_led(1,0);
 					}
-					if(motor::status(1)==1||motor::status(2)==1){
-						m_send(1,2,spos,3);
-						m_send(2,2,spos,3);
+					if(motor::status(MOTOR_RIGHT)==1||motor::status(MOTOR_LEFT)==1){
+						m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+						m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 						error_led(2,0);
 						error_led(1,0);
 					}
@@ -981,14 +978,14 @@ namespace motor{
 				if(ac>=Acc_thre_u){
 					notify_long_acc(x,false);
 				}
-				motor::move(10);
+				motor::move();
 				ac=acc_x_mes();
 				if(ac>=Acc_thre_u){
 					notify_long_acc(x,false);
 				}
 				_delay_ms(1);
 				lcd_clear();
-				motor::move(7);
+				motor::move(HALF_BACK);
 				return 2;
 			}
 			else if(ac<=Acc_thre_d){//‰º‚è
@@ -1009,8 +1006,8 @@ namespace motor{
 				}
 				lcd_clear();
 				lcd_putstr(LCD1_TWI,"NotiL!D");
-				m_send(1,2,spos,3);
-				m_send(2,2,spos,3);
+				m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+				m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 				ac=acc_x_mes();
 				while(ac<=Acc_thre_d){
 					ac=acc_x_mes();
@@ -1030,9 +1027,9 @@ namespace motor{
 							do 
 							{
 								now=acc_y_mes();
-								if(motor::status(1)==1||motor::status(2)==1){
-									m_send(1,2,spos,3);
-									m_send(2,2,spos-3,3);
+								if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+									m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+									m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos-3,3);
 								}
 							} while (now>Acc_slope_thre);
 						}
@@ -1042,9 +1039,9 @@ namespace motor{
 							do
 							{
 								now=acc_y_mes();
-								if(motor::status(1)==1||motor::status(2)==1){
-									m_send(1,2,spos-3,3);
-									m_send(2,2,spos,3);
+								if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+									m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos-3,3);
+									m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 								}
 							} while (now<Acc_slope_thre*-1);
 						}
@@ -1064,9 +1061,9 @@ namespace motor{
 						error_led(2,0);
 						error_led(1,0);
 					}
-					if(motor::status(1)==1||motor::status(2)==1){
-						m_send(1,2,spos,3);
-						m_send(2,2,spos,3);
+					if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+						m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+						m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 						error_led(2,0);
 						error_led(1,0);
 					}
@@ -1082,14 +1079,14 @@ namespace motor{
 				if(ac<=Acc_thre_d){
 					notify_long_acc(x,false);
 				}
-				motor::move(10);
+				motor::move();
 				ac=acc_x_mes();
 				if(ac<=Acc_thre_d){
 					notify_long_acc(x,false);
 				}
 				_delay_ms(1);
 				lcd_clear();
-				motor::move(7);
+				motor::move(HALF_BACK);
 				return 1;
 			}
 		}else if(x==v::back){//Œãi’†
@@ -1111,8 +1108,8 @@ namespace motor{
 				}
 				lcd_clear();
 				lcd_putstr(LCD1_TWI,"NotiL!D");
-				m_send(1,1,spos,3);
-				m_send(2,1,spos,3);
+				m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+				m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 				ac=acc_x_mes();
 				while(ac>=Acc_thre_u){
 					ac=acc_x_mes();
@@ -1128,9 +1125,9 @@ namespace motor{
 							do 
 							{
 								now=acc_y_mes();
-								if(motor::status(1)==1||motor::status(2)==1){
-									m_send(2,1,spos-2,3);
-									m_send(1,1,spos,3);
+								if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+									m_send(MOTOR_LEFT,MOTOR_BACK,spos-2,3);
+									m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
 								}
 							} while (now>Acc_slope_thre);
 						}
@@ -1140,9 +1137,9 @@ namespace motor{
 							do
 							{
 								now=acc_y_mes();
-								if(motor::status(1)==1||motor::status(2)==1){
-									m_send(2,1,spos,3);
-									m_send(1,1,spos-2,3);
+								if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+									m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
+									m_send(MOTOR_RIGHT,MOTOR_BACK,spos-2,3);
 								}
 							} while (now<Acc_slope_thre*-1);
 						}
@@ -1162,9 +1159,9 @@ namespace motor{
 						error_led(2,0);
 						error_led(1,0);
 					}
-					if(motor::status(1)==1||motor::status(2)==1){
-						m_send(1,1,spos,3);
-						m_send(2,1,spos,3);
+					if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+						m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+						m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 						error_led(2,0);
 						error_led(1,0);
 					}
@@ -1180,14 +1177,14 @@ namespace motor{
 				if(ac>=Acc_thre_u){
 					notify_long_acc(x,false);
 				}
-				motor::move(10);
+				motor::move();
 				ac=acc_x_mes();
 				if(ac>=Acc_thre_u){
 					notify_long_acc(x,false);
 				}
 				_delay_ms(1);
 				lcd_clear();
-				motor::move(7);
+				motor::move(HALF_BACK);
 				return 1;
 			}
 			else if(ac<=Acc_thre_d){//¸‚è
@@ -1208,8 +1205,8 @@ namespace motor{
 				}
 				lcd_clear();
 				lcd_putstr(LCD1_TWI,"NotiL!U");
-				m_send(1,1,spos,3);
-				m_send(2,1,spos,3);
+				m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+				m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 				ac=acc_x_mes();
 				while(ac<=Acc_thre_d){
 					ac=acc_x_mes();
@@ -1225,9 +1222,9 @@ namespace motor{
 							do 
 							{
 								now=acc_y_mes();
-								if(motor::status(1)==1||motor::status(2)==1){
-									m_send(2,1,spos,3);
-									m_send(1,1,spos-3,3);
+								if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+									m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
+									m_send(MOTOR_RIGHT,MOTOR_BACK,spos-3,3);
 								}
 							} while (now>Acc_slope_thre);
 						}
@@ -1237,9 +1234,9 @@ namespace motor{
 							do
 							{
 								now=acc_y_mes();
-								if(motor::status(1)==1||motor::status(2)==1){
-									m_send(2,1,spos-3,3);
-									m_send(1,1,spos,3);
+								if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+									m_send(MOTOR_LEFT,MOTOR_BACK,spos-3,3);
+									m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
 								}
 							} while (now<Acc_slope_thre*-1);
 						}
@@ -1259,9 +1256,9 @@ namespace motor{
 						error_led(2,0);
 						error_led(1,0);
 					}
-					if(motor::status(1)==1||motor::status(2)==1){
-						m_send(1,1,spos,3);
-						m_send(2,1,spos,3);
+					if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+						m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+						m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 						error_led(2,0);
 						error_led(1,0);
 					}
@@ -1277,14 +1274,14 @@ namespace motor{
 				if(ac<=Acc_thre_d){
 					notify_long_acc(x,false);
 				}
-				motor::move(10);
+				motor::move();
 				ac=acc_x_mes();
 				if(ac<=Acc_thre_d){
 					notify_long_acc(x,false);
 				}
 				_delay_ms(1);
 				lcd_clear();
-				motor::move(7);
+				motor::move(HALF_BACK);
 				return 2;
 			}
 		}
@@ -1305,8 +1302,8 @@ namespace motor{
 				lcd_putstr(LCD1_TWI,"NotiL!U");
 				buzzer(400);
 				buzzer(800);
-				m_send(1,2,spos,3);
-				m_send(2,2,spos,3);
+				m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+				m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 				while(ang<=Ang_slope_Norm-Ang_slope_thre){
 					ang=gyro_angle_y();
 					anx=gyro_angle_x();
@@ -1317,9 +1314,9 @@ namespace motor{
 							do 
 							{
 								anx=gyro_angle_x();
-								if(motor::status(1)==1||motor::status(2)==1){
-									m_send(1,2,spos-2,3);
-									m_send(2,2,spos,3);
+								if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+									m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos-2,3);
+									m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 								}
 							} while (anx>Ang_x_Norm);
 						}
@@ -1329,22 +1326,22 @@ namespace motor{
 							do
 							{
 								anx=gyro_angle_x();
-								if(motor::status(1)==1||motor::status(2)==1){
-									m_send(1,2,spos,3);
-									m_send(2,2,spos-2,3);
+								if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+									m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+									m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos-2,3);
 								}
 							} while (anx<Ang_x_Norm);
 						}
-						m_send(1,2,spos,3);
-						m_send(2,2,spos,3);
+						m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+						m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 					}
 					else{
 						error_led(2,0);
 						error_led(1,0);
 					}
-					if(motor::status(1)==1||motor::status(2)==1){
-						m_send(1,2,spos,3);
-						m_send(2,2,spos,3);
+					if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+						m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+						m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 						error_led(2,0);
 						error_led(1,0);
 					}
@@ -1356,8 +1353,8 @@ namespace motor{
 				lcd_putstr(LCD1_TWI,"NotiL!D");
 				buzzer(800);
 				buzzer(400);
-				m_send(1,2,spos,3);
-				m_send(2,2,spos,3);
+				m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+				m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 				while(ang>=Ang_slope_Norm+Ang_slope_thre){
 					ang=gyro_angle_y();
 					anx=gyro_angle_x();
@@ -1368,9 +1365,9 @@ namespace motor{
 							do 
 							{
 								anx=gyro_angle_x();
-								if(motor::status(1)==1||motor::status(2)==1){
-									m_send(1,2,spos,3);
-									m_send(2,2,spos-2,3);
+								if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+									m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+									m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos-2,3);
 								}
 							} while (anx>Ang_x_Norm);
 						}
@@ -1380,22 +1377,22 @@ namespace motor{
 							do
 							{
 								anx=gyro_angle_x();
-								if(motor::status(1)==1||motor::status(2)==1){
-									m_send(1,2,spos-2,3);
-									m_send(2,2,spos,3);
+								if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+									m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos-2,3);
+									m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 								}
 							} while (anx<Ang_x_Norm);
 						}
-						m_send(1,2,spos,3);
-						m_send(2,2,spos,3);
+						m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+						m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 					}
 					else{
 						error_led(2,0);
 						error_led(1,0);
 					}
-					if(motor::status(1)==1||motor::status(2)==1){
-						m_send(1,2,spos,3);
-						m_send(2,2,spos,3);
+					if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+						m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+						m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 						error_led(2,0);
 						error_led(1,0);
 					}
@@ -1406,8 +1403,8 @@ namespace motor{
 			if(ang>=Ang_slope_Norm+Ang_slope_thre){//‰º‚è
 				lcd_clear();
 				lcd_putstr(LCD1_TWI,"NotiL!U");
-				m_send(1,1,spos,3);
-				m_send(2,1,spos,3);
+				m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+				m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 				buzzer(400);
 				buzzer(800);
 				while(ang>=Ang_slope_Norm+Ang_slope_thre){
@@ -1420,9 +1417,9 @@ namespace motor{
 							do 
 							{
 								anx=gyro_angle_x();
-								if(motor::status(1)==1||motor::status(2)==1){
-									m_send(2,1,spos,3);
-									m_send(1,1,spos-2,3);
+								if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+									m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
+									m_send(MOTOR_RIGHT,MOTOR_BACK,spos-2,3);
 								}
 							} while (anx>Ang_x_Norm);
 						}
@@ -1432,22 +1429,22 @@ namespace motor{
 							do
 							{
 								anx=gyro_angle_x();
-								if(motor::status(1)==1||motor::status(2)==1){
-									m_send(2,1,spos-2,3);
-									m_send(1,1,spos,3);
+								if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+									m_send(MOTOR_LEFT,MOTOR_BACK,spos-2,3);
+									m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
 								}
 							} while (anx<Ang_x_Norm);
 						}
-						m_send(1,1,spos,3);
-						m_send(2,1,spos,3);
+						m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+						m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 					}
 					else{
 						error_led(2,0);
 						error_led(1,0);
 					}
-					if(motor::status(1)==1||motor::status(2)==1){
-						m_send(1,1,spos,3);
-						m_send(2,1,spos,3);
+					if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+						m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+						m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 						error_led(2,0);
 						error_led(1,0);
 					}
@@ -1457,8 +1454,8 @@ namespace motor{
 			else if(ang<=Ang_slope_Norm-Ang_slope_thre){//¸‚è
 				lcd_clear();
 				lcd_putstr(LCD1_TWI,"NotiL!U");
-				m_send(1,1,spos,3);
-				m_send(2,1,spos,3);
+				m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+				m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 				buzzer(800);
 				buzzer(400);
 				while(ang<=Ang_slope_Norm-Ang_slope_thre){
@@ -1471,9 +1468,9 @@ namespace motor{
 							do 
 							{
 								anx=gyro_angle_x();
-								if(motor::status(1)==1||motor::status(2)==1){
-									m_send(2,1,spos-2,3);
-									m_send(1,1,spos,3);
+								if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+									m_send(MOTOR_LEFT,MOTOR_BACK,spos-2,3);
+									m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
 								}
 							} while (anx>Ang_x_Norm);
 						}
@@ -1483,22 +1480,22 @@ namespace motor{
 							do
 							{
 								anx=gyro_angle_x();
-								if(motor::status(1)==1||motor::status(2)==1){
-									m_send(2,1,spos,3);
-									m_send(1,1,spos-2,3);
+								if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+									m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
+									m_send(MOTOR_RIGHT,MOTOR_BACK,spos-2,3);
 								}
 							} while (anx<Ang_x_Norm);
 						}
-						m_send(1,1,spos,3);
-						m_send(2,1,spos,3);
+						m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+						m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 					}
 					else{
 						error_led(2,0);
 						error_led(1,0);
 					}
-					if(motor::status(1)==1||motor::status(2)==1){
-						m_send(1,1,spos,3);
-						m_send(2,1,spos,3);
+					if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+						m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+						m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 						error_led(2,0);
 						error_led(1,0);
 					}
@@ -1541,60 +1538,59 @@ namespace motor{
 			lcd_putstr(LCD1_TWI,"fix_angl");
 			if(now-b_angle>0){
 				if(abs(now-b_angle)<=180){
-					m_send(1,2,spos,3);
-					m_send(2,1,spos,3);
+					m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+					m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 					do 
 					{
 						now=gyro_angle();
-						if(motor::status(1)==1||motor::status(2)==1){
-							m_send(1,2,spos,3);
-							m_send(2,1,spos,3);
+						if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+							m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+							m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 						}
 					} while (abs(now-b_angle)>siki);
 				}
 				else if(abs(now-b_angle)>180){
-					m_send(1,1,spos,3);
-					m_send(2,2,spos,3);
+					m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+					m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 					do
 					{
 						now=gyro_angle();
-						if(motor::status(1)==1||motor::status(2)==1){
-							m_send(1,1,spos,3);
-							m_send(2,2,spos,3);
+						if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+							m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+							m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 						}
 					} while (abs(now-b_angle)>siki);
 				}
 			}
 			else if(now-b_angle<0){
 				if(abs(now-b_angle)<=180){
-					m_send(1,1,spos,3);
-					m_send(2,2,spos,3);
+					m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+					m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 					do
 					{
 						now=gyro_angle();
-						if(motor::status(1)==1||motor::status(2)==1){
-							m_send(1,1,spos,3);
-							m_send(2,2,spos,3);
+						if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+							m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+							m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 						}
 					} while (abs(now-b_angle)>siki);
 				}
 				else if(abs(now-b_angle)>180){
-					m_send(1,2,spos,3);
-					m_send(2,1,spos,3);
+					m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+					m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 					do
 					{
 						now=gyro_angle();
-						if(motor::status(1)==1||motor::status(2)==1){
-							m_send(1,2,spos,3);
-							m_send(2,1,spos,3);
+						if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+							m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+							m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 						}
 					} while (abs(now-b_angle)>siki);
 				}
 			}
 		}
 		lcd_clear();
-		motor::brake(1);
-		motor::brake(2);
+		motor::move(BRAKE);
 		return;
 	}void fix_angle_v(float angl){
 		float now=0;
@@ -1606,60 +1602,59 @@ namespace motor{
 			lcd_putstr(LCD1_TWI,"fix_ag_v");
 			if(now-angl>0){
 				if(abs(now-angl)<=180){
-					m_send(1,2,spos,3);
-					m_send(2,1,spos,3);
+					m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+					m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 					do 
 					{
 						now=gyro_angle();
-						if(motor::status(1)==1||motor::status(2)==1){
-							m_send(1,2,spos,3);
-							m_send(2,1,spos,3);
+						if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+							m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+							m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 						}
 					} while (abs(now-angl)>siki);
 				}
 				else if(abs(now-angl)>180){
-					m_send(1,1,spos,3);
-					m_send(2,2,spos,3);
+					m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+					m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 					do
 					{
 						now=gyro_angle();
-						if(motor::status(1)==1||motor::status(2)==1){
-							m_send(1,1,spos,3);
-							m_send(2,2,spos,3);
+						if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+							m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+							m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 						}
 					} while (abs(now-angl)>siki);
 				}
 			}
 			else if(now-angl<0){
 				if(abs(now-angl)<=180){
-					m_send(1,1,spos,3);
-					m_send(2,2,spos,3);
+					m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+					m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 					do
 					{
 						now=gyro_angle();
-						if(motor::status(1)==1||motor::status(2)==1){
-							m_send(1,1,spos,3);
-							m_send(2,2,spos,3);
+						if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+							m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+							m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 						}
 					} while (abs(now-angl)>siki);
 				}
 				else if(abs(now-angl)>180){
-					m_send(1,2,spos,3);
-					m_send(2,1,spos,3);
+					m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+					m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 					do
 					{
 						now=gyro_angle();
-						if(motor::status(1)==1||motor::status(2)==1){
-							m_send(1,2,spos,3);
-							m_send(2,1,spos,3);
+						if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+							m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+							m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 						}
 					} while (abs(now-angl)>siki);
 				}
 			}
 		}
 		lcd_clear();
-		motor::brake(1);
-		motor::brake(2);
+		motor::move(BRAKE);
 		return;
 	}
 	void set_angle(float ang){
@@ -1672,60 +1667,59 @@ namespace motor{
 			lcd_putstr(LCD1_TWI,"set_ag_v");
 			if(now-ang>0){
 				if(abs(now-ang)<=180){
-					m_send(1,2,spos,3);
-					m_send(2,1,spos,3);
+					m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+					m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 					do 
 					{
 						now=gyro_angle();
-						if(motor::status(1)==1||motor::status(2)==1){
-							m_send(1,2,spos,3);
-							m_send(2,1,spos,3);
+						if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+							m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+							m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 						}
 					} while (abs(now-ang)>siki);
 				}
 				else if(abs(now-ang)>180){
-					m_send(1,1,spos,3);
-					m_send(2,2,spos,3);
+					m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+					m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 					do
 					{
 						now=gyro_angle();
-						if(motor::status(1)==1||motor::status(2)==1){
-							m_send(1,1,spos,3);
-							m_send(2,2,spos,3);
+						if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+							m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+							m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 						}
 					} while (abs(now-ang)>siki);
 				}
 			}
 			else if(now-ang<0){
 				if(abs(now-ang)<=180){
-					m_send(1,1,spos,3);
-					m_send(2,2,spos,3);
+					m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+					m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 					do
 					{
 						now=gyro_angle();
-						if(motor::status(1)==1||motor::status(2)==1){
-							m_send(1,1,spos,3);
-							m_send(2,2,spos,3);
+						if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+							m_send(MOTOR_RIGHT,MOTOR_BACK,spos,3);
+							m_send(MOTOR_LEFT,MOTOR_ADVANCE,spos,3);
 						}
 					} while (abs(now-ang)>siki);
 				}
 				else if(abs(now-ang)>180){
-					m_send(1,2,spos,3);
-					m_send(2,1,spos,3);
+					m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+					m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 					do
 					{
 						now=gyro_angle();
-						if(motor::status(1)==1||motor::status(2)==1){
-							m_send(1,2,spos,3);
-							m_send(2,1,spos,3);
+						if(motor::status(MOTOR_LEFT)==1||motor::status(MOTOR_RIGHT)==1){
+							m_send(MOTOR_RIGHT,MOTOR_ADVANCE,spos,3);
+							m_send(MOTOR_LEFT,MOTOR_BACK,spos,3);
 						}
 					} while (abs(now-ang)>siki);
 				}
 			}
 		}
 		lcd_clear();
-		motor::brake(1);
-		motor::brake(2);
+		motor::move(BRAKE);
 		return;
 	}
 }
@@ -1738,28 +1732,27 @@ void enkaigei(void){
 		if(abs(now-first)>1){
 			if(now-first>0){
 				if(abs(now-first)<=180){
-					m_send(1,2,spos,3);
-					m_send(2,1,spos,3);
+					m_send(motor::MOTOR_RIGHT,motor::MOTOR_ADVANCE,spos,3);
+					m_send(motor::MOTOR_LEFT,motor::MOTOR_BACK,spos,3);
 				}
 				else if(abs(now-first)>180){
-					m_send(1,1,spos,3);
-					m_send(2,2,spos,3);
+					m_send(motor::MOTOR_RIGHT,motor::MOTOR_BACK,spos,3);
+					m_send(motor::MOTOR_LEFT,motor::MOTOR_ADVANCE,spos,3);
 				}
 			}
 			else if(now-first<0){
 				if(abs(now-first)<=180){
-					m_send(1,1,spos,3);
-					m_send(2,2,spos,3);
+					m_send(motor::MOTOR_RIGHT,motor::MOTOR_BACK,spos,3);
+					m_send(motor::MOTOR_LEFT,motor::MOTOR_ADVANCE,spos,3);
 				}
 				else if(abs(now-first)>180){
-					m_send(1,2,spos,3);
-					m_send(2,1,spos,3);
+					m_send(motor::MOTOR_RIGHT,motor::MOTOR_ADVANCE,spos,3);
+					m_send(motor::MOTOR_LEFT,motor::MOTOR_BACK,spos,3);
 				}
 			}
 		}
 		else{
-			motor::brake(1);
-			motor::brake(2);
+			motor::move(motor::BRAKE);
 		}
 	}
 }
