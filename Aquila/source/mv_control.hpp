@@ -20,14 +20,14 @@ void mv_sig(uint8_t i,bool ud);
 void init_mv(void);
 bool kit_chk(uint8_t num);
 
-void mv_cap(uint8_t di,bool st);
-uint8_t mv_spi_send(uint8_t val, uint8_t i);
-uint8_t check_mv(uint8_t dir);
-
 typedef enum{
     MV_LEFT,
     MV_FRONT,
     MV_RIGHT
 }mv_ch_t;
+void mv_cap(mv_ch_t di,bool st);
+uint8_t mv_spi_send(uint8_t val, uint8_t i);
+uint8_t check_mv(mv_ch_t dir);
+
 
 #endif /* MV_CONTROL_H_ */

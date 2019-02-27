@@ -45,6 +45,19 @@ uint16_t ping(int no){
 	}
 	return ping_data;
 }
+uint16_t ping(ping_ch_t no){
+	uint16_t ping_data=0;
+	switch(no){
+		case LEFT_BACK:ping_data=ping_check(&PORTE,PIN0_bm);break;
+		case LEFT_FRONT:ping_data=ping_check(&PORTE,PIN1_bm);break;
+		case FRONT:ping_data=ping_check(&PORTE,PIN2_bm);break;
+		case RIGHT_FRONT:ping_data=ping_check(&PORTE,PIN3_bm);break;
+		case RIGHT_BACK:ping_data=ping_check(&PORTE,PIN4_bm);break;
+		case BACK:ping_data=ping_check(&PORTE,PIN5_bm);break;
+		default:break;
+	}
+	return ping_data;
+}
 uint16_t ping_check (PORT_t *p_port,uint8_t p_pin){
 	//PD2 ping4繝ｻ・ｽ・・ｪｭ縺ｿ繧托ｽｿ・ｽ繝ｻ・ｽ繝ｻ・ｽ繝ｻ・ｽ・・ｑ・ｿ・ｽ
 	//ping(&PORTD,PIN2_bm);
