@@ -78,6 +78,8 @@ void m_send(motor::ch_t rl,motor::move_sig_t sig,uint8_t y,motor::move_dis_t dis
 		case motor::HALF_BLOCK:
 			m_send(rl,sig,y,4);
 			break;
+		default:
+			break;
 	}
 	return;
 }
