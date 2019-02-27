@@ -64,6 +64,23 @@ uint8_t mspi(uint8_t val,motor::ch_t i){
 	PORTB.OUTSET=PIN2_bm|PIN3_bm;
 	return dat;
 }
+void m_send(motor::ch_t rl,motor::move_sig_t sig,uint8_t y,motor::move_dis_t dis){
+	switch (dis){
+		case motor::ONE_BLOCK:
+			m_send(rl,sig,y,1);
+			break;
+		case motor::TWO_BLOCK:
+			m_send(rl,sig,y,2);
+			break;
+		case motor::TURN:
+			m_send(rl,sig,y,3);
+			break;
+		case motor::HALF_BLOCK:
+			m_send(rl,sig,y,4);
+			break;
+	}
+	return;
+}
 void m_send(motor::ch_t rl,motor::move_sig_t sig,uint8_t y,uint8_t z){//rl:Right or Left(1:L2:R)x:Go or Back(1:Back,2:Go)y:speed(max7(1 is for fixing movement))z:distance(1:1block,2:2blocks,3:turn,4:half))
 	//data = 100*x+10*y+z;
 	uint8_t x=3;
