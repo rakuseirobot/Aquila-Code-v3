@@ -6,7 +6,7 @@
 #include "core.hpp"
 
 core::core(){
-    now=mall.make(100,100,1,1);
+    now=mall.make(100,100,10,1);
 	at.insert(now);
     flg=0;
     ans = np;
@@ -108,7 +108,7 @@ void core::bfs(node* s,node* t){//sを始点にしてtを検索する�?
         rep(i,4){
             node* aa=a->next[i];
             if(aa!=np){
-                aa->dist=min(aa->dist,a->dist+1);
+                aa->dist=min(aa->dist,(uint8_t)(a->dist+1));
 				if(aa->type==v::black)aa->dist=1000;
                 if(aa->flag!=flg){ q.push(aa); aa->flag=flg; }
             }else{ break; }

@@ -7,21 +7,6 @@
  */ 
 #include "core.hpp"
 
-/*
-#include "initializing.hpp"
-#include "ui_control.hpp"
-#include "lcd_control.hpp"
-#include "action.hpp"
-#include "color_control.hpp"
-#include "sermo_control.hpp"
-#include "serial.hpp" 
-#include "ping_control.hpp"
-#include "motor_control.hpp"
-#include <avr/io.h>
-#include <util/delay.h>
-*/
-//#include "core.hpp" // it's my code
-
 void make_nodes();
 
 void black_tile();

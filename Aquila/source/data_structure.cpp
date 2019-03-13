@@ -4,6 +4,24 @@
  *  Author: emile
  */
 #include "data_structure.hpp"
+
+void tuple_four::update(uint8_t x,uint8_t y){
+	x_min = min(x_min,x); x_max = max(x_max,x);
+	y_min = min(y_min,y); y_max = max(y_max,y);
+}
+
+void tuple_four::write(uint8_t x_m,uint8_t x_M,uint8_t y_m,uint8_t y_M){
+	x_min = x_m; x_max = x_M; y_min = y_m; y_max = y_M;
+}
+
+void range_set::write(int n,uint8_t x_m,uint8_t x_M,uint8_t y_m,uint8_t y_M){
+	set[n].write(x_m,x_M,y_m,y_M);
+}
+
+tuple_four* range_set::at(int n){
+	return &set[n];
+}
+
 #define ht(t) (t ? t->height : 0)
 uint8_t lorr(node* t,int x,int y,int z){
 	int d[3];
@@ -109,5 +127,5 @@ bl nodes::full(){ if(now>=max_size-1){ return true; }else{ return false; } }
 //////////////////////////////////////////////////////nodes//////////////////////////////////////////////////
 
 
-int max(int x,int y){if(x>y){return x;}else{return y;}}
-int min(int x,int y){if(x<y){return x;}else{return y;}}
+template <class T1>T1 max(T1 x,T1 y){if(x>y){return x;}else{return y;}}
+template <class T1>T1 min(T1 x,T1 y){if(x<y){return x;}else{return y;}}

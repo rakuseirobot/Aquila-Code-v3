@@ -12,12 +12,11 @@ class core{
     node* start;//it may be unnecessary.But now, it is used in dfs.
     int dir;//0::<,1::^,2::>,3::v
     //for status
-    //long long unsigned int counter;//dfs's counter.
     node* ans;//dfs's answer.
     int flg;//0 or 1
     //for dfs
     queue q;//for bfs
-   // AVLtree at; //use ans,flg (also in bfs)
+
 public:
 	AVLtree at;
 	nodes mall;
