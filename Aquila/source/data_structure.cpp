@@ -14,9 +14,9 @@ void tuple_four::write(uint8_t x_m,uint8_t x_M,uint8_t y_m,uint8_t y_M){
 	x_min = x_m; x_max = x_M; y_min = y_m; y_max = y_M;
 }
 
-void range_set::write(int n,uint8_t x_m,uint8_t x_M,uint8_t y_m,uint8_t y_M){
-	set[n].write(x_m,x_M,y_m,y_M);
-}
+// void range_set::write(int n,uint8_t x_m,uint8_t x_M,uint8_t y_m,uint8_t y_M){
+// 	set[n].write(x_m,x_M,y_m,y_M);
+// }
 
 tuple_four* range_set::at(int n){
 	return &set[n];
@@ -126,6 +126,5 @@ bl nodes::full(){ if(now>=max_size-1){ return true; }else{ return false; } }
 
 //////////////////////////////////////////////////////nodes//////////////////////////////////////////////////
 
-
-template <class T1>T1 max(T1 x,T1 y){if(x>y){return x;}else{return y;}}
-template <class T1>T1 min(T1 x,T1 y){if(x<y){return x;}else{return y;}}
+int max(int x,int y){if(x>y){return x;}else{return y;}}
+int min(int x,int y){if(x<y){return x;}else{return y;}}

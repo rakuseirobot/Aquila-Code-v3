@@ -30,25 +30,26 @@ namespace motor{
 		MOTOR_BRAKE,
 	}move_sig_t;
 	typedef enum{
-		ONE_ADVANCE=0,
-		TWO_ADVANCE=1,
-		RIGHT_TURN=2,
-		LEFT_TURN=3,
-		ONE_BACK=4,
-		TWO_BACK=5,
-		HALF_ADVANCE=6,
-		HALF_BACK=7,
-		RIGHT_TURN_NO_GYRO=8,
-		LEFT_TURN_NO_GYRO=9,
-		BRAKE=10
+		ONE_ADVANCE,
+		TWO_ADVANCE,
+		RIGHT_TURN,
+		LEFT_TURN,
+		ONE_BACK,
+		TWO_BACK,
+		HALF_ADVANCE,
+		HALF_BACK,
+		RIGHT_TURN_NO_GYRO,
+		LEFT_TURN_NO_GYRO,
+		BRAKE
 	}move_t;
 	typedef enum{
-		ONE_BLOCK=1,
-		TWO_BLOCK=2,
-		TURN=3,
-		HALF_BLOCK=4,
+		ONE_BLOCK,
+		TWO_BLOCK,
+		TURN,
+		HALF_BLOCK,
 	}move_dis_t;
 	void brake(ch_t x);
+	uint8_t status(motor::ch_t m);
 	void wait(bool check=true);
 	void move(move_t x=BRAKE);/*
 	void forever(void);

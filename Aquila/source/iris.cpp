@@ -12,14 +12,18 @@
 #include "mv_control.hpp"
 #include "gyro_control.hpp"
 #include "action.hpp"
-using namespace motor;
+//using namespace motor;
+#define ping_flag true //trueなら2マス先も見る
 
 void make_nodes(){
 	serial.string("make_nodes\n");
     if(!ta.r_now()->ac){
 		rep(i,4){
 			if(check_ping(i)>1){
-				if(ta.ac_next(i,1)==np){ta.ap_node(ta.r_now(),i); }else{ ta.cn_graph(ta.r_now(),ta.ac_next(i,1)); }
+				if(ta.ac_next(i,1)==np){ ta.ap_node(ta.r_now(),i); }else{ ta.cn_graph(ta.r_now(),ta.ac_next(i,1)); }
+				if(check_ping(i)>2 && ping_flag){//2マス先も見る.
+					if(ta.ac_next(i,2)==np){ ta.ap_node(ta.ac_next(i,1),i); }else{ ta.cn_graph(ta.ac_next(i,1),ta.ac_next(i,2)); }
+				}
 			}
 		}
 		ta.r_now()->ac=true;
@@ -30,7 +34,7 @@ void black_tile(){
 	if(color_check()==1 || ta.r_now()->type==v::black){
 		ta.r_now()->type=v::black;
 		ta.r_now()->color=v::black;
-		motor::move(ONE_ADVANCE);
+		motor::move(motor::ONE_ADVANCE);
 		motor::fix_position(v::back);
 		ta.turn_l();
 		ta.turn_l();
@@ -82,13 +86,14 @@ bool nachylenie2(uint8_t x){/*make_nodesよりも前に使う*/
 	if(x!=v::back){x=v::front;};
 	uint8_t flag = motor::notify_long_ang(x);/*flag=1:下り、=2:上り、=0:無し*/
 	if(flag==0)return false;
-	motor::move(BRAKE);
+	motor::brake(motor::MOTOR_LEFT);
+	motor::brake(motor::MOTOR_RIGHT);
 	serial.putint(x);
 	if(x==v::front){
-		motor::move(HALF_ADVANCE);
+		motor::move(motor::HALF_ADVANCE);
 	}
 	else{
-		motor::move(HALF_BACK);
+		motor::move(motor::HALF_BACK);
 	}
 	motor::gb_fix();
 	motor::turn_fix();
@@ -162,34 +167,34 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 	switch(num){
 		case 0:
 			ta.turn_l();
-			motor::move(LEFT_TURN);
+			motor::move(motor::LEFT_TURN);
 			motor::fix_position();
 			ta.go_st();
-			motor::move(ONE_ADVANCE);
+			motor::move(motor::ONE_ADVANCE);
 			motor::fix_position();
 			break;
 		case 1:
 			ta.go_st();
-			motor::move(ONE_ADVANCE);
+			motor::move(motor::ONE_ADVANCE);
 			motor::fix_position();
 			break;
 		case 2:
 			ta.turn_r();
-			motor::move(RIGHT_TURN);
+			motor::move(motor::RIGHT_TURN);
 			motor::fix_position();
 			ta.go_st();
-			motor::move(ONE_ADVANCE);
+			motor::move(motor::ONE_ADVANCE);
 			motor::fix_position();
 			break;
 		case 4:
 			ta.turn_r();
-			motor::move(LEFT_TURN);
+			motor::move(motor::LEFT_TURN);
 			motor::fix_position();
 			ta.turn_r();
-			motor::move(LEFT_TURN);
+			motor::move(motor::LEFT_TURN);
 			motor::fix_position();
 			ta.go_st();
-			motor::move(ONE_ADVANCE);
+			motor::move(motor::ONE_ADVANCE);
 			motor::fix_position();
 			break;
         case 3:
@@ -198,7 +203,7 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 			ta.go_st();
 			ta.turn_l();
 			ta.turn_l();
-			motor::move(ONE_BACK);
+			motor::move(motor::ONE_BACK);
 			motor::fix_position(v::back);
 			break;
 		default:
@@ -221,37 +226,18 @@ void move(int num){//num::0:turn_l(90deg)+go_st,1:go_st,2:turn_r(90deg)+go_st,4:
 	black_tile();
 	if(num==v::back){ nachylenie2(v::back); }else{ nachylenie2(v::front); }
 	make_nodes();
-	if(blind_alley(num)){
-		ta.turn_r();
-		motor::move(RIGHT_TURN);
-		motor::fix_position();
-		ta.turn_l();
-		motor::move(LEFT_TURN);
-		motor::fix_position();
-	}
-	if(Victim_front&&ta.r_now()->type==v::unknown){
-		ta.turn_l();
-		motor::move(LEFT_TURN);//左にまがる
-		motor::fix_position();
-		//キットを落とす
-		if(Victim_front_kit==1){
-			Drop_kit(1);
-			Drop_kit(0);
-		}
-		else if(Victim_front_kit==2){
-			Drop_kit(1);
-			Drop_kit(0);
-			Drop_kit(1);
-			Drop_kit(0);
-		}
-		ta.turn_r();
-		motor::move(RIGHT_TURN);//右にまがる
-		motor::fix_position();	
-		Victim_front = false;
-	}
+// 	if(blind_alley(num)){
+// 		ta.turn_r();
+// 		motor::move(motor::RIGHT_TURN);
+// 		motor::fix_position();
+// 		ta.turn_l();
+// 		motor::move(motor::LEFT_TURN);
+// 		motor::fix_position();
+// 	}
 	if(ta.r_now()->type==v::unknown){ta.r_now()->type = v::normal;}
 	motor::wait();
 }
+
 void move_n(node* n){//move to neighborhood((node*)n)
 	if(n!=np){
 		serial.string("m_n");
@@ -285,6 +271,7 @@ void move_toa(node* a){//move to (node*)a
 		fg = false;
 		rep(i,4){
 			serial.string("-aa");
+			serial.putint((int)a);
 			if(!fg && ta.ac_next(i,1)!=np && ta.ck_conect(ta.r_now(),ta.ac_next(i,1)) && ta.ac_next(i,1)->dist<ta.r_now()->dist && ta.ac_next(i,1)->type!=v::black){ move_n(ta.ac_next(i,1)); fg=true; }
 			if(ta.find(a->x,a->y,a->z)->type==v::slope)fg=true;
 		}
@@ -310,10 +297,11 @@ void stack_dfs(){
 	ta.stk.push(ta.r_start());
 	ta.r_start()->color=color::gray;
 	make_nodes();
-	bl fg;
+	bl fg;/*for ??*/ float range_tmp[4]={0.0};//for node tuika
+	uint8_t tmp2;uint8_t tmp[4]={0,1,2,3};//for node tuika
 	while(!ta.stk.empty()){
 		if(ta.r_now()!=ta.r_start())ta.r_now()->color=color::black;
-		for(int j=1;j>=0;j--){
+		/*for(int j=1;j>=0;j--){ //node追加 old ver
 			for(int i=3;i>=0;i--){
 				if(check_ping(i)>j+1)if(ta.ac_next(i,1)!=np && ta.ac_next(i,1)->color==color::white 
 																	&& ta.ck_conect(ta.r_now(),ta.ac_next(i,1))){
@@ -322,8 +310,35 @@ void stack_dfs(){
 					ta.ac_next(i,1)->color=color::gray;
 				}
 			}
+		}*///node追加部分
+		for(int i=3;i>=0;i--){//node追加 normal ver
+			if(ta.ac_next(i,1)!=np && ta.ac_next(i,1)->color==color::white && ta.ck_conect(ta.r_now(),ta.ac_next(i,1))){
+				ta.stk.push(ta.ac_next(i,1));
+				ta.ac_next(i,1)->color=color::gray;
+			}
 		}
-		serial.string("n");
+		//node追加部分ここから
+		/*for(int i=3;i>=0;i--){//node追加 new ver
+			if(ta.ac_next(i,1)!=np && ta.ac_next(i,1)->color==color::white && ta.ck_conect(ta.r_now(),ta.ac_next(i,1))){
+				range_tmp[i]=ta.range_size(ta.ac_next(i,1),i);
+			}else{ range_tmp[i] = -1.0;}
+		}
+		rep(i,4)tmp[i]=i;//init
+		rep(i,3){
+			rep(j,i)if(range_tmp[tmp[j]]<range_tmp[tmp[j+1]]){//sort
+				tmp2 = tmp[j+1]; tmp[j+1] = tmp[j]; tmp[j]=tmp2;//swap
+			}
+			if(range_tmp[tmp[i+1]]>=0.0){//push
+				ta.stk.push(ta.ac_next(tmp[i+1],1));
+				ta.ac_next(tmp[i+1],1)->color=color::gray;
+			}
+		}
+		if(range_tmp[tmp[0]]>=0.0){
+			ta.stk.push(ta.ac_next(tmp[0],1));
+			ta.ac_next(tmp[0],1)->color=color::gray;
+		}
+		//node追加部分ここまで
+		*/serial.string("n");
 		lcd_clear();
 		lcd_putstr(LCD1_TWI,"dfs");
 		fg=false;

@@ -64,7 +64,6 @@ struct tuple_four{
 
 struct range_set{
 	tuple_four set[20];
-	void write(int n,uint8_t x_m,uint8_t x_M,uint8_t y_m,uint8_t y_M);
 	tuple_four* at(int n);
 };
 
@@ -118,7 +117,7 @@ public:
     bl full();
 };
 
-template <class T1>T1 max(T1 x,T1 y);
-template <class T1>T1 min(T1 x,T1 y);
+int max(int x,int y);
+int min(int x,int y);
 
 #endif
