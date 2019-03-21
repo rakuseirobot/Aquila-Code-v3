@@ -5,6 +5,10 @@
  *  Author: shun2
  */ 
 #include "ui_control.hpp"
+
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
 void init_buzzer(void){
 	TCD0.CTRLA=TC_CLKSEL_DIV1024_gc;
 	TCD0.CTRLB=TC_WGMODE_NORMAL_gc;
@@ -16,11 +20,24 @@ ISR(TCD0_OVF_vect){
 	
 }
 void buzzer(uint16_t t){
-	for(int i=0;i<=1000-t;i++){
-		PORTA.OUTSET=PIN0_bm;
-		delay_us(t);
-		PORTA.OUTCLR=PIN0_bm;
-		delay_us(t);
+	while(1){
+		for(int i=0;i<=1000-t;i++){
+			PORTA.OUTSET=PIN0_bm;
+			vTaskDelay(t);
+			PORTA.OUTCLR=PIN0_bm;
+			vTaskDelay(t);
+		}
+	}
+}
+void buzzer(void *param){
+	uint16_t t = 800;
+	while(1){
+		for(int i=0;i<=1000-t;i++){
+			PORTA.OUTSET=PIN0_bm;
+			vTaskDelay(t);
+			PORTA.OUTCLR=PIN0_bm;
+			vTaskDelay(t);
+		}
 	}
 }
 
@@ -31,7 +48,7 @@ void delay_us(uint16_t t){
 	return;
 }
 
-void led(uint8_t ledkind,uint8_t ledmode){//0:消灯1:点灯3:TGL4:全部消灯
+void led(uint8_t ledkind,uint8_t ledmode){//0:效灯1:点灯3:TGL4:全部效灯
 	if(ledmode==1){
 		PORTQ.OUTCLR=ledkind;
 	}
