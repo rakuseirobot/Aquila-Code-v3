@@ -33,4 +33,7 @@
 #define INCLUDE_vTaskDelayUntil                         1
 #define INCLUDE_vTaskDelay                              1
 
+/*Shun added*/
+#define configTOTAL_HEAP_SIZE 120  //uint8_t Array
+
 #endif /* FREERTOS_CONFIG_H */
