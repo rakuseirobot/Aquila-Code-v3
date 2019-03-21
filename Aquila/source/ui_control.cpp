@@ -29,8 +29,8 @@ void buzzer(uint16_t t){
 		}
 	}
 }
-void buzzer(void *param){
-	uint16_t t = 800;
+void vbuzzer(void *param){
+	uint16_t t = *(uint16_t *)param;;
 	while(1){
 		for(int i=0;i<=1000-t;i++){
 			PORTA.OUTSET=PIN0_bm;
