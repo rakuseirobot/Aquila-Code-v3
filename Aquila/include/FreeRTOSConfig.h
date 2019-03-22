@@ -34,6 +34,6 @@
 #define INCLUDE_vTaskDelay                              1
 
 /*Shun added*/
-#define configTOTAL_HEAP_SIZE ((size_t)400) //uint8_t Array
+#define configTOTAL_HEAP_SIZE ((size_t)400) //uint8_t Array  //‘«‚è‚Ä‚È‚¢
 
 #endif /* FREERTOS_CONFIG_H */
