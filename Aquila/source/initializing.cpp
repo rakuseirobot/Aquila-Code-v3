@@ -62,6 +62,7 @@ void init_int(void){
 	PMIC.CTRL = PMIC_LOLVLEN_bm|PMIC_HILVLEN_bm;
 	sei();
 }
+/*
 bool pause=false;
 void pause_fun(void){
 	lcd_clear();
@@ -85,7 +86,8 @@ void pause_fun(void){
 		}
 	}
 	return;
-}
+}*/
+/*
 ISR(PORTH_INT0_vect){
 	PORTB.OUTSET=PIN0_bm|PIN1_bm;
 	led(Redled,1);
@@ -105,7 +107,7 @@ ISR(PORTH_INT1_vect){
 	error_led(2,0);
 	PORTB.OUTCLR=PIN0_bm|PIN1_bm;
 }
-
+*/
 namespace debug{
 	void ping_d(uint8_t num,bool s){
 		if(s==true){

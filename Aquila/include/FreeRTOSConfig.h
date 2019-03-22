@@ -9,7 +9,7 @@
 #include <avr/io.h>
 
 #define configUSE_PREEMPTION                            1
-#define configCPU_CLOCK_HZ                              ( ( unsigned long ) 20000000 )
+#define configCPU_CLOCK_HZ                              ( ( unsigned long ) 32000000 )
 #define configTICK_RATE_HZ                              ( ( TickType_t ) 1000 )
 #define configMAX_PRIORITIES                            5
 #define configMINIMAL_STACK_SIZE                        ( ( unsigned short ) 85 )
@@ -26,14 +26,14 @@
 #define configMAX_CO_ROUTINE_PRIORITIES                 5
 
 /* Optional functions - most linkers will remove unused functions anyway. */
-#define INCLUDE_vTaskPrioritySet                        0
-#define INCLUDE_uxTaskPriorityGet                       0
-#define INCLUDE_vTaskDelete                             0
-#define INCLUDE_vTaskSuspend                            0
-#define INCLUDE_vTaskDelayUntil                         1
+#define INCLUDE_vTaskPrioritySet                        1
+#define INCLUDE_uxTaskPriorityGet                       1
+#define INCLUDE_vTaskDelete                             1
+#define INCLUDE_vTaskSuspend                            1
+#define INCLUDE_vTaskDelayUntil                         0
 #define INCLUDE_vTaskDelay                              1
 
 /*Shun added*/
-#define configTOTAL_HEAP_SIZE 120  //uint8_t Array
+#define configTOTAL_HEAP_SIZE ((size_t)400) //uint8_t Array
 
 #endif /* FREERTOS_CONFIG_H */

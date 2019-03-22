@@ -69,7 +69,7 @@ void lcd_putstr(TWI_t *port, const char *data)
 	twi lcd_twi(&TWID,lcd_fre);
 	lcd_twi.Address(LCD1_SLvADD,0);
 	uint8_t i=0;
-	uint16_t datalong=strlen(data);
+	uint8_t datalong=strlen(data);
 	for(i=0; i<datalong; i++)
 	{
 		if(i==datalong-1){

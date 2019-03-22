@@ -20,27 +20,29 @@ ISR(TCD0_OVF_vect){
 	
 }
 void buzzer(uint16_t t){
-	while(1){
-		for(int i=0;i<=1000-t;i++){
-			PORTA.OUTSET=PIN0_bm;
-			vTaskDelay(t);
-			PORTA.OUTCLR=PIN0_bm;
-			vTaskDelay(t);
-		}
+	for(uint16_t i=0;i<=1000-t;i++){
+		PORTA.OUTSET=PIN0_bm;
+		delay_ms(t);
+		PORTA.OUTCLR=PIN0_bm;
+		delay_ms(t);
 	}
 }
 void vbuzzer(void *param){
-	uint16_t t = *(uint16_t *)param;;
+	//uint16_t t = *(uint16_t *)param;
+	uint16_t t = 800;
 	while(1){
-		for(int i=0;i<=1000-t;i++){
-			PORTA.OUTSET=PIN0_bm;
-			vTaskDelay(t);
-			PORTA.OUTCLR=PIN0_bm;
+		for(uint16_t i=0;i<=1000-t;i++){
+			PORTA.OUTTGL=PIN0_bm;
 			vTaskDelay(t);
 		}
 	}
 }
-
+void delay_ms(uint16_t t){
+	for (uint16_t i=0;i<=t;i++){
+		_delay_ms(1);
+	}
+	return;
+}
 void delay_us(uint16_t t){
 	for (uint16_t i=0;i<=t;i++){
 		_delay_us(1);
