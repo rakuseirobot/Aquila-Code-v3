@@ -108,6 +108,16 @@ node* stack::top(){return box[siz-1];}
 void stack::pop(){box[siz-1]=np;siz--;}
 void stack::push(node* x){box[siz]=x;siz++;}
 bl stack::empty(){if(siz==0){return true;}else{return false;}}
+void stack::remove(int num){
+	for(int i = num;i<siz;i++)box[i] = box[i+1];
+	box[siz-1]=np; siz--;
+}
+void stack::clean(){
+	rep(i,siz)rep(j,siz){
+		if(i==j)continue;
+		if(box[i]==box[j]){ remove(min(i,j)); i--; break; }
+	}
+}
 
 /////////////////////////////////////////////////////////////stack//////////////////////////////////
 

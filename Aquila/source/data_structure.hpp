@@ -85,8 +85,9 @@ class AVLtree{
 
 class queue{
     int siz;
-    node* box[max_size];
+	node* box[max_size];
 public:
+    //node* box[max_size];
     void init();
     int size();
     node* front();
@@ -97,14 +98,17 @@ public:
 
 class stack{
     int siz;
-    node* box[max_size];
+    //node* box[max_size];
 public:
+	node* box[max_size];
     void init();
     int size();
     node* top();
     void pop();
     void push(node* x);
-    bl empty();
+	void remove(int num);
+	void clean();
+    bl empty();	
 };
 
 class nodes{

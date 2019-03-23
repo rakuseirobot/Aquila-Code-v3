@@ -161,5 +161,23 @@ float core::range_size(node* u,int dire){
 	return ans;
 }
 
+void core::init_wf(){
+	rep(i,13)rep(j,13)dist_wf[i][j]=255;
+}
+
+void core::calc_wf(){
+	stk.clean();
+	init_wf();
+	rep(i,13)rep(j,13){
+		if(i==j)continue;
+		if(dist_wf[i][j]!=255)continue;
+		clear_dist();
+		bfs(stk.box[i],stk.box[j]);
+		clear_dist();
+		dist_wf[i][j] = find(stk.box[j]->x,stk.box[j]->y,stk.box[j]->z)->dist;
+		dist_wf[j][i] = dist_wf[i][j];
+	}
+}
+
 core ta;
 
