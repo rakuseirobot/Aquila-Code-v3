@@ -48,8 +48,8 @@ petal.hpp        にアルゴリズム関連が詰まっています。
 # Author
 
 * Shun Kayaki
-* Kyushu institute of Technology
-* shun@guetan.dev
+ Kyushu institute of Technology
+ shun@guetan.dev
 
 * Emile
 
