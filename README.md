@@ -49,9 +49,9 @@ petal.hpp        にアルゴリズム関連が詰まっています。
 
 * Shun Kayaki
 
- Kyushu institute of Technology
+    Kyushu institute of Technology
  
- shun@guetan.dev
+    shun@guetan.dev
 
 * Emile
 
